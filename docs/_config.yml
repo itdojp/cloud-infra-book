@@ -1,34 +1,17 @@
 title: "クラウドインフラ設計・構築ガイド"
-description: "クラウドインフラエンジニアが実際の設計・構築業務で必要な知識を体系的に学べる実践書。設計の背景にある原理原則と実装判断の根拠を丁寧に解説し、単なる操作手順ではなく考え方を身につけることを重視しています。"
+description: "クラウドインフラエンジニアが実際の設計・構築業務で必要な知識を体系的に学べる実践書"
 author: "株式会社アイティードゥ"
-version: "1.0.0"
-lang: "ja"
 url: "https://itdojp.github.io"
 baseurl: "/cloud-infra-book"
 
-# リポジトリ情報
-repository:
-  github: "https://github.com/itdojp/cloud-infra-book"
-  name: "cloud-infra-book"
-
-# Jekyll設定
+# GitHub Pages設定
 markdown: kramdown
 highlighter: rouge
-# GitHub Pages設定
 theme: jekyll-theme-primer
 
-# プラグイン（GitHub Pages標準サポート）
+# プラグイン（最小限）
 plugins:
   - jekyll-feed
-  - jekyll-sitemap
-
-# デフォルト設定
-defaults:
-  - scope:
-      path: ""
-      type: "pages"
-    values:
-      layout: "default"
 
 # 除外ファイル
 exclude:
@@ -36,20 +19,7 @@ exclude:
   - package.json
   - package-lock.json
   - scripts/
-  - tests/
   - README.md
   - CLAUDE.md
   - book-config.json
-  - templates/
-
-# 日本語対応
-kramdown:
-  input: GFM
-  syntax_highlighter: rouge
-  syntax_highlighter_opts:
-    line_numbers: false
-  
-# GitHub Pages設定
-github:
-  is_project_page: true
 
