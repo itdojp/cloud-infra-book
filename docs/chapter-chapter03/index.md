@@ -24,7 +24,7 @@ layout: book
 
 現代のアプリケーションは、極めて多様な特性を持っています：
 
-`
+```
 ウェブサーバー：
 - CPU: 中程度の使用率（20-40%）
 - メモリ: リクエスト数に比例
@@ -42,7 +42,7 @@ layout: book
 - GPU: モデル学習で集中使用
 - メモリ: 大容量データセット
 - ストレージ: 高スループット
-`
+```
 
 これらの異なる要求に対して、単一のハードウェア構成で対応することは、技術的にも経済的にも非効率です。
 
@@ -51,7 +51,7 @@ layout: book
 #### 1. 汎用インスタンス（General Purpose）
 
 **特徴と設計思想：**
-`
+```
 リソースバランス：
 - vCPU : メモリ = 1:4 の比率が一般的
 - 中程度のネットワーク性能
@@ -62,12 +62,12 @@ layout: book
 - 小〜中規模のデータベース
 - 開発・テスト環境
 - エンタープライズアプリケーション
-`
+```
 
 **各プロバイダーの詳細：**
 
 **AWS (M6i, M6a, T3, T4g)**
-`
+```
 M6i/M6a シリーズ：
 - Intel Xeon 第3世代 / AMD EPYC 第3世代
 - ニトロシステムによる最適化
@@ -83,10 +83,10 @@ T3/T4g シリーズ（バースト可能）：
 価格例（us-east-1, 2024年）：
 m6i.large (2 vCPU, 8 GiB): $0.096/時間
 t3.large (2 vCPU, 8 GiB): $0.0832/時間
-`
+```
 
 **Azure (Dv4, Dav4, B シリーズ)**
-`
+```
 Dv4/Dav4 シリーズ：
 - Intel Xeon Platinum 8272CL / AMD EPYC 7452
 - 最大 96 vCPU, 384 GiB メモリ
@@ -101,10 +101,10 @@ B シリーズ（バースト可能）：
 価格例（East US, 2024年）：
 D2v4 (2 vCPU, 8 GiB): $0.096/時間
 B2s (2 vCPU, 4 GiB): $0.0416/時間
-`
+```
 
 **GCP (N2, N2D, E2)**
-`
+```
 N2/N2D シリーズ：
 - Intel Xeon / AMD EPYC 第2世代
 - カスタムマシンタイプ対応
@@ -119,12 +119,12 @@ E2 シリーズ（コスト最適化）：
 価格例（us-central1, 2024年）：
 n2-standard-2 (2 vCPU, 8 GiB): $0.0971/時間
 e2-standard-2 (2 vCPU, 8 GiB): $0.0669/時間
-`
+```
 
 #### 2. コンピュート最適化（Compute Optimized）
 
 **設計思想：**
-`
+```
 高性能CPU重視：
 - 高周波数プロセッサ
 - vCPU : メモリ = 1:2 の比率
@@ -135,12 +135,12 @@ e2-standard-2 (2 vCPU, 8 GiB): $0.0669/時間
 - 科学計算・シミュレーション
 - 分散分析
 - 高性能ゲームサーバー
-`
+```
 
 **各プロバイダーの詳細：**
 
 **AWS (C6i, C6a, C7g)**
-`
+```
 C6i/C6a シリーズ：
 - Intel Xeon 第3世代 / AMD EPYC 第3世代
 - 最大 3.5 GHz の高クロック
@@ -155,10 +155,10 @@ C7g シリーズ（ARM）：
 価格例（us-east-1, 2024年）：
 c6i.large (2 vCPU, 4 GiB): $0.085/時間
 c7g.large (2 vCPU, 4 GiB): $0.0725/時間
-`
+```
 
 **Azure (Fv2, Fx)**
-`
+```
 Fv2 シリーズ：
 - Intel Xeon Platinum 8272CL
 - 最大 3.7 GHz ベースクロック
@@ -167,10 +167,10 @@ Fv2 シリーズ：
 
 価格例（East US, 2024年）：
 F2s_v2 (2 vCPU, 4 GiB): $0.085/時間
-`
+```
 
 **GCP (C2, C2D)**
-`
+```
 C2/C2D シリーズ：
 - Intel Xeon / AMD EPYC 第2世代
 - 最大 3.9 GHz のターボクロック
@@ -180,12 +180,12 @@ C2/C2D シリーズ：
 価格例（us-central1, 2024年）：
 c2-standard-2 (2 vCPU, 8 GiB): $0.1002/時間
 c2d-standard-2 (2 vCPU, 8 GiB): $0.0891/時間
-`
+```
 
 #### 3. メモリ最適化（Memory Optimized）
 
 **設計思想：**
-`
+```
 大容量メモリ重視：
 - vCPU : メモリ = 1:8 または 1:16 の比率
 - 高メモリ帯域幅
@@ -196,12 +196,12 @@ c2d-standard-2 (2 vCPU, 8 GiB): $0.0891/時間
 - リアルタイム解析
 - 大容量キャッシュ
 - 高性能計算（HPC）
-`
+```
 
 **各プロバイダーの詳細：**
 
 **AWS (R6i, R6a, X1e, z1d)**
-`
+```
 R6i/R6a シリーズ：
 - Intel Xeon 第3世代 / AMD EPYC 第3世代
 - 最大 1024 GiB メモリ
@@ -222,10 +222,10 @@ z1d シリーズ：
 r6i.large (2 vCPU, 16 GiB): $0.126/時間
 x1e.large (2 vCPU, 61 GiB): $0.334/時間
 z1d.large (2 vCPU, 16 GiB): $0.186/時間
-`
+```
 
 **Azure (Ev4, Eav4, Mv2)**
-`
+```
 Ev4/Eav4 シリーズ：
 - Intel Xeon Platinum / AMD EPYC 第2世代
 - 最大 672 GiB メモリ
@@ -240,10 +240,10 @@ Mv2 シリーズ：
 価格例（East US, 2024年）：
 E2v4 (2 vCPU, 16 GiB): $0.126/時間
 M64s_v2 (64 vCPU, 1024 GiB): $5.888/時間
-`
+```
 
 **GCP (N2-highmem, M1, M2)**
-`
+```
 N2-highmem シリーズ：
 - Intel Xeon 第2世代
 - 最大 6.5 GiB メモリ/vCPU
@@ -258,12 +258,12 @@ M1/M2 シリーズ：
 価格例（us-central1, 2024年）：
 n2-highmem-2 (2 vCPU, 16 GiB): $0.1188/時間
 m1-ultramem-40 (40 vCPU, 961 GiB): $6.7034/時間
-`
+```
 
 #### 4. ストレージ最適化（Storage Optimized）
 
 **設計思想：**
-`
+```
 高速ストレージ重視：
 - NVMe SSD 搭載
 - 高 IOPS・低レイテンシ
@@ -274,12 +274,12 @@ m1-ultramem-40 (40 vCPU, 961 GiB): $6.7034/時間
 - データウェアハウス
 - 高IOPS NoSQL データベース
 - 検索エンジン
-`
+```
 
 **各プロバイダーの詳細：**
 
 **AWS (I3, I3en, I4i, D2, D3)**
-`
+```
 I3/I3en シリーズ：
 - NVMe SSD 搭載
 - 最大 15.2 TiB NVMe ストレージ
@@ -301,10 +301,10 @@ D2/D3 シリーズ：
 i3.large (2 vCPU, 15.25 GiB + 475 GB NVMe): $0.156/時間
 i4i.large (2 vCPU, 16 GiB + 468 GB NVMe): $0.1692/時間
 d3.large (2 vCPU, 8 GiB + 6000 GB HDD): $0.1662/時間
-`
+```
 
 **Azure (Lv2, Lv3)**
-`
+```
 Lv2/Lv3 シリーズ：
 - NVMe SSD 搭載
 - 最大 1.92 TiB NVMe ストレージ
@@ -314,10 +314,10 @@ Lv2/Lv3 シリーズ：
 価格例（East US, 2024年）：
 L8s_v2 (8 vCPU, 64 GiB + 1920 GB NVMe): $0.696/時間
 L8s_v3 (8 vCPU, 64 GiB + 1920 GB NVMe): $0.624/時間
-`
+```
 
 **GCP (Local SSD)**
-`
+```
 Local SSD：
 - 375 GB NVMe SSD
 - 最大 24 個まで接続可能
@@ -327,12 +327,12 @@ Local SSD：
 価格例（us-central1, 2024年）：
 Local SSD: $0.04/時間（375 GB あたり）
 n2-standard-2 + 1x Local SSD: $0.1371/時間
-`
+```
 
 #### 5. 高性能コンピューティング（HPC）
 
 **設計思想：**
-`
+```
 大規模並列処理：
 - 高性能CPU・GPU
 - 高帯域幅ネットワーク
@@ -344,12 +344,12 @@ n2-standard-2 + 1x Local SSD: $0.1371/時間
 - 機械学習・AI トレーニング
 - 金融モデリング
 - 気象・地震解析
-`
+```
 
 **各プロバイダーの詳細：**
 
 **AWS (HPC6a, HPC7g)**
-`
+```
 HPC6a シリーズ：
 - AMD EPYC 第3世代
 - 最大 96 vCPU
@@ -365,10 +365,10 @@ HPC7g シリーズ：
 価格例（us-east-1, 2024年）：
 hpc6a.48xlarge (96 vCPU, 384 GiB): $2.88/時間
 hpc7g.4xlarge (16 vCPU, 128 GiB): $1.2848/時間
-`
+```
 
 **Azure (HBv3, HCv1, NCv3)**
-`
+```
 HBv3 シリーズ：
 - AMD EPYC 第3世代
 - 最大 120 vCPU
@@ -391,10 +391,10 @@ NCv3 シリーズ：
 HB120rs_v3 (120 vCPU, 448 GiB): $3.168/時間
 HC44rs (44 vCPU, 352 GiB): $2.64/時間
 NC24rs_v3 (24 vCPU, 448 GiB + 4x V100): $18.12/時間
-`
+```
 
 **GCP (C2, N2, A2)**
-`
+```
 C2 シリーズ：
 - Intel Xeon Cascade Lake
 - 最大 60 vCPU
@@ -410,7 +410,7 @@ A2 シリーズ：
 価格例（us-central1, 2024年）：
 c2-standard-60 (60 vCPU, 240 GiB): $3.006/時間
 a2-highgpu-1g (12 vCPU, 85 GiB + 1x A100): $3.673/時間
-`
+```
 
 ### インスタンスタイプ選択のフレームワーク
 
@@ -442,7 +442,7 @@ workload_analysis = {
         "capacity": 100     # GB
     }
 }
-`
+```
 
 #### 2. コスト最適化
 
@@ -466,7 +466,7 @@ instances = ["m6i.large", "m6i.xlarge", "c6i.large", "r6i.large"]
 for instance in instances:
     cost = calculate_instance_cost(instance)
     print(f"{instance}: ${cost:.2f}/month")
-`
+```
 
 #### 3. ベンチマーキング
 
@@ -484,14 +484,14 @@ fio --name=random-read --ioengine=libaio --rw=randread --bs=4k --numjobs=1 --siz
 
 # ネットワーク ベンチマーク
 iperf3 -c target-server -t 60 -P 4
-`
+```
 
 ### オペレーティングシステムの選択
 
 #### 1. Linux ディストリビューション
 
 **Amazon Linux 2**
-`
+```
 特徴：
 - AWS 最適化
 - 長期サポート（5年）
@@ -502,10 +502,10 @@ iperf3 -c target-server -t 60 -P 4
 - AWS 中心の環境
 - 運用コストを抑えたい場合
 - AWS サービスとの統合重視
-`
+```
 
 **Ubuntu**
-`
+```
 特徴：
 - 豊富なパッケージ
 - 活発なコミュニティ
@@ -516,10 +516,10 @@ iperf3 -c target-server -t 60 -P 4
 - 開発環境
 - コンテナ化アプリケーション
 - オープンソースソフトウェア
-`
+```
 
 **CentOS/RHEL**
-`
+```
 特徴：
 - エンタープライズ志向
 - 長期サポート
@@ -530,12 +530,12 @@ iperf3 -c target-server -t 60 -P 4
 - エンタープライズアプリケーション
 - 長期運用システム
 - コンプライアンス要件
-`
+```
 
 #### 2. Windows Server
 
 **Windows Server 2019/2022**
-`
+```
 特徴：
 - Active Directory 統合
 - .NET アプリケーション
@@ -546,10 +546,10 @@ iperf3 -c target-server -t 60 -P 4
 - Microsoft 技術スタック
 - エンタープライズアプリケーション
 - レガシーシステム移行
-`
+```
 
 **ライセンス考慮事項：**
-`
+```
 BYOL (Bring Your Own License)：
 - 既存ライセンスの活用
 - ライセンス持込割引
@@ -559,7 +559,7 @@ License Included：
 - 従量課金モデル
 - 初期投資不要
 - 使用量に応じた課金
-`
+```
 
 ### 実践的な選択事例
 
@@ -572,7 +572,7 @@ License Included：
 - 高可用性要求
 
 **選択結果：**
-`
+```
 推奨構成：
 - インスタンスタイプ: m6i.large
 - OS: Ubuntu 20.04 LTS
@@ -583,7 +583,7 @@ License Included：
 - バランスの取れたリソース比率
 - バーストトラフィックに対応
 - コスト効率の良い選択
-`
+```
 
 #### 事例2: データベースサーバー
 
@@ -594,7 +594,7 @@ License Included：
 - 99.9% 可用性
 
 **選択結果：**
-`
+```
 推奨構成：
 - インスタンスタイプ: r6i.xlarge
 - OS: Amazon Linux 2
@@ -605,7 +605,7 @@ License Included：
 - 高メモリ・CPU 比率
 - EBS 最適化
 - マネージドサービス利用
-`
+```
 
 #### 事例3: 機械学習ワークロード
 
@@ -616,7 +616,7 @@ License Included：
 - バッチ処理
 
 **選択結果：**
-`
+```
 推奨構成：
 - インスタンスタイプ: p4d.24xlarge
 - OS: Deep Learning AMI
@@ -627,7 +627,7 @@ License Included：
 - 高性能GPU（8x A100）
 - 高帯域幅ネットワーク
 - 最適化されたML環境
-`
+```
 
 ## 3.2 仮想マシンのライフサイクル管理
 
@@ -726,7 +726,7 @@ business_metrics = {
 
 capacity_plan = calculate_capacity_requirements(business_metrics)
 print(f"推奨構成: {capacity_plan['recommended_instances']}")
-`
+```
 
 #### 2. プロビジョニング・起動フェーズ
 
@@ -886,7 +886,7 @@ resource "aws_autoscaling_group" "web_server" {
     propagate_at_launch = true
   }
 }
-`
+```
 
 **User Data による初期設定**
 
@@ -1077,7 +1077,7 @@ aws sns publish \
     --subject "Instance Initialization Complete"
 
 log "Initialization complete"
-`
+```
 
 #### 3. 設定・構成管理フェーズ
 
@@ -1153,7 +1153,7 @@ log "Initialization complete"
         name: httpd
         state: restarted
         enabled: yes
-`
+```
 
 
 #### 4. 運用・監視フェーズ
@@ -1277,7 +1277,7 @@ if __name__ == "__main__":
     instance_id = "i-1234567890abcdef0"
     environment = "production"
     setup_comprehensive_monitoring(instance_id, environment)
-`
+```
 
 #### 5. メンテナンス・更新フェーズ
 
@@ -1470,7 +1470,7 @@ main() {
 
 # 実行
 main "$@"
-`
+```
 
 #### 6. 最適化・スケーリングフェーズ
 
@@ -1661,7 +1661,7 @@ if __name__ == "__main__":
     )
     
     print(f"Scaling policies created: {policy_arns}")
-`
+```
 
 #### 7. 廃止・削除フェーズ
 
@@ -1929,7 +1929,7 @@ if __name__ == "__main__":
         print(f"Instance {instance_id} decommissioned successfully")
     else:
         print(f"Failed to decommission instance {instance_id}")
-`
+```
 
 ---
 
