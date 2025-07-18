@@ -96,10 +96,10 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 { font-size: 2.25rem; }
 h2 { font-size: 1.875rem; }
-h3 { font-size: 1.375rem; }
-h4 { font-size: 1.25rem; }
-h5 { font-size: 1.125rem; }
-h6 { font-size: 1rem; }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1.125rem; }
+h5 { font-size: 1rem; }
+h6 { font-size: 0.875rem; }
 
 p {
     margin-top: 0;
@@ -127,8 +127,9 @@ strong, b {
 /* Ensure consistent font size for bold text in content */
 .page-content strong,
 .page-content b {
-    font-size: 1rem !important;
+    font-size: inherit !important;
     font-weight: 600;
+    color: inherit;
 }
 
 /* Specific styling for bold text in paragraphs */
@@ -136,6 +137,7 @@ p strong,
 p b {
     font-size: inherit !important;
     font-weight: 600;
+    color: inherit;
 }
 
 /* Layout */
