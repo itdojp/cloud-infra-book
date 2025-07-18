@@ -17,51 +17,109 @@
             <h4 class="toc-section-title">はじめに</h4>
             <ul class="toc-list">
                 <li class="toc-item">
-                    <a href="{{ '/src/introduction/preface.html' | relative_url }}" class="toc-link {% if page.url contains '/introduction/preface' %}active{% endif %}">
+                    <a href="{{ '/introduction/' | relative_url }}" class="toc-link {% if page.url contains '/introduction/' %}active{% endif %}">
                         まえがき
                     </a>
                 </li>
             </ul>
         </div>
 
-        <!-- Chapters -->
+        <!-- Part I: 基礎編 -->
         <div class="toc-section">
-            <h4 class="toc-section-title">本編</h4>
+            <h4 class="toc-section-title">Part I: 基礎編</h4>
             <ul class="toc-list">
                 <li class="toc-item toc-chapter">
-                    <a href="{{ '/src/chapter-1/index.html' | relative_url }}" class="toc-link {% if page.url contains '/chapter-1/' %}active{% endif %}">
+                    <a href="{{ '/chapter-chapter01/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-chapter01/' %}active{% endif %}">
                         <span class="chapter-number">第1章</span>
-                        <span class="chapter-title">エンジニアの思考OS</span>
+                        <span class="chapter-title">クラウドインフラストラクチャの概要</span>
                     </a>
                 </li>
                 <li class="toc-item toc-chapter">
-                    <a href="{{ '/src/chapter-2/index.html' | relative_url }}" class="toc-link {% if page.url contains '/chapter-2/' %}active{% endif %}">
+                    <a href="{{ '/chapter-chapter02/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-chapter02/' %}active{% endif %}">
                         <span class="chapter-number">第2章</span>
-                        <span class="chapter-title">要件定義の認知プロセス</span>
+                        <span class="chapter-title">クラウドアーキテクチャの基本原則</span>
                     </a>
                 </li>
+            </ul>
+        </div>
+
+        <!-- Part II: コアサービス編 -->
+        <div class="toc-section">
+            <h4 class="toc-section-title">Part II: コアサービス編</h4>
+            <ul class="toc-list">
                 <li class="toc-item toc-chapter">
-                    <a href="{{ '/src/chapter-3/index.html' | relative_url }}" class="toc-link {% if page.url contains '/chapter-3/' %}active{% endif %}">
+                    <a href="{{ '/chapter-chapter03/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-chapter03/' %}active{% endif %}">
                         <span class="chapter-number">第3章</span>
-                        <span class="chapter-title">アーキテクチャ設計の意思決定</span>
+                        <span class="chapter-title">仮想マシン（Compute）の活用</span>
                     </a>
                 </li>
                 <li class="toc-item toc-chapter">
-                    <a href="{{ '/src/chapter-4/index.html' | relative_url }}" class="toc-link {% if page.url contains '/chapter-4/' %}active{% endif %}">
+                    <a href="{{ '/chapter-chapter04/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-chapter04/' %}active{% endif %}">
                         <span class="chapter-number">第4章</span>
-                        <span class="chapter-title">開発/構築フェーズの最適化思考</span>
+                        <span class="chapter-title">ストレージサービスの設計</span>
                     </a>
                 </li>
                 <li class="toc-item toc-chapter">
-                    <a href="{{ '/src/chapter-5/index.html' | relative_url }}" class="toc-link {% if page.url contains '/chapter-5/' %}active{% endif %}">
+                    <a href="{{ '/chapter-chapter05/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-chapter05/' %}active{% endif %}">
                         <span class="chapter-number">第5章</span>
-                        <span class="chapter-title">ステークホルダーマネジメント</span>
+                        <span class="chapter-title">ネットワークインフラの構築</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Part III: 運用管理編 -->
+        <div class="toc-section">
+            <h4 class="toc-section-title">Part III: 運用管理編</h4>
+            <ul class="toc-list">
+                <li class="toc-item toc-chapter">
+                    <a href="{{ '/chapter-chapter06/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-chapter06/' %}active{% endif %}">
+                        <span class="chapter-number">第6章</span>
+                        <span class="chapter-title">セキュリティ対策の実装</span>
                     </a>
                 </li>
                 <li class="toc-item toc-chapter">
-                    <a href="{{ '/src/chapter-6/index.html' | relative_url }}" class="toc-link {% if page.url contains '/chapter-6/' %}active{% endif %}">
-                        <span class="chapter-number">第6章</span>
-                        <span class="chapter-title">危機管理と問題解決</span>
+                    <a href="{{ '/chapter-chapter07/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-chapter07/' %}active{% endif %}">
+                        <span class="chapter-number">第7章</span>
+                        <span class="chapter-title">監視・ログ管理の設計</span>
+                    </a>
+                </li>
+                <li class="toc-item toc-chapter">
+                    <a href="{{ '/chapter-chapter08/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-chapter08/' %}active{% endif %}">
+                        <span class="chapter-number">第8章</span>
+                        <span class="chapter-title">バックアップ・災害復旧戦略</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Part IV: 先進技術編 -->
+        <div class="toc-section">
+            <h4 class="toc-section-title">Part IV: 先進技術編</h4>
+            <ul class="toc-list">
+                <li class="toc-item toc-chapter">
+                    <a href="{{ '/chapter-chapter09/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-chapter09/' %}active{% endif %}">
+                        <span class="chapter-number">第9章</span>
+                        <span class="chapter-title">コンテナ・オーケストレーション</span>
+                    </a>
+                </li>
+                <li class="toc-item toc-chapter">
+                    <a href="{{ '/chapter-chapter10/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-chapter10/' %}active{% endif %}">
+                        <span class="chapter-number">第10章</span>
+                        <span class="chapter-title">Infrastructure as Code（IaC）</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Part V: 統合編 -->
+        <div class="toc-section">
+            <h4 class="toc-section-title">Part V: 統合編</h4>
+            <ul class="toc-list">
+                <li class="toc-item toc-chapter">
+                    <a href="{{ '/chapter-chapter11/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-chapter11/' %}active{% endif %}">
+                        <span class="chapter-number">第11章</span>
+                        <span class="chapter-title">マルチクラウド戦略とガバナンス</span>
                     </a>
                 </li>
             </ul>
@@ -72,21 +130,9 @@
             <h4 class="toc-section-title">付録</h4>
             <ul class="toc-list">
                 <li class="toc-item">
-                    <a href="{{ '/src/appendices/templates.html' | relative_url }}" class="toc-link {% if page.url contains '/appendices/templates' %}active{% endif %}">
-                        <span class="appendix-label">付録A</span>
-                        <span class="appendix-title">思考ツールテンプレート集</span>
-                    </a>
-                </li>
-                <li class="toc-item">
-                    <a href="{{ '/src/appendices/case-studies.html' | relative_url }}" class="toc-link {% if page.url contains '/appendices/case-studies' %}active{% endif %}">
-                        <span class="appendix-label">付録B</span>
-                        <span class="appendix-title">ケーススタディ</span>
-                    </a>
-                </li>
-                <li class="toc-item">
-                    <a href="{{ '/src/appendices/reading-list.html' | relative_url }}" class="toc-link {% if page.url contains '/appendices/reading-list' %}active{% endif %}">
-                        <span class="appendix-label">付録C</span>
-                        <span class="appendix-title">推奨読書リスト</span>
+                    <a href="{{ '/appendices/' | relative_url }}" class="toc-link {% if page.url contains '/appendices/' %}active{% endif %}">
+                        <span class="appendix-label">付録</span>
+                        <span class="appendix-title">参考資料</span>
                     </a>
                 </li>
             </ul>

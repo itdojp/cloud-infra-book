@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: book
 title: クラウドインフラ設計・構築ガイド
 ---
 
@@ -26,8 +26,8 @@ title: クラウドインフラ設計・構築ガイド
 - [第8章：バックアップ・災害復旧戦略](chapter-chapter08/)
 
 ### Part IV: 先進技術編
-- 第9章：コンテナ・オーケストレーション（準備中）
-- 第10章：Infrastructure as Code（IaC）（準備中）
+- [第9章：コンテナ・オーケストレーション](chapter-chapter09/)
+- [第10章：Infrastructure as Code（IaC）](chapter-chapter10/)
 
 ### Part V: 統合編
 - [第11章：マルチクラウド戦略とガバナンス](chapter-chapter11/)
