@@ -1780,15 +1780,15 @@ class SMBImplementation:
         windows_mount_script = f"""
 # PowerShell script for mounting Azure Files
 $connectTestResult = Test-NetConnection -ComputerName <storage-account>.file.core.windows.net -Port 445
-`{% raw %}`if ($connectTestResult.TcpTestSucceeded) {% raw %}{{
+{% raw %}if ($connectTestResult.TcpTestSucceeded) {
     # 資格情報の保存
-    cmd.exe /C "cmdkey /add:`"<storage-account>.file.core.windows.net`" /user:`"Azure\<storage-account>`" /pass:`"<storage-account-key>`{% raw %}""
+    cmd.exe /C "cmdkey /add:`"<storage-account>.file.core.windows.net`" /user:`"Azure\<storage-account>`" /pass:`"<storage-account-key>`""
     
     # ドライブのマウント
     New-PSDrive -Name Z -PSProvider FileSystem -Root "\\<storage-account>.file.core.windows.net\{share_name}" -Persist
-}}{% endraw %} else {{
+} else {
     Write-Error -Message "Unable to reach the Azure storage account via port 445."
-}}`{% endraw %}`
+}{% endraw %}
 """
         
         # SMBマウントスクリプト（Linux）
@@ -1821,7 +1821,6 @@ sudo mount -a
             'windows_mount': windows_mount_script,
             'linux_mount': linux_mount_script
         }
-{% endraw %}`
 
 ### パフォーマンスとスケーラビリティ
 

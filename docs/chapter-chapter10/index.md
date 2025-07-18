@@ -1247,15 +1247,15 @@ http {
     default_type application/octet-stream;
     
     # SSL設定
-    `{% if nginx_use_ssl | default(false) %}`
-    ssl_protocols `{% raw %}`{{ nginx_ssl_protocols }}`{% endraw %}`;
-    ssl_ciphers `{% raw %}`{{ nginx_ssl_ciphers }}`{% endraw %}`;
+    {% raw %}{% if nginx_use_ssl | default(false) %}
+    ssl_protocols {{ nginx_ssl_protocols }};
+    ssl_ciphers {{ nginx_ssl_ciphers }};
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
     ssl_stapling on;
     ssl_stapling_verify on;
-    `{% endif %}`
+    {% endif %}{% endraw %}
     
     # ログ設定
     access_log /var/log/nginx/access.log;
