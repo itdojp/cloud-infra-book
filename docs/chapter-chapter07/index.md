@@ -1,7 +1,7 @@
 ---
 title: "第7章：監視とログ管理"
 chapter: chapter07
-layout: default
+layout: book
 ---
 
 # 第7章：監視とログ管理

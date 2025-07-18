@@ -1,7 +1,7 @@
 ---
 title: "はじめに"
 introduction: true
-layout: default
+layout: book
 ---
 
 # はじめに

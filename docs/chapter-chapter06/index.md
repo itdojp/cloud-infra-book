@@ -1,7 +1,7 @@
 ---
 title: "第6章：IAMとセキュリティ実践"
 chapter: chapter06
-layout: default
+layout: book
 ---
 
 # 第6章：IAMとセキュリティ実践

@@ -1,7 +1,7 @@
 ---
 title: "第1章：クラウドコンピューティングの基礎"
 chapter: chapter01
-layout: default
+layout: book
 ---
 
 # 第1章：クラウドコンピューティングの基礎

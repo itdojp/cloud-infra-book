@@ -1,7 +1,7 @@
 ---
 title: "第4章：クラウドストレージの設計と利用"
 chapter: chapter04
-layout: default
+layout: book
 ---
 # 第4章：クラウドストレージの設計と利用
 

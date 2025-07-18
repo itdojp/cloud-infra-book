@@ -1,7 +1,7 @@
 ---
 title: "第11章：エンタープライズ設計パターンと事例"
 chapter: chapter11
-layout: default
+layout: book
 ---
 
 # 第11章：エンタープライズ設計パターンと事例
