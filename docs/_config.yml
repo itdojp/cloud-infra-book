@@ -17,11 +17,10 @@ highlighter: rouge
 # GitHub Pages標準テーマを使用しない
 # theme: minima
 
-# プラグイン
+# プラグイン（GitHub Pages標準サポート）
 plugins:
   - jekyll-feed
   - jekyll-sitemap
-  - jekyll-seo-tag
 
 # デフォルト設定
 defaults:
