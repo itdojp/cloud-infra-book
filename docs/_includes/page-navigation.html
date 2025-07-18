@@ -3,53 +3,68 @@
 {% assign previous_page = nil %}
 {% assign next_page = nil %}
 
-<!-- Define page order manually -->
-{% if current_url contains '/introduction/preface' %}
-    {% assign next_page_url = '/src/chapter-1/index.html' %}
-    {% assign next_page_title = '第1章 エンジニアの思考OS' %}
-{% elsif current_url contains '/chapter-1/' %}
-    {% assign previous_page_url = '/src/introduction/preface.html' %}
-    {% assign previous_page_title = 'まえがき' %}
-    {% assign next_page_url = '/src/chapter-2/index.html' %}
-    {% assign next_page_title = '第2章 要件定義の認知プロセス' %}
-{% elsif current_url contains '/chapter-2/' %}
-    {% assign previous_page_url = '/src/chapter-1/index.html' %}
-    {% assign previous_page_title = '第1章 エンジニアの思考OS' %}
-    {% assign next_page_url = '/src/chapter-3/index.html' %}
-    {% assign next_page_title = '第3章 アーキテクチャ設計の意思決定' %}
-{% elsif current_url contains '/chapter-3/' %}
-    {% assign previous_page_url = '/src/chapter-2/index.html' %}
-    {% assign previous_page_title = '第2章 要件定義の認知プロセス' %}
-    {% assign next_page_url = '/src/chapter-4/index.html' %}
-    {% assign next_page_title = '第4章 開発/構築フェーズの最適化思考' %}
-{% elsif current_url contains '/chapter-4/' %}
-    {% assign previous_page_url = '/src/chapter-3/index.html' %}
-    {% assign previous_page_title = '第3章 アーキテクチャ設計の意思決定' %}
-    {% assign next_page_url = '/src/chapter-5/index.html' %}
-    {% assign next_page_title = '第5章 ステークホルダーマネジメント' %}
-{% elsif current_url contains '/chapter-5/' %}
-    {% assign previous_page_url = '/src/chapter-4/index.html' %}
-    {% assign previous_page_title = '第4章 開発/構築フェーズの最適化思考' %}
-    {% assign next_page_url = '/src/chapter-6/index.html' %}
-    {% assign next_page_title = '第6章 危機管理と問題解決' %}
-{% elsif current_url contains '/chapter-6/' %}
-    {% assign previous_page_url = '/src/chapter-5/index.html' %}
-    {% assign previous_page_title = '第5章 ステークホルダーマネジメント' %}
-    {% assign next_page_url = '/src/appendices/templates.html' %}
-    {% assign next_page_title = '付録A 思考ツールテンプレート集' %}
-{% elsif current_url contains '/appendices/templates' %}
-    {% assign previous_page_url = '/src/chapter-6/index.html' %}
-    {% assign previous_page_title = '第6章 危機管理と問題解決' %}
-    {% assign next_page_url = '/src/appendices/case-studies.html' %}
-    {% assign next_page_title = '付録B ケーススタディ' %}
-{% elsif current_url contains '/appendices/case-studies' %}
-    {% assign previous_page_url = '/src/appendices/templates.html' %}
-    {% assign previous_page_title = '付録A 思考ツールテンプレート集' %}
-    {% assign next_page_url = '/src/appendices/reading-list.html' %}
-    {% assign next_page_title = '付録C 推奨読書リスト' %}
-{% elsif current_url contains '/appendices/reading-list' %}
-    {% assign previous_page_url = '/src/appendices/case-studies.html' %}
-    {% assign previous_page_title = '付録B ケーススタディ' %}
+<!-- Define page order manually for cloud-infra-book -->
+{% if current_url contains '/introduction/' %}
+    {% assign next_page_url = '/chapter-chapter01/' %}
+    {% assign next_page_title = '第1章 クラウドインフラストラクチャの概要' %}
+{% elsif current_url contains '/chapter-chapter01/' %}
+    {% assign previous_page_url = '/introduction/' %}
+    {% assign previous_page_title = 'はじめに' %}
+    {% assign next_page_url = '/chapter-chapter02/' %}
+    {% assign next_page_title = '第2章 クラウドアーキテクチャの基本原則' %}
+{% elsif current_url contains '/chapter-chapter02/' %}
+    {% assign previous_page_url = '/chapter-chapter01/' %}
+    {% assign previous_page_title = '第1章 クラウドインフラストラクチャの概要' %}
+    {% assign next_page_url = '/chapter-chapter03/' %}
+    {% assign next_page_title = '第3章 仮想マシン（Compute）の活用' %}
+{% elsif current_url contains '/chapter-chapter03/' %}
+    {% assign previous_page_url = '/chapter-chapter02/' %}
+    {% assign previous_page_title = '第2章 クラウドアーキテクチャの基本原則' %}
+    {% assign next_page_url = '/chapter-chapter04/' %}
+    {% assign next_page_title = '第4章 ストレージサービスの設計' %}
+{% elsif current_url contains '/chapter-chapter04/' %}
+    {% assign previous_page_url = '/chapter-chapter03/' %}
+    {% assign previous_page_title = '第3章 仮想マシン（Compute）の活用' %}
+    {% assign next_page_url = '/chapter-chapter05/' %}
+    {% assign next_page_title = '第5章 ネットワークインフラの構築' %}
+{% elsif current_url contains '/chapter-chapter05/' %}
+    {% assign previous_page_url = '/chapter-chapter04/' %}
+    {% assign previous_page_title = '第4章 ストレージサービスの設計' %}
+    {% assign next_page_url = '/chapter-chapter06/' %}
+    {% assign next_page_title = '第6章 セキュリティ対策の実装' %}
+{% elsif current_url contains '/chapter-chapter06/' %}
+    {% assign previous_page_url = '/chapter-chapter05/' %}
+    {% assign previous_page_title = '第5章 ネットワークインフラの構築' %}
+    {% assign next_page_url = '/chapter-chapter07/' %}
+    {% assign next_page_title = '第7章 監視・ログ管理の設計' %}
+{% elsif current_url contains '/chapter-chapter07/' %}
+    {% assign previous_page_url = '/chapter-chapter06/' %}
+    {% assign previous_page_title = '第6章 セキュリティ対策の実装' %}
+    {% assign next_page_url = '/chapter-chapter08/' %}
+    {% assign next_page_title = '第8章 バックアップ・災害復旧戦略' %}
+{% elsif current_url contains '/chapter-chapter08/' %}
+    {% assign previous_page_url = '/chapter-chapter07/' %}
+    {% assign previous_page_title = '第7章 監視・ログ管理の設計' %}
+    {% assign next_page_url = '/chapter-chapter09/' %}
+    {% assign next_page_title = '第9章 コンテナ・オーケストレーション' %}
+{% elsif current_url contains '/chapter-chapter09/' %}
+    {% assign previous_page_url = '/chapter-chapter08/' %}
+    {% assign previous_page_title = '第8章 バックアップ・災害復旧戦略' %}
+    {% assign next_page_url = '/chapter-chapter10/' %}
+    {% assign next_page_title = '第10章 Infrastructure as Code（IaC）' %}
+{% elsif current_url contains '/chapter-chapter10/' %}
+    {% assign previous_page_url = '/chapter-chapter09/' %}
+    {% assign previous_page_title = '第9章 コンテナ・オーケストレーション' %}
+    {% assign next_page_url = '/chapter-chapter11/' %}
+    {% assign next_page_title = '第11章 マルチクラウド戦略とガバナンス' %}
+{% elsif current_url contains '/chapter-chapter11/' %}
+    {% assign previous_page_url = '/chapter-chapter10/' %}
+    {% assign previous_page_title = '第10章 Infrastructure as Code（IaC）' %}
+    {% assign next_page_url = '/appendices/' %}
+    {% assign next_page_title = '付録 参考資料' %}
+{% elsif current_url contains '/appendices/' %}
+    {% assign previous_page_url = '/chapter-chapter11/' %}
+    {% assign previous_page_title = '第11章 マルチクラウド戦略とガバナンス' %}
 {% endif %}
 
 <div class="page-nav">
