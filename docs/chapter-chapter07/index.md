@@ -923,6 +923,510 @@ Site Reliability Engineering（SRE）は、Googleが提唱した運用へのア�
 `
 
 SREプラクティスの実践は、単なる手法の適用ではなく、組織文化の変革です。エラーバジェット、トイル削減、ポストモーテムなどの実践を通じて、信頼性とイノベーションのバランスを保ちながら、持続可能な運用を実現することが目標です。重要なのは、これらの実践を段階的に導入し、組織に合わせてカスタマイズすることです。
+
+## 7.7 現代的な監視手法の実装
+
+### OpenTelemetryによる統合オブザーバビリティ
+
+OpenTelemetryは、クラウドネイティブな監視において業界標準となりつつあるフレームワークです。ベンダーニュートラルな方法で、メトリクス、ログ、トレースを統合的に収集できます。
+
+**OpenTelemetryの実装例**
+
+```python
+from opentelemetry import trace, metrics
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+
+# Tracing設定
+trace.set_tracer_provider(TracerProvider())
+tracer = trace.get_tracer(__name__)
+
+# Span Processorの設定
+span_processor = BatchSpanProcessor(
+    OTLPSpanExporter(
+        endpoint="https://api.honeycomb.io/v1/traces",
+        headers={"x-honeycomb-team": "your-api-key"}
+    )
+)
+trace.get_tracer_provider().add_span_processor(span_processor)
+
+# Metricsの設定
+metric_reader = PeriodicExportingMetricReader(
+    exporter=OTLPMetricExporter(
+        endpoint="https://api.honeycomb.io/v1/metrics",
+        headers={"x-honeycomb-team": "your-api-key"}
+    ),
+    export_interval_millis=30000
+)
+metrics.set_meter_provider(MeterProvider(metric_readers=[metric_reader]))
+meter = metrics.get_meter(__name__)
+
+# カスタムメトリクス
+request_counter = meter.create_counter(
+    "requests_total",
+    description="Total number of requests",
+    unit="1",
+)
+
+response_time_histogram = meter.create_histogram(
+    "request_duration_seconds",
+    description="Request duration in seconds",
+    unit="s",
+)
+
+# 使用例
+@tracer.start_as_current_span("process_request")
+def process_request(request_id):
+    with tracer.start_as_current_span("database_query") as span:
+        span.set_attribute("request.id", request_id)
+        span.set_attribute("db.operation", "select")
+        
+        # メトリクス記録
+        request_counter.add(1, {"endpoint": "/api/users", "method": "GET"})
+        
+        # 処理時間の記録
+        import time
+        start_time = time.time()
+        
+        # 実際の処理
+        result = fetch_user_data(request_id)
+        
+        duration = time.time() - start_time
+        response_time_histogram.record(duration, {"endpoint": "/api/users"})
+        
+        return result
+```
+
+### 分散トレーシングの実装戦略
+
+分散トレーシングは、マイクロサービス環境において必須の技術です。複数のサービスにまたがるリクエストの流れを追跡し、ボトルネックや障害の根本原因を特定できます。
+
+**トレーシング実装の段階的アプローチ**
+
+```yaml
+# Stage 1: 基本的なトレーシング
+基本実装:
+  - HTTP通信の自動計装
+  - データベースクエリの記録
+  - 基本的なカスタムスパンの作成
+
+# Stage 2: 詳細なコンテキスト
+詳細実装:
+  - ビジネスロジック単位でのスパン分割
+  - カスタム属性の追加
+  - エラーハンドリングとスパン状態の管理
+
+# Stage 3: 高度な分析
+高度実装:
+  - サービス間の依存関係マッピング
+  - パフォーマンス異常の自動検出
+  - SLI/SLOとの連携
+```
+
+**Jaeger実装例**
+
+```python
+import jaeger_client
+from jaeger_client import Config
+
+def initialize_tracer(service_name):
+    config = Config(
+        config={
+            'sampler': {
+                'type': 'const',
+                'param': 1,
+            },
+            'logging': True,
+            'reporter': {
+                'log_spans': True,
+                'batch_size': 1,
+                'queue_size': 100,
+                'local_agent': {
+                    'reporting_host': 'jaeger-agent',
+                    'reporting_port': 6831,
+                }
+            }
+        },
+        service_name=service_name,
+        validate=True,
+    )
+    return config.initialize_tracer()
+
+tracer = initialize_tracer('user-service')
+
+def get_user_profile(user_id):
+    with tracer.start_span('get_user_profile') as span:
+        span.set_tag('user.id', user_id)
+        span.set_tag('span.kind', 'server')
+        
+        # 子スパンでデータベース操作
+        with tracer.start_span('database_query', child_of=span) as db_span:
+            db_span.set_tag('db.type', 'postgresql')
+            db_span.set_tag('db.statement', 'SELECT * FROM users WHERE id = %s')
+            
+            user_data = database.query_user(user_id)
+            
+            if user_data:
+                db_span.set_tag('db.rows_affected', 1)
+            else:
+                db_span.set_tag('error', True)
+                span.set_tag('error', True)
+                
+        return user_data
+```
+
+### カオスエンジニアリングと監視
+
+カオスエンジニアリングは、システムの弱点を積極的に発見し、信頼性を向上させる手法です。監視システムと組み合わせることで、より効果的な障害対応が可能になります。
+
+**Chaos Monkey実装例**
+
+```python
+import random
+import time
+from typing import List, Dict
+from dataclasses import dataclass
+from kubernetes import client, config
+
+@dataclass
+class ChaosExperiment:
+    name: str
+    target_service: str
+    failure_type: str
+    duration_seconds: int
+    success_criteria: Dict[str, float]
+
+class ChaosMonkey:
+    def __init__(self, monitoring_client):
+        self.monitoring = monitoring_client
+        self.k8s_client = client.AppsV1Api()
+        
+    def execute_experiment(self, experiment: ChaosExperiment):
+        """カオス実験を実行し、監視データを収集"""
+        
+        # 実験開始前のベースライン収集
+        baseline_metrics = self.collect_baseline_metrics(experiment.target_service)
+        
+        # 実験開始ログ
+        self.monitoring.log_event({
+            "event_type": "chaos_experiment_start",
+            "experiment_name": experiment.name,
+            "target_service": experiment.target_service,
+            "failure_type": experiment.failure_type
+        })
+        
+        try:
+            # 障害の注入
+            self.inject_failure(experiment)
+            
+            # 実験期間中の監視
+            experiment_metrics = self.monitor_during_experiment(
+                experiment.target_service, 
+                experiment.duration_seconds
+            )
+            
+            # 成功基準の評価
+            success = self.evaluate_success_criteria(
+                experiment_metrics, 
+                experiment.success_criteria
+            )
+            
+            # 結果の記録
+            self.record_experiment_result(experiment, success, experiment_metrics)
+            
+        finally:
+            # 障害の除去
+            self.remove_failure(experiment)
+            
+            # 実験終了ログ
+            self.monitoring.log_event({
+                "event_type": "chaos_experiment_end",
+                "experiment_name": experiment.name,
+                "success": success
+            })
+    
+    def inject_failure(self, experiment: ChaosExperiment):
+        """障害を注入"""
+        if experiment.failure_type == "pod_kill":
+            self.kill_random_pods(experiment.target_service)
+        elif experiment.failure_type == "network_latency":
+            self.inject_network_latency(experiment.target_service)
+        elif experiment.failure_type == "memory_stress":
+            self.inject_memory_stress(experiment.target_service)
+    
+    def kill_random_pods(self, service_name: str):
+        """ランダムにポッドを削除"""
+        pods = self.k8s_client.list_namespaced_pod(
+            namespace="default",
+            label_selector=f"app={service_name}"
+        )
+        
+        if pods.items:
+            target_pod = random.choice(pods.items)
+            self.k8s_client.delete_namespaced_pod(
+                name=target_pod.metadata.name,
+                namespace="default"
+            )
+    
+    def monitor_during_experiment(self, service_name: str, duration: int) -> Dict:
+        """実験期間中のメトリクス収集"""
+        metrics = {
+            "error_rate": [],
+            "response_time": [],
+            "throughput": []
+        }
+        
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            current_metrics = self.monitoring.get_service_metrics(service_name)
+            
+            metrics["error_rate"].append(current_metrics.get("error_rate", 0))
+            metrics["response_time"].append(current_metrics.get("response_time", 0))
+            metrics["throughput"].append(current_metrics.get("throughput", 0))
+            
+            time.sleep(10)  # 10秒間隔で収集
+        
+        return metrics
+    
+    def evaluate_success_criteria(self, metrics: Dict, criteria: Dict) -> bool:
+        """成功基準の評価"""
+        avg_error_rate = sum(metrics["error_rate"]) / len(metrics["error_rate"])
+        avg_response_time = sum(metrics["response_time"]) / len(metrics["response_time"])
+        
+        # 基準を満たしているかチェック
+        if avg_error_rate > criteria.get("max_error_rate", 0.05):
+            return False
+        if avg_response_time > criteria.get("max_response_time", 1.0):
+            return False
+            
+        return True
+
+# 使用例
+chaos_monkey = ChaosMonkey(monitoring_client)
+
+experiment = ChaosExperiment(
+    name="user-service-resilience-test",
+    target_service="user-service",
+    failure_type="pod_kill",
+    duration_seconds=300,
+    success_criteria={
+        "max_error_rate": 0.05,  # 5%以下
+        "max_response_time": 2.0  # 2秒以下
+    }
+)
+
+chaos_monkey.execute_experiment(experiment)
+```
+
+### 監視の自動化とAIOps
+
+AIOps（Artificial Intelligence for IT Operations）は、機械学習とAIを活用して、IT運用の効率化と高度化を図る手法です。
+
+**異常検出の自動化**
+
+```python
+import numpy as np
+from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
+from typing import List, Dict, Tuple
+
+class AnomalyDetector:
+    def __init__(self, contamination=0.1):
+        self.model = IsolationForest(contamination=contamination, random_state=42)
+        self.scaler = StandardScaler()
+        self.feature_names = []
+        
+    def train(self, training_data: List[Dict]):
+        """正常時のデータでモデルを学習"""
+        features = self.extract_features(training_data)
+        scaled_features = self.scaler.fit_transform(features)
+        self.model.fit(scaled_features)
+        
+    def detect_anomalies(self, current_data: List[Dict]) -> List[Tuple[int, float]]:
+        """異常を検出"""
+        features = self.extract_features(current_data)
+        scaled_features = self.scaler.transform(features)
+        
+        # 異常度スコアを計算
+        anomaly_scores = self.model.decision_function(scaled_features)
+        predictions = self.model.predict(scaled_features)
+        
+        anomalies = []
+        for i, (score, prediction) in enumerate(zip(anomaly_scores, predictions)):
+            if prediction == -1:  # 異常と判定
+                anomalies.append((i, score))
+                
+        return anomalies
+    
+    def extract_features(self, data: List[Dict]) -> np.ndarray:
+        """メトリクスからフィーチャを抽出"""
+        if not self.feature_names:
+            # 初回実行時にフィーチャ名を設定
+            self.feature_names = [
+                'cpu_usage', 'memory_usage', 'disk_usage',
+                'network_in', 'network_out', 'request_count',
+                'error_rate', 'response_time'
+            ]
+        
+        features = []
+        for record in data:
+            feature_vector = [
+                record.get(name, 0) for name in self.feature_names
+            ]
+            features.append(feature_vector)
+            
+        return np.array(features)
+
+# 使用例
+detector = AnomalyDetector()
+
+# 正常時のデータでトレーニング
+normal_data = [
+    {"cpu_usage": 45, "memory_usage": 60, "response_time": 200},
+    {"cpu_usage": 50, "memory_usage": 65, "response_time": 180},
+    # ... 正常時のデータ
+]
+
+detector.train(normal_data)
+
+# 現在のデータで異常検出
+current_data = [
+    {"cpu_usage": 95, "memory_usage": 90, "response_time": 2000},  # 異常
+    {"cpu_usage": 48, "memory_usage": 62, "response_time": 190},   # 正常
+]
+
+anomalies = detector.detect_anomalies(current_data)
+for index, score in anomalies:
+    print(f"異常を検出: データ#{index}, 異常度スコア: {score:.3f}")
+```
+
+### 監視データの可視化戦略
+
+効果的な可視化は、監視データから迅速に洞察を得るために不可欠です。
+
+**Grafanaダッシュボード設計原則**
+
+```json
+{
+  "dashboard": {
+    "title": "Service Health Overview",
+    "panels": [
+      {
+        "title": "Golden Signals",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total[5m])",
+            "legendFormat": "Request Rate"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "99th Percentile Latency"
+          },
+          {
+            "expr": "rate(http_requests_total{status=~\"5..\"}[5m]) / rate(http_requests_total[5m])",
+            "legendFormat": "Error Rate"
+          },
+          {
+            "expr": "sum(rate(http_requests_total[5m])) by (instance)",
+            "legendFormat": "Saturation"
+          }
+        ],
+        "thresholds": [
+          {
+            "color": "green",
+            "value": null
+          },
+          {
+            "color": "yellow",
+            "value": 0.01
+          },
+          {
+            "color": "red",
+            "value": 0.05
+          }
+        ]
+      },
+      {
+        "title": "Service Dependencies",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total[5m])) by (service, dependency)",
+            "legendFormat": "{{service}} -> {{dependency}}"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**アラートの階層化**
+
+```yaml
+# 重要度に基づくアラート設計
+alerts:
+  critical:
+    - name: "Service Down"
+      condition: "up == 0"
+      for: "1m"
+      action: "immediate_page"
+      
+    - name: "High Error Rate"
+      condition: "rate(http_requests_total{status=~\"5..\"}[5m]) > 0.1"
+      for: "5m"
+      action: "immediate_page"
+      
+  warning:
+    - name: "High Latency"
+      condition: "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2"
+      for: "10m"
+      action: "slack_notification"
+      
+    - name: "Unusual Traffic Pattern"
+      condition: "rate(http_requests_total[5m]) > 2 * rate(http_requests_total[1h] offset 1h)"
+      for: "15m"
+      action: "email_notification"
+      
+  info:
+    - name: "Deployment Started"
+      condition: "increase(deployment_events_total[1m]) > 0"
+      action: "slack_notification"
+```
+
+## まとめ：持続可能な監視戦略
+
+効果的な監視・ログ管理は、以下の要素を統合的に実装することで実現されます：
+
+### 重要な実装ポイント
+
+1. **段階的な導入**
+   - 基本的なメトリクス収集から開始
+   - 組織の成熟度に応じた機能追加
+   - 継続的な改善とツールの進化
+
+2. **データ駆動な意思決定**
+   - SLI/SLOに基づく客観的な評価
+   - メトリクスによる改善効果の測定
+   - 異常検出の自動化による効率化
+
+3. **組織文化の醸成**
+   - 可観測性の重要性の共有
+   - オンコール文化の健全化
+   - 継続的学習とスキル向上
+
+4. **技術の適切な選択**
+   - オープンソース vs 商用ツール
+   - クラウドネイティブな手法の採用
+   - 将来性と拡張性の考慮
+
+監視・ログ管理は、システムの信頼性を確保し、ビジネスの成長を支える重要な基盤です。適切な実装により、障害の早期発見、迅速な対応、そして継続的な改善が可能になります。
+
 ---
 
 [第08章](../chapter-chapter08/index.md)へ進む
