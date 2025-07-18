@@ -418,7 +418,7 @@ a2-highgpu-1g (12 vCPU, 85 GiB + 1x A100): $3.673/時間
 
 **パフォーマンス要件の定量化：**
 
-`python
+```python
 # ワークロード分析の例
 workload_analysis = {
     "cpu_utilization": {
@@ -448,7 +448,7 @@ workload_analysis = {
 
 **Right-sizing の実践：**
 
-`python
+```python
 # コスト最適化の計算例
 def calculate_instance_cost(instance_type, hours_per_month=730):
     prices = {
@@ -472,7 +472,7 @@ for instance in instances:
 
 **性能評価の基準：**
 
-`bash
+```bash
 # CPU ベンチマーク
 sysbench cpu --threads=2 --time=60 run
 
@@ -639,7 +639,7 @@ License Included：
 
 **キャパシティプランニング**
 
-`python
+```python
 # キャパシティプランニングの例
 import math
 
@@ -732,7 +732,7 @@ print(f"推奨構成: {capacity_plan['recommended_instances']}")
 
 **Infrastructure as Code による自動化**
 
-`yaml
+```yaml
 # Terraform による VM プロビジョニング例
 # variables.tf
 variable "environment" {
@@ -890,7 +890,7 @@ resource "aws_autoscaling_group" "web_server" {
 
 **User Data による初期設定**
 
-`bash
+```bash
 #!/bin/bash
 # userdata.sh
 
@@ -1084,7 +1084,7 @@ log "Initialization complete"
 **Ansible による構成管理**
 
 
-`yaml
+```yaml
 # playbook.yml
 ---
 - name: Configure web servers
@@ -1160,7 +1160,7 @@ log "Initialization complete"
 
 **CloudWatch による監視設定**
 
-`python
+```python
 # monitoring_setup.py
 import boto3
 import json
@@ -1283,7 +1283,7 @@ if __name__ == "__main__":
 
 **自動化されたパッチ管理**
 
-`bash
+```bash
 #!/bin/bash
 # patch_management.sh
 
@@ -1476,7 +1476,7 @@ main "$@"
 
 **自動スケーリング設定**
 
-`python
+```python
 # auto_scaling_setup.py
 import boto3
 import json
@@ -1667,7 +1667,7 @@ if __name__ == "__main__":
 
 **安全な廃止プロセス**
 
-`python
+```python
 # instance_decommission.py
 import boto3
 import json
