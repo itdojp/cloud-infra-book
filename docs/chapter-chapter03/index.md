@@ -1117,20 +1117,20 @@ log "Initialization complete"
     - name: Create virtual host
       template:
         src: vhost.conf.j2
-        dest: /etc/httpd/conf.d/`{{ app_name }}`.conf
+        dest: /etc/httpd/conf.d/`{% raw %}`{{ app_name }}`{% endraw %}`.conf
       notify: restart httpd
 
     - name: Deploy application
       git:
-        repo: https://github.com/your-org/`{{ app_name }}`.git
-        dest: /var/www/html/`{{ app_name }}`
-        version: "`{{ app_version }}`"
+        repo: https://github.com/your-org/`{% raw %}`{{ app_name }}`{% endraw %}`.git
+        dest: /var/www/html/`{% raw %}`{{ app_name }}`{% endraw %}`
+        version: "`{% raw %}`{{ app_version }}`{% endraw %}`"
         force: yes
       notify: restart httpd
 
     - name: Set file permissions
       file:
-        path: /var/www/html/`{{ app_name }}`
+        path: /var/www/html/`{% raw %}`{{ app_name }}`{% endraw %}`
         owner: apache
         group: apache
         mode: '0755'
@@ -1139,7 +1139,7 @@ log "Initialization complete"
     - name: Configure logrotate
       template:
         src: logrotate.conf.j2
-        dest: /etc/logrotate.d/`{{ app_name }}`
+        dest: /etc/logrotate.d/`{% raw %}`{{ app_name }}`{% endraw %}`
 
     - name: Setup monitoring
       include_tasks: monitoring.yml
