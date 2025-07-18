@@ -1,0 +1,186 @@
+<!-- Page Navigation (Previous/Next) -->
+{% assign current_url = page.url %}
+{% assign previous_page = nil %}
+{% assign next_page = nil %}
+
+<!-- Define page order manually -->
+{% if current_url contains '/introduction/preface' %}
+    {% assign next_page_url = '/src/chapter-1/index.html' %}
+    {% assign next_page_title = '第1章 エンジニアの思考OS' %}
+{% elsif current_url contains '/chapter-1/' %}
+    {% assign previous_page_url = '/src/introduction/preface.html' %}
+    {% assign previous_page_title = 'まえがき' %}
+    {% assign next_page_url = '/src/chapter-2/index.html' %}
+    {% assign next_page_title = '第2章 要件定義の認知プロセス' %}
+{% elsif current_url contains '/chapter-2/' %}
+    {% assign previous_page_url = '/src/chapter-1/index.html' %}
+    {% assign previous_page_title = '第1章 エンジニアの思考OS' %}
+    {% assign next_page_url = '/src/chapter-3/index.html' %}
+    {% assign next_page_title = '第3章 アーキテクチャ設計の意思決定' %}
+{% elsif current_url contains '/chapter-3/' %}
+    {% assign previous_page_url = '/src/chapter-2/index.html' %}
+    {% assign previous_page_title = '第2章 要件定義の認知プロセス' %}
+    {% assign next_page_url = '/src/chapter-4/index.html' %}
+    {% assign next_page_title = '第4章 開発/構築フェーズの最適化思考' %}
+{% elsif current_url contains '/chapter-4/' %}
+    {% assign previous_page_url = '/src/chapter-3/index.html' %}
+    {% assign previous_page_title = '第3章 アーキテクチャ設計の意思決定' %}
+    {% assign next_page_url = '/src/chapter-5/index.html' %}
+    {% assign next_page_title = '第5章 ステークホルダーマネジメント' %}
+{% elsif current_url contains '/chapter-5/' %}
+    {% assign previous_page_url = '/src/chapter-4/index.html' %}
+    {% assign previous_page_title = '第4章 開発/構築フェーズの最適化思考' %}
+    {% assign next_page_url = '/src/chapter-6/index.html' %}
+    {% assign next_page_title = '第6章 危機管理と問題解決' %}
+{% elsif current_url contains '/chapter-6/' %}
+    {% assign previous_page_url = '/src/chapter-5/index.html' %}
+    {% assign previous_page_title = '第5章 ステークホルダーマネジメント' %}
+    {% assign next_page_url = '/src/appendices/templates.html' %}
+    {% assign next_page_title = '付録A 思考ツールテンプレート集' %}
+{% elsif current_url contains '/appendices/templates' %}
+    {% assign previous_page_url = '/src/chapter-6/index.html' %}
+    {% assign previous_page_title = '第6章 危機管理と問題解決' %}
+    {% assign next_page_url = '/src/appendices/case-studies.html' %}
+    {% assign next_page_title = '付録B ケーススタディ' %}
+{% elsif current_url contains '/appendices/case-studies' %}
+    {% assign previous_page_url = '/src/appendices/templates.html' %}
+    {% assign previous_page_title = '付録A 思考ツールテンプレート集' %}
+    {% assign next_page_url = '/src/appendices/reading-list.html' %}
+    {% assign next_page_title = '付録C 推奨読書リスト' %}
+{% elsif current_url contains '/appendices/reading-list' %}
+    {% assign previous_page_url = '/src/appendices/case-studies.html' %}
+    {% assign previous_page_title = '付録B ケーススタディ' %}
+{% endif %}
+
+<div class="page-nav">
+    <!-- Previous Page -->
+    <div class="page-nav-item page-nav-prev">
+        {% if previous_page_url %}
+        <a href="{{ previous_page_url | relative_url }}" class="page-nav-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            <div class="page-nav-content">
+                <span class="page-nav-label">前のページ</span>
+                <span class="page-nav-title">{{ previous_page_title }}</span>
+            </div>
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Next Page -->
+    <div class="page-nav-item page-nav-next">
+        {% if next_page_url %}
+        <a href="{{ next_page_url | relative_url }}" class="page-nav-link">
+            <div class="page-nav-content">
+                <span class="page-nav-label">次のページ</span>
+                <span class="page-nav-title">{{ next_page_title }}</span>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.page-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.page-nav-item {
+    flex: 1;
+    max-width: 45%;
+}
+
+.page-nav-prev {
+    text-align: left;
+}
+
+.page-nav-next {
+    text-align: right;
+    margin-left: auto;
+}
+
+.page-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    background: var(--bg-primary);
+}
+
+.page-nav-link:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.page-nav-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.page-nav-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.page-nav-title {
+    font-size: 1rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .page-nav-link {
+    background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .page-nav-link:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .page-nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .page-nav-item {
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .page-nav-next {
+        margin-left: 0;
+    }
+    
+    .page-nav-link {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .page-nav-prev .page-nav-link {
+        flex-direction: row;
+    }
+    
+    .page-nav-next .page-nav-link {
+        flex-direction: row-reverse;
+    }
+}
+</style>

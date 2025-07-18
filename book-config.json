@@ -1,0 +1,84 @@
+{
+  "title": "クラウドインフラ設計・構築ガイド",
+  "description": "クラウドインフラエンジニアが実際の設計・構築業務で必要な知識を体系的に学べる実践書。設計の背景にある原理原則と実装判断の根拠を丁寧に解説し、単なる操作手順ではなく考え方を身につけることを重視しています。",
+  "author": "株式会社アイティードゥ",
+  "version": "1.0.0",
+  "structure": {
+    "chapters": [
+      {
+        "id": "introduction",
+        "title": "はじめに",
+        "description": "本書の目的と構成、クラウドインフラエンジニアに求められるスキルセット"
+      },
+      {
+        "id": "chapter01",
+        "title": "第1章：クラウドコンピューティングの基礎",
+        "description": "クラウドの本質、サービスモデル（IaaS/PaaS/SaaS）、主要プロバイダーの特徴、共有責任モデル"
+      },
+      {
+        "id": "chapter02",
+        "title": "第2章：クラウドインフラの共通概念とアーキテクチャ",
+        "description": "リージョン・AZ、仮想ネットワーク、IAMの基礎、リソース管理とタグ付け"
+      },
+      {
+        "id": "chapter03",
+        "title": "第3章：仮想マシン（Compute）の活用",
+        "description": "インスタンス選択、起動・設定、ネットワーク、Auto Scaling、監視"
+      },
+      {
+        "id": "chapter04",
+        "title": "第4章：クラウドストレージの設計と利用",
+        "description": "オブジェクト・ブロック・ファイルストレージ、データベースサービスの選択"
+      },
+      {
+        "id": "chapter05",
+        "title": "第5章：ネットワークとロードバランシング",
+        "description": "VPC設計、ルーティング・VPN、ロードバランサー、DNS・CDN"
+      },
+      {
+        "id": "chapter06",
+        "title": "第6章：IAMとセキュリティ実践",
+        "description": "RBAC、MFA、監査ログ、WAF・DDoS対策、脆弱性管理"
+      },
+      {
+        "id": "chapter07",
+        "title": "第7章：監視とログ管理",
+        "description": "クラウドネイティブ監視、メトリクス・アラート、ログ分析、統合ダッシュボード"
+      },
+      {
+        "id": "chapter08",
+        "title": "第8章：コスト管理と最適化",
+        "description": "課金モデル理解、コスト可視化、最適化戦略、予算管理"
+      },
+      {
+        "id": "chapter09",
+        "title": "第9章：サーバーレスとコンテナサービス",
+        "description": "サーバーレス概念、コンテナ技術、オーケストレーション、CI/CD連携"
+      },
+      {
+        "id": "chapter10",
+        "title": "第10章：Infrastructure as Code (IaC) と自動化",
+        "description": "IaC概念、Terraform実践、Ansible構成管理、CI/CDパイプライン"
+      },
+      {
+        "id": "chapter11",
+        "title": "第11章：エンタープライズ設計パターンと事例",
+        "description": "高可用性設計、コスト効率、トラブルシューティング、実践事例"
+      }
+    ],
+    "appendices": [
+      {
+        "id": "appendix-a",
+        "title": "付録A：クラウドサービス比較表"
+      },
+      {
+        "id": "appendix-b",
+        "title": "付録B：参考文献とリソース"
+      },
+      {
+        "id": "afterword",
+        "title": "あとがき"
+      }
+    ]
+  }
+}

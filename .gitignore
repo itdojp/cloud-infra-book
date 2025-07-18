@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+_build/
+_site/
+.tmp/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Book build artifacts
+*.pdf
+*.epub
+*.mobi
+
+# Temporary files
+.cache/
+tmp/

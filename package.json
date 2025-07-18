@@ -1,0 +1,37 @@
+{
+  "name": "クラウドインフラ設計・構築ガイド",
+  "version": "1.0.0",
+  "description": "クラウドインフラエンジニアが実際の設計・構築業務で必要な知識を体系的に学べる実践書。設計の背景にある原理原則と実装判断の根拠を丁寧に解説し、単なる操作手順ではなく考え方を身につけることを重視しています。",
+  "main": "index.md",
+  "scripts": {
+    "start": "jekyll serve --livereload",
+    "build": "jekyll build",
+    "build:safe": "bundle exec jekyll build",
+    "test": "npm run lint && npm run check-links",
+    "lint": "markdownlint src/**/*.md",
+    "check-links": "markdown-link-check src/**/*.md",
+    "check-conflicts": "node scripts/jekyll-conflict-detector.js",
+    "deploy": "gh-pages -d _site"
+  },
+  "keywords": [
+    "cloud",
+    "infrastructure",
+    "aws",
+    "azure",
+    "gcp",
+    "book",
+    "documentation",
+    "ja"
+  ],
+  "author": "株式会社アイティードゥ",
+  "license": "All rights reserved",
+  "devDependencies": {
+    "markdownlint-cli": "^0.37.0",
+    "markdown-link-check": "^3.11.2",
+    "gh-pages": "^6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itdojp/cloud-infra-book.git"
+  }
+}
