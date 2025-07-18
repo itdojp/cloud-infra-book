@@ -16,7 +16,7 @@ layout: default
 
 従量課金は「使った分だけ支払う」という一見単純な概念ですが、実践においては複雑な最適化問題となります。
 
-```
+`
 従量課金の利点:
 - 初期投資ゼロでの開始
 - 需要変動への即時対応
@@ -28,7 +28,7 @@ layout: default
 - 無駄な支出の増加リスク
 - 複雑な料金体系の理解
 - コスト管理の継続的な必要性
-```
+`
 
 ### 料金構成要素の詳細分析
 
@@ -36,7 +36,7 @@ layout: default
 
 インスタンス料金は、単純な時間単価以上の要素で構成されています。
 
-```yaml
+`yaml
 EC2インスタンス料金構成:
   基本料金:
     - インスタンスタイプ（vCPU、メモリ、ネットワーク性能）
@@ -51,13 +51,13 @@ EC2インスタンス料金構成:
     - AWS: 秒単位（最小60秒）
     - Azure: 秒単位（最小60秒）
     - GCP: 秒単位（最小60秒）
-```
+`
 
 **ストレージ料金の階層構造**
 
 ストレージコストは、容量だけでなくアクセスパターンによって大きく変わります。
 
-```
+`
 S3ストレージクラス別料金（東京リージョン）:
 ┌─────────────────┬──────────┬────────────┬─────────────┐
 │ ストレージクラス │ 保存料金 │ 取り出し  │ 最適用途    │
@@ -68,13 +68,13 @@ S3ストレージクラス別料金（東京リージョン）:
 │ Glacier Instant │ $0.005   │ $0.03      │ 四半期1回   │
 │ Glacier Deep   │ $0.002   │ $0.20      │ 年1回以下   │
 └─────────────────┴──────────┴────────────┴─────────────┘
-```
+`
 
 **ネットワーク料金の落とし穴**
 
 ネットワーク転送料金は、最も予測困難で高額になりやすい要素です。
 
-```
+`
 データ転送料金マトリクス（AWS例）:
 ┌────────────┬────────────┬──────────┬──────────┐
 │ From＼To   │ 同一AZ     │ 異なるAZ │ Internet │
@@ -84,7 +84,7 @@ S3ストレージクラス別料金（東京リージョン）:
 │ Internet   │ 無料       │ 無料     │ -        │
 └────────────┴────────────┴──────────┴──────────┘
 * 同一リージョン内
-```
+`
 
 ### 割引オプションの戦略的活用
 
@@ -92,7 +92,7 @@ S3ストレージクラス別料金（東京リージョン）:
 
 RIの購入は、技術的判断と財務的判断の両方を必要とします。
 
-```python
+`python
 # RI購入判断のフレームワーク
 def calculate_ri_roi(on_demand_cost, ri_cost, utilization_rate):
     """
@@ -110,13 +110,13 @@ def calculate_ri_roi(on_demand_cost, ri_cost, utilization_rate):
     savings = on_demand_cost - effective_ri_cost
     roi_percentage = (savings / on_demand_cost) * 100
     return roi_percentage
-```
+`
 
 **Savings Plansの柔軟性**
 
 より現代的な割引モデルであるSavings Plansは、RIの欠点を改善しています。
 
-```yaml
+`yaml
 Savings Plans比較:
   Compute Savings Plans:
     - 割引率: 最大66%
@@ -131,13 +131,13 @@ Savings Plans比較:
 選択基準:
   - 予測可能性が高い: EC2 Instance Savings Plans
   - 柔軟性重視: Compute Savings Plans
-```
+`
 
 **スポットインスタンスの活用戦略**
 
 スポットインスタンスは、適切に使用すれば大幅なコスト削減を実現できます。
 
-```yaml
+`yaml
 スポット活用パターン:
   1. ビッグデータ処理:
      - 用途: EMR、Spark処理
@@ -153,13 +153,13 @@ Savings Plans比較:
      - 構成: オンデマンド（30%）+ スポット（70%）
      - 中断対策: ELBによる自動切り離し
      - 節約率: 50-60%
-```
+`
 
 ### 隠れたコストの識別と削減
 
 **アイドルリソースの検出**
 
-```python
+`python
 # アイドルリソース検出ロジック
 アイドルリソースチェックリスト:
   EBSボリューム:
@@ -181,11 +181,11 @@ Savings Plans比較:
     - 条件: トラフィックが極小
     - コスト: $45/月 + データ転送
     - 対策: NATインスタンスへの置換検討
-```
+`
 
 **データ転送コストの最適化**
 
-```yaml
+`yaml
 データ転送最適化戦略:
   1. VPCエンドポイントの活用:
      - S3、DynamoDBへの転送料削減
@@ -200,13 +200,13 @@ Savings Plans比較:
      - 同一AZ内での処理
      - リージョン間転送の最小化
      - アーキテクチャの見直し
-```
+`
 
 ### TCO（総所有コスト）の包括的計算
 
 **可視コストと不可視コストの統合評価**
 
-```
+`
 TCO計算フレームワーク:
 オンプレミスTCO（3年間）:
   ハードウェア: $500,000
@@ -225,7 +225,7 @@ TCO計算フレームワーク:
   
 節約額: $380,000（22.6%削減）
 + 定量化困難な価値（アジリティ、イノベーション速度）
-```
+`
 
 ## 8.2 コスト可視化と分析
 
@@ -239,7 +239,7 @@ TCO計算フレームワーク:
 
 効果的なタグ戦略は、技術的観点とビジネス観点の両方を考慮する必要があります。
 
-```yaml
+`yaml
 タグ設計フレームワーク:
 必須タグ:
   Environment:
@@ -270,11 +270,11 @@ TCO計算フレームワーク:
     
   AutoShutdown:
     - 値: Yes | No
-```
+`
 
 **タグガバナンスの実装**
 
-```python
+`python
 # タグコンプライアンスチェック
 def check_tag_compliance(resource):
     required_tags = ['Environment', 'CostCenter', 'Project', 'Owner']
@@ -292,13 +292,13 @@ def check_tag_compliance(resource):
             add_to_quarantine(resource)
     
     return len(missing_tags) == 0
-```
+`
 
 ### 多次元コスト分析
 
 **サービス別分析の実践**
 
-```
+`
 月次コスト内訳（典型的なWebアプリケーション）:
 ┌─────────────────────┬──────────┬────────┬─────────────────┐
 │ サービス            │ コスト   │ 割合   │ 最適化優先度    │
@@ -310,11 +310,11 @@ def check_tag_compliance(resource):
 │ ELB                 │ $800     │ 8%     │ 低              │
 │ その他             │ $1,200   │ 12%    │ 要調査          │
 └─────────────────────┴──────────┴────────┴─────────────────┘
-```
+`
 
 **時系列分析によるトレンド把握**
 
-```python
+`python
 # コストトレンド分析
 def analyze_cost_trend(costs_history):
     """
@@ -338,13 +338,13 @@ def analyze_cost_trend(costs_history):
         'projection': projection,
         'recommendations': generate_recommendations(costs_history)
     }
-```
+`
 
 ### チャージバックとショーバックの実装
 
 **ショーバックによる透明性確保**
 
-```yaml
+`yaml
 部門別コストレポート（月次）:
   開発部門:
     Environment別:
@@ -363,11 +363,11 @@ def analyze_cost_trend(costs_history):
   全社共通:
     認証基盤: $1,500
     監視システム: $800
-```
+`
 
 **チャージバック実装の考慮事項**
 
-```python
+`python
 # チャージバックロジック
 def calculate_chargeback(usage_data, pricing_model):
     """
@@ -395,13 +395,13 @@ def calculate_chargeback(usage_data, pricing_model):
         'shared': shared_costs,
         'total': direct_costs + shared_costs
     }
-```
+`
 
 ### カスタムダッシュボードによる洞察
 
 **KPIダッシュボードの設計**
 
-```yaml
+`yaml
 ビジネスKPIダッシュボード:
   効率性指標:
     - コスト/アクティブユーザー: $0.50（目標: < $0.60）
@@ -417,13 +417,13 @@ def calculate_chargeback(usage_data, pricing_model):
     - 月間予算消化率: 85%
     - 予測年間コスト: $520,000
     - 前年同期比: +15%
-```
+`
 
 ### 異常検知とアラート
 
 **統計的異常検知の実装**
 
-```python
+`python
 # 異常検知アルゴリズム
 def detect_cost_anomaly(daily_costs, sensitivity=2.5):
     """
@@ -450,11 +450,11 @@ def detect_cost_anomaly(daily_costs, sensitivity=2.5):
             'investigation_hints': analyze_cost_drivers(daily_costs)
         }
         send_alert(alert)
-```
+`
 
 **コンテキスト aware な異常検知**
 
-```yaml
+`yaml
 コンテキストルール:
   - 月初（1-3日）: 
       理由: 月次バッチ処理
@@ -471,7 +471,7 @@ def detect_cost_anomaly(daily_costs, sensitivity=2.5):
   - 四半期末:
       理由: 決算処理負荷
       許容上昇率: +30%
-```
+`
 
 ## 8.3 コスト最適化戦略
 
@@ -481,7 +481,7 @@ def detect_cost_anomaly(daily_costs, sensitivity=2.5):
 
 **使用率分析フレームワーク**
 
-```python
+`python
 # インスタンス使用率分析
 def analyze_instance_utilization(instance_metrics):
     """
@@ -523,11 +523,11 @@ def analyze_instance_utilization(instance_metrics):
         })
     
     return recommendations
-```
+`
 
 **段階的最適化アプローチ**
 
-```yaml
+`yaml
 ライトサイジング実施計画:
   Phase 1 - 低リスク対象（週1）:
     - 開発環境
@@ -548,13 +548,13 @@ def analyze_instance_utilization(instance_metrics):
     - パフォーマンス影響の監視
     - ユーザー体験指標の追跡
     - ロールバック準備
-```
+`
 
 ### 自動化によるコスト削減
 
 **インテリジェントスケジューリング**
 
-```python
+`python
 # 自動Start/Stopスケジューラー
 def create_schedule_policy(resource_tags):
     """
@@ -588,11 +588,11 @@ def create_schedule_policy(resource_tags):
 
 # 年間節約額計算
 # 100インスタンス × $100/月 × 65% = $78,000/年
-```
+`
 
 **オートスケーリング最適化**
 
-```yaml
+`yaml
 高度なオートスケーリング設定:
   複合メトリクス:
     ScaleUpPolicy:
@@ -615,13 +615,13 @@ def create_schedule_policy(resource_tags):
     - 過去のパターン学習
     - 定期的なスパイクの予測
     - プロアクティブなスケール
-```
+`
 
 ### アーキテクチャレベルの最適化
 
 **サーバーレスへの選択的移行**
 
-```yaml
+`yaml
 サーバーレス適合性評価:
   高適合性（移行推奨）:
     - イベント駆動処理
@@ -641,11 +641,11 @@ def create_schedule_policy(resource_tags):
     - ステートフル処理
     - 長時間実行（> 15分）
     - 低レイテンシ要求（< 10ms）
-```
+`
 
 **マネージドサービス移行のROI分析**
 
-```python
+`python
 # マネージドサービス移行ROI計算
 def calculate_managed_service_roi(current_costs, migration_scenario):
     """
@@ -681,13 +681,13 @@ def calculate_managed_service_roi(current_costs, migration_scenario):
         'payback_period_months': payback_period,  # 8.7ヶ月
         'three_year_roi': (monthly_savings * 36 - migration_cost) / migration_cost  # 314%
     }
-```
+`
 
 ### ストレージ最適化
 
 **インテリジェントライフサイクル管理**
 
-```yaml
+`yaml
 S3ライフサイクルポリシー設計:
   アプリケーションログ:
     0-7日: Standard（頻繁なアクセス）
@@ -708,11 +708,11 @@ S3ライフサイクルポリシー設計:
     30-90日: Intelligent-Tiering（自動最適化）
     90日-1年: Standard-IA
     1年以降: Glacier Instant
-```
+`
 
 **EBSスナップショット最適化**
 
-```python
+`python
 # スナップショット管理自動化
 def optimize_snapshots(snapshots):
     """
@@ -745,13 +745,13 @@ def optimize_snapshots(snapshots):
     )
     
     return savings  # 約$3,000/年
-```
+`
 
 ### 予約容量の最適化
 
 **動的な予約ポートフォリオ管理**
 
-```python
+`python
 # RI/SPポートフォリオ最適化
 def optimize_reservation_portfolio(usage_history, forecast):
     """
@@ -787,7 +787,7 @@ def optimize_reservation_portfolio(usage_history, forecast):
     }
     
     return portfolio
-```
+`
 
 ## 8.4 コストアラートと予算管理
 
@@ -797,7 +797,7 @@ def optimize_reservation_portfolio(usage_history, forecast):
 
 ### 階層的予算構造の設計
 
-```yaml
+`yaml
 組織予算階層:
   全社レベル:
     年間予算: $1,200,000
@@ -818,13 +818,13 @@ def optimize_reservation_portfolio(usage_history, forecast):
         - 本番環境: 70%
         - DR環境: 20%
         - 監視・ツール: 10%
-```
+`
 
 ### 多段階アラートシステム
 
 **段階的エスカレーション設計**
 
-```python
+`python
 # アラート設定
 alert_thresholds = {
     'informational': {
@@ -857,13 +857,13 @@ alert_thresholds = {
         'actions': ['新規リソース作成の禁止', '緊急対策会議の招集']
     }
 }
-```
+`
 
 ### 異常検知の高度化
 
 **機械学習ベースの異常検知**
 
-```python
+`python
 # 季節性を考慮した異常検知
 def detect_anomaly_with_seasonality(cost_data):
     """
@@ -901,13 +901,13 @@ def detect_anomaly_with_seasonality(cost_data):
         'expected_range': (forecast['yhat_lower'], forecast['yhat_upper']),
         'confidence': 0.95
     }
-```
+`
 
 ### コストガバナンスフレームワーク
 
 **ポリシーベースの制御**
 
-```yaml
+`yaml
 コストガバナンスポリシー:
   リソース作成制限:
     開発環境:
@@ -925,11 +925,11 @@ def detect_anomaly_with_seasonality(cost_data):
     - 未使用EIP: 即座に解放
     - 古いスナップショット: 90日で削除
     - アイドルロードバランサー: 通知後削除
-```
+`
 
 **コスト承認ワークフロー**
 
-```python
+`python
 # 承認ワークフロー実装
 class CostApprovalWorkflow:
     def __init__(self):
@@ -959,13 +959,13 @@ class CostApprovalWorkflow:
             self.send_to_slack_workflow(approval_request)
             
             return {'status': 'pending_approval', 'request_id': approval_request.id}
-```
+`
 
 ### 継続的改善サイクル
 
 **定期レビュープロセス**
 
-```yaml
+`yaml
 コストレビュー会議体系:
   週次チームレビュー:
     参加者: チームリード、エンジニア
@@ -990,11 +990,11 @@ class CostApprovalWorkflow:
       - ROI評価
       - 戦略的投資判断
     成果物: 次四半期予算
-```
+`
 
 **自動化による効率化**
 
-```python
+`python
 # コスト最適化の自動実行
 class AutomatedCostOptimizer:
     def __init__(self):
@@ -1033,7 +1033,7 @@ class AutomatedCostOptimizer:
         self.generate_daily_report(actions_taken)
         
         return actions_taken
-```
+`
 
 ## 8.5 FinOpsの実践
 
@@ -1041,7 +1041,7 @@ class AutomatedCostOptimizer:
 
 FinOps（Financial Operations）は、クラウド財務管理の文化的・実践的なアプローチです。
 
-```yaml
+`yaml
 FinOpsの原則:
   1. チームのコラボレーション:
      - エンジニアリング
@@ -1057,11 +1057,11 @@ FinOpsの原則:
      - リアルタイムの可視性
      - 予測可能性の向上
      - 継続的な最適化
-```
+`
 
 ### FinOps成熟度モデル
 
-```yaml
+`yaml
 成熟度レベル:
   Crawl（初級）:
     - 基本的なコスト可視化
@@ -1080,13 +1080,13 @@ FinOpsの原則:
     - リアルタイム最適化
     - チャージバック
     - ビジネス価値の最大化
-```
+`
 
 ### FinOpsプラクティスの実装
 
 **コスト意識の文化醸成**
 
-```python
+`python
 # ゲーミフィケーションによるコスト削減
 class CostSavingsGamification:
     def __init__(self):
@@ -1117,11 +1117,11 @@ class CostSavingsGamification:
         # 月間チャンピオンの表彰
         if self.is_month_end():
             self.announce_monthly_champion()
-```
+`
 
 **FinOpsツールチェーン**
 
-```yaml
+`yaml
 FinOpsツールスタック:
   可視化層:
     - CloudHealth
@@ -1142,11 +1142,11 @@ FinOpsツールスタック:
     - Terraform
     - ServiceNow
     - Jira
-```
+`
 
 ### ビジネス価値の定量化
 
-```python
+`python
 # 単位コストメトリクスの追跡
 class UnitEconomicsTracker:
     def calculate_unit_costs(self, costs, metrics):
@@ -1174,7 +1174,7 @@ class UnitEconomicsTracker:
             'trends': trends,
             'recommendations': self.generate_recommendations(unit_costs, trends)
         }
-```
+`
 
 クラウドコスト管理は、技術的な最適化だけでなく、組織文化とプロセスの変革を必要とします。FinOpsの実践を通じて、コストを単なる経費ではなく、ビジネス価値創出のための投資として管理することが可能になります。重要なのは、継続的な改善と全社的な取り組みにより、クラウドの柔軟性を最大限に活用しながら、財務的な規律を保つことです。
 ---

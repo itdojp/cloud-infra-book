@@ -27,7 +27,7 @@ layout: default
 
 オブジェクトストレージは、階層構造を持たないフラットな名前空間を採用しています。バケット（AWS S3）、コンテナ（Azure Blob Storage）、バケット（GCP Cloud Storage）は、オブジェクトを格納する最上位の名前空間です。
 
-```python
+`python
 # オブジェクトストレージの基本構造
 class ObjectStorageArchitecture:
     """
@@ -66,7 +66,7 @@ class ObjectStorageArchitecture:
         )
         
         return response
-```
+`
 
 この設計の利点：
 - 無限に近いスケーラビリティ：階層traversalのオーバーヘッドがない
@@ -83,7 +83,7 @@ class ObjectStorageArchitecture:
 
 多くのクラウドプロバイダーは、オブジェクトストレージに対して年間99.999999999%（11個の9）の耐久性を謳っています。これは、100億個のオブジェクトを保存した場合、100年に1個のオブジェクトが失われる可能性があることを意味します。
 
-```python
+`python
 class DurabilityCalculator:
     """
     耐久性の計算と理解
@@ -132,7 +132,7 @@ class DurabilityCalculator:
             })
         
         return comparisons
-```
+`
 
 この驚異的な耐久性は、以下の技術により実現されています：
 - 複数のデバイス、ラック、データセンターへの自動レプリケーション
@@ -145,7 +145,7 @@ class DurabilityCalculator:
 
 すべてのデータが同じようにアクセスされるわけではありません。オブジェクトストレージは、この現実を反映したストレージクラスを提供します：
 
-```python
+`python
 class StorageClassOptimizer:
     """
     ストレージクラスの最適化
@@ -271,11 +271,11 @@ class StorageClassOptimizer:
         )
         
         return lifecycle_policy
-```
+`
 
 **Intelligent-Tiering の活用**
 
-```python
+`python
 def setup_intelligent_tiering(self, bucket_name):
     """
     自動階層化の設定
@@ -301,7 +301,7 @@ def setup_intelligent_tiering(self, bucket_name):
         Id='EntireObjects',
         IntelligentTieringConfiguration=configuration
     )
-```
+`
 
 ### セキュリティの多層防御
 
@@ -309,7 +309,7 @@ def setup_intelligent_tiering(self, bucket_name):
 
 オブジェクトストレージのセキュリティモデルは、「デフォルトで拒否」の原則に基づいています。明示的に許可されない限り、誰もアクセスできません。
 
-```python
+`python
 class S3SecurityManager:
     """
     S3セキュリティの包括的管理
@@ -415,11 +415,11 @@ class S3SecurityManager:
         )
         
         return "Defense in depth implemented successfully"
-```
+`
 
 **署名付きURL の活用**
 
-```python
+`python
 def generate_presigned_url(self, bucket_name, object_key, expiration=3600):
     """
     時限的なアクセスを提供する署名付きURL
@@ -452,7 +452,7 @@ def generate_presigned_url(self, bucket_name, object_key, expiration=3600):
         'download_url': download_url,
         'expires_in': expiration
     }
-```
+`
 
 ### 実践的な活用パターン
 
@@ -460,7 +460,7 @@ def generate_presigned_url(self, bucket_name, object_key, expiration=3600):
 
 オブジェクトストレージは、単なるデータ保管庫ではありません。静的ウェブサイトの配信プラットフォームとしても機能します。
 
-```python
+`python
 class StaticWebsiteHosting:
     """
     S3での静的ウェブサイトホスティング
@@ -548,11 +548,11 @@ class StaticWebsiteHosting:
         )
         
         return response['Distribution']['DomainName']
-```
+`
 
 **データレイクの基盤**
 
-```python
+`python
 class DataLakeArchitecture:
     """
     S3ベースのデータレイクアーキテクチャ
@@ -640,13 +640,13 @@ class DataLakeArchitecture:
         )
         
         return response['QueryExecutionId']
-```
+`
 
 ### パフォーマンス最適化
 
 **リクエストレート最適化**
 
-```python
+`python
 class S3PerformanceOptimizer:
     """
     S3パフォーマンスの最適化
@@ -756,11 +756,11 @@ class S3PerformanceOptimizer:
         )
         
         return f"Uploaded {key} in {part_count} parts"
-```
+`
 
 ### コスト最適化戦略
 
-```python
+`python
 class S3CostOptimizer:
     """
     S3コストの最適化
@@ -866,7 +866,7 @@ class S3CostOptimizer:
             'cleaned_uploads': cleaned_count,
             'recommendation': 'Set lifecycle rule for automatic cleanup'
         }
-```
+`
 
 ## 4.2 ブロックストレージ（EBS, Azure Disks, Persistent Disk）
 
@@ -884,7 +884,7 @@ class S3CostOptimizer:
 
 クラウドのブロックストレージは、コンピュートインスタンスとは物理的に分離されています。これは一見オーバーヘッドのように見えますが、実は大きな利点をもたらします：
 
-```python
+`python
 class BlockStorageArchitecture:
     """
     ブロックストレージアーキテクチャの理解と実装
@@ -937,7 +937,7 @@ class BlockStorageArchitecture:
         }
         
         return benefits
-```
+`
 
 ### パフォーマンス特性の理解
 
@@ -945,7 +945,7 @@ class BlockStorageArchitecture:
 
 ストレージパフォーマンスは、これら3つの要素のバランスで決まります：
 
-```python
+`python
 class StoragePerformanceAnalyzer:
     """
     ストレージパフォーマンスの分析と最適化
@@ -1022,11 +1022,11 @@ class StoragePerformanceAnalyzer:
             }
         
         return volume_recommendation
-```
+`
 
 ### ボリュームタイプの選択戦略
 
-```python
+`python
 class VolumeTypeSelector:
     """
     ボリュームタイプの選択ロジック
@@ -1141,7 +1141,7 @@ class VolumeTypeSelector:
         recommendations.sort(key=lambda x: x['score'], reverse=True)
         
         return recommendations[0] if recommendations else None
-```
+`
 
 ### スナップショットによるデータ保護
 
@@ -1149,7 +1149,7 @@ class VolumeTypeSelector:
 
 スナップショットは、特定時点のボリューム状態を保存しますが、効率的な増分方式を採用しています：
 
-```python
+`python
 class SnapshotManagement:
     """
     スナップショット管理の実装
@@ -1312,7 +1312,7 @@ class SnapshotManagement:
         )
         
         return volume['VolumeId']
-```
+`
 
 ### 高度な機能の活用
 
@@ -1320,7 +1320,7 @@ class SnapshotManagement:
 
 保存データの暗号化は、コンプライアンス要件だけでなく、セキュリティのベストプラクティスです：
 
-```python
+`python
 class VolumeEncryption:
     """
     ボリューム暗号化の実装
@@ -1384,11 +1384,11 @@ class VolumeEncryption:
         )
         
         return encrypted_volume['VolumeId']
-```
+`
 
 **Elastic Volumes（動的な変更）**
 
-```python
+`python
 class ElasticVolumes:
     """
     Elastic Volumesによる動的変更
@@ -1446,11 +1446,11 @@ class ElasticVolumes:
         }
         
         return commands.get(filesystem_type, ['Unknown filesystem type'])
-```
+`
 
 ### パフォーマンスチューニング
 
-```python
+`python
 class EBSPerformanceTuning:
     """
     EBSパフォーマンスチューニング
@@ -1589,7 +1589,7 @@ chmod +x /etc/rc.local
                 performance_data[description] = latest_value
         
         return performance_data
-```
+`
 
 ## 4.3 ファイルストレージ（EFS, Azure Files, Cloud Filestore）
 
@@ -1601,7 +1601,7 @@ chmod +x /etc/rc.local
 
 ブロックストレージは通常、単一のインスタンスからしかアクセスできません。複数のインスタンスでデータを共有する必要がある場合、ファイルストレージが適切な選択となります。
 
-```python
+`python
 class FileStorageArchitecture:
     """
     ファイルストレージアーキテクチャの実装
@@ -1655,7 +1655,7 @@ class FileStorageArchitecture:
             'mount_targets': mount_targets,
             'benefits': benefits
         }
-```
+`
 
 ### プロトコルの選択
 
@@ -1663,7 +1663,7 @@ class FileStorageArchitecture:
 
 Linux/Unix環境で広く使用される標準プロトコル：
 
-```python
+`python
 class NFSImplementation:
     """
     NFSベースのファイルストレージ実装
@@ -1743,13 +1743,13 @@ df -h | grep {mount_point}
             'sysctl_commands': sysctl_commands,
             'nfs_mount_options': optimization_settings['nfs_options']
         }
-```
+`
 
 **SMB（Server Message Block）**
 
 Windows環境での標準プロトコル：
 
-```python
+`python
 class SMBImplementation:
     """
     SMBベースのファイルストレージ実装（Azure Files）
@@ -1821,7 +1821,7 @@ sudo mount -a
             'windows_mount': windows_mount_script,
             'linux_mount': linux_mount_script
         }
-```
+`
 
 ### パフォーマンスとスケーラビリティ
 
@@ -1829,7 +1829,7 @@ sudo mount -a
 
 多くのマネージドファイルストレージは、保存データ量に応じて自動的にスループットをスケールします：
 
-```python
+`python
 class FileStoragePerformance:
     """
     ファイルストレージのパフォーマンス管理
@@ -1909,7 +1909,7 @@ class FileStoragePerformance:
         }
         
         return caching_config
-```
+`
 
 ### ユースケースと設計パターン
 
@@ -1917,7 +1917,7 @@ class FileStoragePerformance:
 
 複数のウェブサーバーが同じコンテンツにアクセスする必要がある場合：
 
-```python
+`python
 class ContentManagementSystem:
     """
     CMSのための共有ストレージ設計
@@ -1971,11 +1971,11 @@ chmod -R 755 /var/www/shared
             'architecture': architecture,
             'user_data': user_data_script
         }
-```
+`
 
 **ホームディレクトリ**
 
-```python
+`python
 class HomeDirectoryService:
     """
     エンタープライズホームディレクトリサービス
@@ -2065,11 +2065,11 @@ create_efs_user "john.doe" 1001 1001
             'user_script': user_management_script,
             'quota_policy': quota_policy
         }
-```
+`
 
 **開発ツールとビルド環境**
 
-```python
+`python
 class DevelopmentEnvironment:
     """
     開発環境向け共有ストレージ
@@ -2144,13 +2144,13 @@ mkdir -p "$BUILD_DIR"
             'codebuild_config': codebuild_project,
             'optimization_script': concurrent_build_optimization
         }
-```
+`
 
 ### コストとパフォーマンスの最適化
 
 **アクセスパターンに基づく最適化**
 
-```python
+`python
 class FileStorageCostOptimizer:
     """
     ファイルストレージのコスト最適化
@@ -2274,7 +2274,7 @@ class FileStorageCostOptimizer:
             )
         
         return profile
-```
+`
 
 ## 4.4 データベースサービス（RDS, Cloud SQL, Cosmos DBなど概要と使い分け）
 
@@ -2286,7 +2286,7 @@ class FileStorageCostOptimizer:
 
 データベースの運用は、専門知識と継続的な努力を要求します：
 
-```python
+`python
 class ManagedDatabaseBenefits:
     """
     マネージドデータベースの利点を実証
@@ -2349,7 +2349,7 @@ class ManagedDatabaseBenefits:
             'tco_comparison': tco_comparison,
             'recommendation': '運用負荷の削減とTCO改善のためマネージドサービスを推奨'
         }
-```
+`
 
 ### リレーショナルデータベースの進化
 
@@ -2357,7 +2357,7 @@ class ManagedDatabaseBenefits:
 
 AWS RDS、Azure Database、Cloud SQLなどは、使い慣れたデータベースエンジンをマネージドサービスとして提供します：
 
-```python
+`python
 class RelationalDatabaseServices:
     """
     リレーショナルデータベースサービスの実装
@@ -2500,13 +2500,13 @@ def execute_query(query):
             'proxy_config': proxy_config,
             'application_config': connection_pool_config
         }
-```
+`
 
 **NewSQLの台頭**
 
 従来のRDBMSの限界を超えるため、新しいアーキテクチャが登場しています：
 
-```python
+`python
 class NewSQLDatabases:
     """
     NewSQLデータベースの実装と比較
@@ -2585,13 +2585,13 @@ class NewSQLDatabases:
             'options': newsql_comparison,
             'selection_criteria': selection_criteria
         }
-```
+`
 
 ### NoSQLの多様性
 
 **ドキュメントデータベース**
 
-```python
+`python
 class DocumentDatabases:
     """
     ドキュメントデータベースの実装
@@ -2729,11 +2729,11 @@ products = collection.find({
             'cluster_config': cluster_config,
             'connection_example': connection_example
         }
-```
+`
 
 **キーバリューストア**
 
-```python
+`python
 class KeyValueStores:
     """
     キーバリューストアの実装
@@ -2924,11 +2924,11 @@ def warm_cache():
                 'refresh_ahead': '有効期限前に事前更新'
             }
         }
-```
+`
 
 **ワイドカラムストア**
 
-```python
+`python
 class WideColumnStores:
     """
     ワイドカラムストアの実装
@@ -3012,11 +3012,11 @@ CREATE MATERIALIZED VIEW iot_data.hourly_averages AS
                 'materialized_views': '事前集計でクエリ高速化'
             }
         }
-```
+`
 
 **グラフデータベース**
 
-```python
+`python
 class GraphDatabases:
     """
     グラフデータベースの実装
@@ -3107,11 +3107,11 @@ class GraphDatabases:
                 'network_topology': 'インフラ依存関係'
             }
         }
-```
+`
 
 ### データベース選択の意思決定フレームワーク
 
-```python
+`python
 class DatabaseSelectionFramework:
     """
     データベース選択の意思決定フレームワーク
@@ -3270,7 +3270,7 @@ class DatabaseSelectionFramework:
             'risk_assessment': risk_assessment,
             'estimated_effort': self.estimate_migration_effort(source_db, target_db)
         }
-```
+`
 
 ### マルチモデルデータベースの未来
 
@@ -3278,7 +3278,7 @@ class DatabaseSelectionFramework:
 
 Azure Cosmos DBのようなマルチモデルデータベースは、複数のデータモデルを単一のサービスで提供：
 
-```python
+`python
 class MultiModelDatabase:
     """
     マルチモデルデータベースの実装（Cosmos DB例）
@@ -3368,13 +3368,13 @@ class MultiModelDatabase:
                 'serverless_option': '使用量ベースの課金'
             }
         }
-```
+`
 
 **サーバーレスデータベース**
 
 使用した分だけ支払う、真のサーバーレスデータベース：
 
-```python
+`python
 class ServerlessDatabase:
     """
     サーバーレスデータベースの実装
@@ -3485,11 +3485,11 @@ def execute_transaction(sql_statements):
                 'pay_per_use': '使用した分だけの支払い'
             }
         }
-```
+`
 
 ### データベース運用のベストプラクティス
 
-```python
+`python
 class DatabaseOperationalExcellence:
     """
     データベース運用の優秀性
@@ -3617,7 +3617,7 @@ FROM
         }
         
         return backup_strategy
-```
+`
 
 ### まとめ
 

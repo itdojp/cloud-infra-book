@@ -20,7 +20,7 @@ IaCツールを理解する上で最も重要な概念は、宣言的（Declarat
 
 宣言的アプローチでは、「どのような状態であるべきか」を記述します。
 
-```hcl
+`hcl
 # Terraform - 宣言的アプローチの例
 resource "aws_instance" "web_servers" {
   count         = 3  # 3台のインスタンスが存在すべき
@@ -40,13 +40,13 @@ resource "aws_instance" "web_servers" {
   # 現在4台ある場合、Terraformは自動的に1台削除
   # 設定が異なる場合、Terraformは差分を適用
 }
-```
+`
 
 **命令的アプローチ：手順の記述**
 
 命令的アプローチでは、「何をすべきか」の手順を記述します。
 
-```python
+`python
 # Python/Boto3 - 命令的アプローチの例
 import boto3
 
@@ -88,7 +88,7 @@ elif current_count > desired_count:
     for instance in current_instances[desired_count:]:
         instance.terminate()
         print(f"Terminated instance: {instance.id}")
-```
+`
 
 ### IaCがもたらす本質的価値
 
@@ -96,7 +96,7 @@ elif current_count > desired_count:
 
 冪等性とは、同じ操作を何度実行しても同じ結果が得られる性質です。宣言的IaCツールは、この冪等性を自動的に保証します。
 
-```yaml
+`yaml
 # 冪等性の実例
 初期状態: インスタンス0台
 1回目実行: 3台作成 → 結果: 3台
@@ -106,13 +106,13 @@ elif current_count > desired_count:
 # 設定変更時
 設定変更: instance_type を t3.large に変更
 4回目実行: 3台を更新 → 結果: 3台（t3.large）
-```
+`
 
 **2. バージョン管理による変更追跡**
 
 インフラストラクチャをコードとして管理することで、ソフトウェア開発で培われたベストプラクティスを適用できます。
 
-```bash
+`bash
 # Git でのインフラ変更管理
 git log --oneline terraform/
 # 出力例：
@@ -124,11 +124,11 @@ git log --oneline terraform/
 # 特定の変更の詳細確認
 git show a5f3c21
 # 変更内容、理由、影響範囲が明確に記録される
-```
+`
 
 **3. コラボレーションの促進**
 
-```yaml
+`yaml
 # プルリクエストでのインフラ変更レビュー
 レビュープロセス:
   1. 変更案の作成:
@@ -149,13 +149,13 @@ git show a5f3c21
      - 複数人による承認
      - 自動テストの通過
      - 本番環境への適用
-```
+`
 
 ### IaCの成熟度モデル
 
 組織のIaC採用レベルを評価し、段階的な改善を図るための指標です。
 
-```yaml
+`yaml
 レベル1 - 手動運用:
   特徴:
     - GUI/CLIでの手動設定
@@ -204,7 +204,7 @@ git show a5f3c21
     - 完全な監査証跡
     - 自動ロールバック
     - 宣言的運用
-```
+`
 
 ### IaCのアンチパターンと対策
 
@@ -212,7 +212,7 @@ git show a5f3c21
 
 最も一般的で危険なアンチパターンは、IaCで管理されているリソースを手動で変更することです。
 
-```hcl
+`hcl
 # ドリフト検出と防止策
 # 1. 定期的なドリフト検出
 resource "null_resource" "drift_check" {
@@ -269,13 +269,13 @@ data "aws_iam_policy_document" "prevent_manual_changes" {
     # Terraform実行ユーザー以外の変更を拒否
   }
 }
-```
+`
 
 **2. 状態ファイルの不適切な管理**
 
 Terraformの状態ファイルは、実際のインフラストラクチャとコードをマッピングする重要な情報です。
 
-```hcl
+`hcl
 # リモートバックエンドの適切な設定
 terraform {
   backend "s3" {
@@ -319,13 +319,13 @@ resource "aws_dynamodb_table" "terraform_locks" {
     Environment = "shared"
   }
 }
-```
+`
 
 **3. モノリシックな構成**
 
 すべてのインフラストラクチャを単一の巨大な構成で管理すると、様々な問題が発生します。
 
-```hcl
+`hcl
 # 適切なモジュール分割
 # ディレクトリ構造
 terraform/
@@ -376,7 +376,7 @@ module "compute" {
   
   depends_on = [module.network]
 }
-```
+`
 
 ## 10.2 Terraformによるインフラ構築の実践
 
@@ -388,7 +388,7 @@ Terraformは、HashiCorpが開発した最も人気のあるIaCツールです�
 
 Terraformは内部的に、すべてのリソースとその依存関係を有向非巡回グラフ（DAG）として管理します。
 
-```hcl
+`hcl
 # 依存関係の自動解決
 resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
@@ -447,7 +447,7 @@ resource "aws_route_table_association" "public" {
   # 3. Route Table
   # 4. Route Table Associations
 }
-```
+`
 
 ### 実践的なモジュール設計
 
@@ -455,7 +455,7 @@ resource "aws_route_table_association" "public" {
 
 **完全なVPCモジュールの実装**
 
-```hcl
+`hcl
 # modules/vpc/variables.tf
 variable "project_name" {
   description = "プロジェクト名"
@@ -786,13 +786,13 @@ output "availability_zones" {
   description = "使用されているAZのリスト"
   value       = local.azs
 }
-```
+`
 
 ### 環境別構成管理のベストプラクティス
 
 **Terraformワークスペース vs ディレクトリ構造**
 
-```hcl
+`hcl
 # ワークスペースを使った環境管理
 # 利点：単一の設定ファイルで複数環境を管理
 # 欠点：環境間の差異が大きい場合に複雑化
@@ -861,13 +861,13 @@ module "vpc" {
   single_nat_gateway = true   # コスト削減のため1つのみ
   enable_flow_logs   = false  # 開発環境では不要
 }
-```
+`
 
 ### 高度なTerraform機能の活用
 
 **Dynamic Blocksによる柔軟な設定**
 
-```hcl
+`hcl
 # セキュリティグループの動的ルール生成
 variable "security_group_rules" {
   description = "セキュリティグループルール"
@@ -926,11 +926,11 @@ resource "aws_security_group" "this" {
     Name = "${var.project_name}-${var.environment}-sg"
   })
 }
-```
+`
 
 **条件式とfor式の組み合わせ**
 
-```hcl
+`hcl
 # 複雑な条件に基づくリソース作成
 locals {
   # 本番環境のみマルチAZ、それ以外はシングルAZ
@@ -997,13 +997,13 @@ resource "aws_rds_cluster" "this" {
   
   tags = var.common_tags
 }
-```
+`
 
 ### Terraformの状態管理上級テクニック
 
 **状態の分割とリモート参照**
 
-```hcl
+`hcl
 # ネットワーク層の状態を参照
 data "terraform_remote_state" "network" {
   backend = "s3"
@@ -1034,11 +1034,11 @@ resource "aws_instance" "app" {
   
   # ...
 }
-```
+`
 
 **状態の移行とリファクタリング**
 
-```bash
+`bash
 # 既存リソースのインポート
 terraform import aws_instance.legacy i-1234567890abcdef0
 
@@ -1057,7 +1057,7 @@ terraform state list
 
 # 特定リソースの詳細表示
 terraform state show aws_instance.web
-```
+`
 
 ## 10.3 Ansibleによる構成管理の基礎
 
@@ -1065,7 +1065,7 @@ terraform state show aws_instance.web
 
 Infrastructure as Codeがインフラストラクチャをプロビジョニングするのに対し、構成管理ツールはそのインフラストラクチャ上でアプリケーションを動作させるための設定を行います。
 
-```yaml
+`yaml
 # IaCと構成管理の責任分担
 Infrastructure as Code (Terraform):
   - ネットワークの作成
@@ -1080,7 +1080,7 @@ Configuration Management (Ansible):
   - アプリケーションのデプロイ
   - 設定ファイルの管理
   - ユーザーと権限の管理
-```
+`
 
 ### Ansibleのアーキテクチャと特徴
 
@@ -1088,7 +1088,7 @@ Ansibleは、エージェントレスで動作し、SSHを通じて管理対象�
 
 **Playbookの構造と設計**
 
-```yaml
+`yaml
 ---
 # site.yml - マスターPlaybook
 - name: Common configuration for all servers
@@ -1105,7 +1105,7 @@ Ansibleは、エージェントレスで動作し、SSHを通じて管理対象�
     - nginx
     - app-deploy
   vars:
-    app_version: "{% raw %}{{ lookup('env', 'APP_VERSION') | default('latest', true) }}{% endraw %}"
+    app_version: "`{{ lookup('env', 'APP_VERSION') | default('latest', true) }}`"
 
 - name: Configure database servers
   hosts: databases
@@ -1128,7 +1128,7 @@ security_ssh_permit_root_login: "no"
 
 # group_vars/webservers.yml - Webサーバー用変数
 ---
-nginx_worker_processes: "{% raw %}{{ ansible_processor_vcpus }}{% endraw %}"
+nginx_worker_processes: "`{{ ansible_processor_vcpus }}`"
 nginx_worker_connections: 2048
 
 app_user: webapp
@@ -1144,25 +1144,25 @@ nginx_ssl_ciphers: "HIGH:!aNULL:!MD5"
 
 enable_monitoring: true
 enable_log_shipping: true
-```
+`
 
 **高度なRole設計**
 
-```yaml
+`yaml
 # roles/nginx/tasks/main.yml
 ---
 - name: Include OS-specific variables
-  include_vars: "{% raw %}{{ ansible_os_family }}{% endraw %}.yml"
+  include_vars: "`{{ ansible_os_family }}`.yml"
 
 - name: Install Nginx
   package:
-    name: "{% raw %}{{ nginx_package_name }}{% endraw %}"
+    name: "`{{ nginx_package_name }}`"
     state: present
   notify: restart nginx
 
 - name: Create Nginx directories
   file:
-    path: "{% raw %}{{ item }}{% endraw %}"
+    path: "`{{ item }}`"
     state: directory
     owner: root
     group: root
@@ -1192,20 +1192,20 @@ enable_log_shipping: true
 - name: Configure virtual hosts
   template:
     src: vhost.conf.j2
-    dest: "/etc/nginx/sites-available/{% raw %}{{ item.name }}{% endraw %}"
+    dest: "/etc/nginx/sites-available/`{{ item.name }}`"
     owner: root
     group: root
     mode: '0644'
-  loop: "{% raw %}{{ nginx_vhosts }}{% endraw %}"
+  loop: "`{{ nginx_vhosts }}`"
   when: nginx_vhosts is defined
   notify: reload nginx
 
 - name: Enable virtual hosts
   file:
-    src: "/etc/nginx/sites-available/{% raw %}{{ item.name }}{% endraw %}"
-    dest: "/etc/nginx/sites-enabled/{% raw %}{{ item.name }}{% endraw %}"
+    src: "/etc/nginx/sites-available/`{{ item.name }}`"
+    dest: "/etc/nginx/sites-enabled/`{{ item.name }}`"
     state: link
-  loop: "{% raw %}{{ nginx_vhosts }}{% endraw %}"
+  loop: "`{{ nginx_vhosts }}`"
   when: nginx_vhosts is defined
   notify: reload nginx
 
@@ -1247,7 +1247,7 @@ http {
     default_type application/octet-stream;
     
     # SSL設定
-    {% if nginx_use_ssl | default(false) %}
+    `{% if nginx_use_ssl | default(false) %}`
     ssl_protocols `{{ nginx_ssl_protocols }}`;
     ssl_ciphers `{{ nginx_ssl_ciphers }}`;
     ssl_prefer_server_ciphers on;
@@ -1255,7 +1255,7 @@ http {
     ssl_session_timeout 10m;
     ssl_stapling on;
     ssl_stapling_verify on;
-    {% endif %}
+    `{% endif %}`
     
     # ログ設定
     access_log /var/log/nginx/access.log;
@@ -1290,13 +1290,13 @@ http {
 - name: validate nginx configuration
   command: nginx -t
   changed_when: false
-```
+`
 
 ### 動的インベントリとクラウド統合
 
 クラウド環境では、インスタンスが動的に作成・削除されるため、静的なインベントリファイルでは管理が困難です。
 
-```python
+`python
 #!/usr/bin/env python3
 # dynamic_inventory_aws.py
 
@@ -1384,13 +1384,13 @@ class AWSInventory:
 if __name__ == '__main__':
     inventory = AWSInventory()
     print(inventory.get_inventory())
-```
+`
 
 ### 冪等性の確保とベストプラクティス
 
 冪等性は構成管理において最も重要な概念です。同じPlaybookを何度実行しても、システムの状態が同じになることを保証します。
 
-```yaml
+`yaml
 # 冪等性を保証する書き方の例
 ---
 - name: 冪等性のあるタスク例
@@ -1455,13 +1455,13 @@ if __name__ == '__main__':
       systemd:
         daemon_reload: yes
       when: service_config.changed
-```
+`
 
 ### セキュアな変数管理
 
 機密情報を安全に管理するため、Ansible Vaultを活用します。
 
-```yaml
+`yaml
 # Vault暗号化されたファイルの作成
 # ansible-vault create vars/secrets.yml
 
@@ -1510,7 +1510,7 @@ production:
 # ansible-playbook -i inventory site.yml --ask-vault-pass
 # または
 # ansible-playbook -i inventory site.yml --vault-password-file ~/.vault_pass
-```
+`
 
 ## 10.4 CI/CDパイプラインとデプロイ自動化
 
@@ -1520,7 +1520,7 @@ production:
 
 **CI/CDパイプラインの設計原則**
 
-```yaml
+`yaml
 パイプライン設計の原則:
   高速フィードバック:
     - 問題の早期発見
@@ -1541,13 +1541,13 @@ production:
     - すべての変更の記録
     - 承認プロセスの可視化
     - コンプライアンス対応
-```
+`
 
 ### 包括的なCI/CDパイプラインの実装
 
 **GitHub Actionsによる完全自動化**
 
-```yaml
+`yaml
 # .github/workflows/infrastructure-pipeline.yml
 name: Infrastructure CI/CD Pipeline
 
@@ -1699,7 +1699,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: {% raw %}`${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}`{% endraw %}
+          role-to-assume: `${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}`
           aws-region: `${{ env.AWS_REGION }}`
           
       - name: Setup Terraform
@@ -1733,7 +1733,7 @@ jobs:
             
             </details>
             
-            *Pushed by: @`${{ github.actor }}{% endraw %}, Action: \`{% raw %}${{ github.event_name }}`\`*`;
+            *Pushed by: @`${{ github.actor }}`, Action: \`${{ github.event_name }}`\`*`;
             
             github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -1804,7 +1804,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: {% raw %}`${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}`{% endraw %}
+          role-to-assume: `${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}`
           aws-region: `${{ env.AWS_REGION }}`
           
       - name: Setup Terraform
@@ -1856,7 +1856,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: {% raw %}`${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}`{% endraw %}
+          role-to-assume: `${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}`
           aws-region: `${{ env.AWS_REGION }}`
           
       - name: Run Ansible Playbook
@@ -1901,13 +1901,13 @@ jobs:
         run: |
           cd monitoring/pagerduty
           ./setup_escalation_policies.sh
-```
+`
 
 ### デプロイメント戦略の実装
 
 **Blue-Green デプロイメント**
 
-```hcl
+`hcl
 # terraform/modules/blue-green/main.tf
 variable "active_environment" {
   description = "現在アクティブな環境 (blue/green)"
@@ -1988,11 +1988,11 @@ resource "local_file" "switch_environment" {
   
   file_permission = "0755"
 }
-```
+`
 
 **カナリアデプロイメント**
 
-```yaml
+`yaml
 # kubernetes/canary-deployment.yaml
 apiVersion: v1
 kind: Service
@@ -2083,11 +2083,11 @@ spec:
       url: http://loadtester/
       metadata:
         cmd: "hey -z 1m -c 10 -q 20 http://myapp/"
-```
+`
 
 ### GitOpsによる宣言的デプロイメント
 
-```yaml
+`yaml
 # argocd/application.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -2151,7 +2151,7 @@ spec:
         curl -X POST $SLACK_WEBHOOK \
           -H 'Content-type: application/json' \
           -d '{"text":"Deployment completed successfully"}'
-```
+`
 
 Infrastructure as Code と自動化は、現代のクラウド運用の基盤です。宣言的な管理、バージョン管理、自動化を組み合わせることで、信頼性が高く、監査可能で、効率的なインフラストラクチャ運用が実現できます。
 
