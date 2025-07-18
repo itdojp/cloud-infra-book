@@ -1699,7 +1699,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: `${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}`
+          role-to-assume: \`${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}\`
           aws-region: `${{ env.AWS_REGION }}`
           
       - name: Setup Terraform
@@ -1804,7 +1804,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: `${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}`
+          role-to-assume: \`${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}\`
           aws-region: `${{ env.AWS_REGION }}`
           
       - name: Setup Terraform
@@ -1856,7 +1856,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: `${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}`
+          role-to-assume: \`${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}\`
           aws-region: `${{ env.AWS_REGION }}`
           
       - name: Run Ansible Playbook
