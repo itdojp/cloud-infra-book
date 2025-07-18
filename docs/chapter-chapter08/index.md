@@ -1,7 +1,7 @@
 ---
 title: "第8章：コスト管理と最適化"
 chapter: chapter08
-layout: book
+layout: default
 ---
 
 # 第8章：コスト管理と最適化

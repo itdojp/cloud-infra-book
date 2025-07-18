@@ -1,7 +1,7 @@
 ---
 title: "第5章：ネットワークとロードバランシング"
 chapter: chapter05
-layout: book
+layout: default
 ---
 
 # 第5章：ネットワークとロードバランシング

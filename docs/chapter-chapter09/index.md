@@ -1,7 +1,7 @@
 ---
 title: "第9章：サーバーレスとコンテナサービス"
 chapter: chapter09
-layout: book
+layout: default
 ---
 
 # 第9章：サーバーレスとコンテナサービス

@@ -14,8 +14,8 @@ repository:
 # Jekyll設定
 markdown: kramdown
 highlighter: rouge
-# GitHub Pages標準テーマを使用しない
-# theme: minima
+# GitHub Pages設定
+theme: jekyll-theme-primer
 
 # プラグイン（GitHub Pages標準サポート）
 plugins:
@@ -28,11 +28,7 @@ defaults:
       path: ""
       type: "pages"
     values:
-      layout: "book"
-  - scope:
-      path: "chapter-*"
-    values:
-      layout: "book"
+      layout: "default"
 
 # 除外ファイル
 exclude:

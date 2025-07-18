@@ -1,7 +1,7 @@
 ---
 title: "第2章：クラウドインフラの共通概念とアーキテクチャ"
 chapter: chapter02
-layout: book
+layout: default
 ---
 
 # 第2章：クラウドインフラの共通概念とアーキテクチャ
