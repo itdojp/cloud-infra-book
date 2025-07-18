@@ -117,6 +117,27 @@ a:hover {
     text-decoration: underline;
 }
 
+strong, b {
+    font-weight: 600;
+    font-size: inherit !important;
+    color: inherit;
+    line-height: inherit;
+}
+
+/* Ensure consistent font size for bold text in content */
+.page-content strong,
+.page-content b {
+    font-size: 1rem !important;
+    font-weight: 600;
+}
+
+/* Specific styling for bold text in paragraphs */
+p strong,
+p b {
+    font-size: inherit !important;
+    font-weight: 600;
+}
+
 /* Layout */
 .book-layout {
     display: flex;
