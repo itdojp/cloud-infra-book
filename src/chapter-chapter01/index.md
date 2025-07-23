@@ -97,6 +97,57 @@ chapter: chapter01
 - 一般的なワークロードはパブリックで実行
 - バーストキャパシティとしてのパブリッククラウド活用
 
+```mermaid
+flowchart TD
+    subgraph "クラウドデプロイメントモデルの戦略的選択"
+        subgraph "パブリッククラウド"
+            Public["🌍 パブリッククラウド<br/><br/>【特徴】<br/>・マルチテナント環境<br/>・規模の経済で低コスト<br/>・柔軟なスケーリング<br/>・最新技術へのアクセス"]
+            PublicUse["🎯 適用事例<br/>・スタートアップの初期投資抑制<br/>・開発・テスト環境<br/>・Webアプリケーション<br/>・バックアップストレージ<br/>・CDN・キャッシュ"]
+        end
+        
+        subgraph "プライベートクラウド"
+            Private["🏢 プライベートクラウド<br/><br/>【特徴】<br/>・単一組織専用環境<br/>・高度なセキュリティ制御<br/>・カスタマイズ可能<br/>・コンプライアンス対応"]
+            PrivateUse["🎯 適用事例<br/>・金融機関・政府機関<br/>・機密情報処理<br/>・レガシーシステム統合<br/>・医療データなどの特殊データ<br/>・高パフォーマンス計算"]
+        end
+        
+        subgraph "ハイブリッドクラウド"
+            Hybrid["🌉 ハイブリッドクラウド<br/><br/>【特徴】<br/>・パブリックとプライベートの組み合わせ<br/>・ワークロードに応じた最適配置<br/>・段階的なクラウド移行<br/>・リスク分散"]
+            HybridUse["🎯 適用事例<br/>・機密データはプライベート<br/>・一般ワークロードはパブリック<br/>・バーストキャパシティ活用<br/>・DRサイトとしての活用<br/>・段階的クラウド移行"]
+        end
+        
+        subgraph "マルチクラウド"
+            Multi["🌐 マルチクラウド<br/><br/>【特徴】<br/>・複数のパブリッククラウドを併用<br/>・ベンダーロックイン回避<br/>・サービスレベルの最適化<br/>・リスク分散"]
+            MultiUse["🎯 適用事例<br/>・グローバル企業のリージョン最適化<br/>・Best-of-Breedアプローチ<br/>・ベンダーリスク管理<br/>・コンプライアンス要件対応<br/>・M&Aによるシステム統合"]
+        end
+        
+        subgraph "選択フレームワーク"
+            Decision["🤔 意思決定フレームワーク<br/><br/>🔴 セキュリティ要件<br/>高 → プライベート<br/>中 → ハイブリッド<br/>低 → パブリック<br/><br/>🟡 コスト要件<br/>低コスト優先 → パブリック<br/>バランス重視 → ハイブリッド<br/><br/>🟢 柔軟性要件<br/>最大柔軟性 → マルチクラウド<br/>制御性重視 → プライベート"]
+        end
+        
+        subgraph "コスト構造比較"
+            CostComparison["💰 コスト構造比較<br/><br/>パブリック: ⭐⭐⭐⭐⭐<br/>・初期コスト最小<br/>・従量課金<br/>・管理コスト最小<br/><br/>ハイブリッド: ⭐⭐⭐<br/>・中程度の初期投資<br/>・最適化による効率<br/>・管理複雑性<br/><br/>プライベート: ⭐⭐<br/>・高い初期投資<br/>・運用コスト高<br/>・専門人材必要"]
+        end
+        
+        Decision --> Public
+        Decision --> Private
+        Decision --> Hybrid
+        Decision --> Multi
+        
+        Public --> PublicUse
+        Private --> PrivateUse
+        Hybrid --> HybridUse
+        Multi --> MultiUse
+        
+        CostComparison -.-> Decision
+    end
+    
+    style Public fill:#e3f2fd
+    style Private fill:#fff3e0
+    style Hybrid fill:#e8f5e8
+    style Multi fill:#f3e5f5
+    style Decision fill:#ffe0b2
+```
+
 ## 1.2 クラウド採用の戦略的判断
 
 ### 変革をもたらすメリット
@@ -149,6 +200,56 @@ CAPEXからOPEXへの転換により、初期投資を抑えて事業を開始�
 - 開発環境のリソース放置
 - データ転送料金の累積
 - ストレージの継続的な増加
+
+```mermaid
+flowchart TD
+    subgraph "クラウド採用の戦略的判断：メリットとリスクの全体像"
+        subgraph "クラウド採用の主要メリット"
+            Agility["🚀 俊敏性の向上<br/><br/>【具体的効果】<br/>・新アイデアの即座検証<br/>・A/Bテスト環境を数分で構築<br/>・失敗コストの激減<br/>・市場変化への迅速対応<br/><br/>【ビジネスインパクト】<br/>・イノベーションの加速<br/>・競争優位性の獲得"]
+            
+            Scalability["📊 弾力的スケーラビリティ<br/><br/>【自動スケーリング】<br/>・ECサイトセール対応<br/>・メディアバズコンテンツ対応<br/>・シーズナル需要変動<br/><br/>【コスト効果】<br/>・過剰投資の回避<br/>・機会損失の防止"]
+            
+            CostStructure["💰 コスト構造変革<br/><br/>【CAPEXかOPEXへ】<br/>・初期投資の大幅減<br/>・予測可能なランニングコスト<br/>・キャッシュフロー改善<br/><br/>【従量課金】<br/>・使用した分だけ支払<br/>・リソース無駄の排除"]
+            
+            GlobalReach["🌍 グローバル展開<br/><br/>【世界中のリージョン】<br/>・数クリックでデプロイ<br/>・レイテンシー最適化<br/>・データレジデンシー対応<br/><br/>【地理的制約の解除】<br/>・グローバルビジネス機会<br/>・多地域災害対策"]
+        end
+        
+        subgraph "主要なリスクと課題"
+            VendorLock["🔒 ベンダーロックイン<br/><br/>【リスク要因】<br/>・プロプライエタリサービス依存<br/>・特定プロバイダー依存<br/>・移行コストの高騰化<br/><br/>【緩和策】<br/>・オープンスタンダード技術<br/>・マルチクラウド戦略<br/>・移行可能性考慮設計"]
+            
+            Security["🔐 セキュリティ・コンプライアンス<br/><br/>【複雑性の要因】<br/>・共有責任モデルの理解<br/>・データ所在地管理<br/>・多層的セキュリティ対策<br/><br/>【必要な対応】<br/>・暗号化戦略<br/>・アクセス制御<br/>・監査ログ管理"]
+            
+            CostManagement["📈 コスト管理の難しさ<br/><br/>【コスト超過リスク】<br/>・開発環境のリソース放置<br/>・データ転送料金累積<br/>・ストレージ継続増加<br/><br/>【管理必要性】<br/>・監視ツール導入<br/>・ガバナンス体制<br/>・自動化ルール"]
+            
+            SkillGap["🏋️ スキルギャップ<br/><br/>【必要な新スキル】<br/>・クラウドネイティブ設計<br/>・DevOpsプラクティス<br/>・IaCツール習得<br/><br/>【組織課題】<br/>・既存エンジニアの再教育<br/>・人材確保競争<br/>・ナレッジ蔵積"]
+        end
+        
+        subgraph "成功要因と戦略"
+            Strategy["🎯 採用戦略<br/><br/>【段階的アプローチ】<br/>1. パイロットプロジェクト<br/>2. 非重要システム移行<br/>3. コアシステム移行<br/>4. デジタルトランスフォーメーション<br/><br/>【リスク管理】<br/>・ガバナンス体制構築<br/>・コスト監視ツール<br/>・スキル投資計画"]
+        end
+        
+        subgraph "意思決定フレームワーク"
+            DecisionMatrix["🤔 意思決定マトリックス<br/><br/>【メリット評価】<br/>✅ 時間的メリットの定量化<br/>✅ コスト効果のROI計算<br/>✅ 競争優位性への影響<br/><br/>【リスク評価】<br/>⚠️ ベンダー依存リスク<br/>⚠️ セキュリティリスク<br/>⚠️ コスト超過リスク<br/>⚠️ スキルギャップリスク"]
+        end
+        
+        Agility --> Strategy
+        Scalability --> Strategy
+        CostStructure --> Strategy
+        GlobalReach --> Strategy
+        
+        VendorLock --> DecisionMatrix
+        Security --> DecisionMatrix
+        CostManagement --> DecisionMatrix
+        SkillGap --> DecisionMatrix
+        
+        Strategy --> DecisionMatrix
+    end
+    
+    style Agility fill:#e3f2fd
+    style VendorLock fill:#ffebee
+    style Strategy fill:#e8f5e8
+    style DecisionMatrix fill:#fff3e0
+```
 
 ## 1.3 主要クラウドプロバイダーの戦略的理解
 
