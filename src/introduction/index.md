@@ -33,8 +33,7 @@ introduction: true
 
 ```mermaid
 mindmap
-  root((クラウドインフラ
-  実践ガイド))
+  root((クラウドインフラ実践ガイド))
     基礎編
       クラウド概念
         IaaS/PaaS/SaaS

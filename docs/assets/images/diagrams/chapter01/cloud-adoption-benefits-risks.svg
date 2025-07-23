@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="1200" viewBox="0 0 800 1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      /* Color Palette */
+      :root {
+        --bg-primary: #FFFFFF;
+        --bg-secondary: #F8F9FA;
+        --text-primary: #1A1A1A;
+        --text-secondary: #6B7280;
+        --primary: #3B82F6;
+        --success: #10B981;
+        --warning: #F59E0B;
+        --error: #EF4444;
+        --neutral: #6B7280;
+        --border: #E5E7EB;
+        --benefit-bg: #e8f5e8;
+        --risk-bg: #ffebee;
+        --strategy-bg: #e3f2fd;
+        --decision-bg: #fff3e0;
+      }
+      
+      /* Dark Theme */
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-primary: #1A1A1A;
+          --bg-secondary: #2D2D2D;
+          --text-primary: #FFFFFF;
+          --text-secondary: #9CA3AF;
+          --primary: #60A5FA;
+          --success: #34D399;
+          --warning: #FBBF24;
+          --error: #F87171;
+          --neutral: #9CA3AF;
+          --border: #374151;
+          --benefit-bg: #1B5E20;
+          --risk-bg: #B71C1C;
+          --strategy-bg: #1A237E;
+          --decision-bg: #E65100;
+        }
+      }
+      
+      /* Typography */
+      .title-text {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        text-anchor: middle;
+        fill: var(--text-primary);
+      }
+      
+      .section-title {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        text-anchor: middle;
+        fill: var(--text-primary);
+      }
+      
+      .benefit-title {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        text-anchor: middle;
+        fill: var(--text-primary);
+      }
+      
+      .description-text {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 10px;
+        font-weight: 400;
+        text-anchor: start;
+        fill: var(--text-secondary);
+      }
+      
+      .impact-text {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 9px;
+        font-weight: 400;
+        text-anchor: start;
+        fill: var(--text-primary);
+      }
+      
+      /* Node Styles */
+      .benefit-node {
+        fill: var(--benefit-bg);
+        stroke: var(--success);
+        stroke-width: 1.5;
+      }
+      
+      .risk-node {
+        fill: var(--risk-bg);
+        stroke: var(--error);
+        stroke-width: 1.5;
+      }
+      
+      .strategy-node {
+        fill: var(--strategy-bg);
+        stroke: var(--primary);
+        stroke-width: 2;
+      }
+      
+      .decision-node {
+        fill: var(--decision-bg);
+        stroke: var(--warning);
+        stroke-width: 2;
+      }
+      
+      /* Connection Lines */
+      .connection-line {
+        stroke: var(--primary);
+        stroke-width: 2;
+        marker-end: url(#arrow);
+      }
+    </style>
+    
+    <!-- Arrow Markers -->
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="var(--primary)"/>
+    </marker>
+  </defs>
+  
+  <title>クラウド採用の戦略的判断：メリットとリスクの全体像</title>
+  <desc>クラウド採用のメリット、リスク、成功要因の包括的分析</desc>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="var(--bg-primary)"/>
+  
+  <!-- Main Title -->
+  <text x="400" y="24" class="title-text">クラウド採用の戦略的判断：メリットとリスクの全体像</text>
+  
+  <!-- Benefits Section -->
+  <rect x="50" y="60" width="700" height="20" rx="3" fill="var(--benefit-bg)" stroke="var(--success)" stroke-width="1"/>
+  <text x="400" y="74" class="section-title">クラウド採用の主要メリット</text>
+  
+  <!-- Agility -->
+  <rect x="70" y="100" width="160" height="140" rx="4" class="benefit-node"/>
+  <text x="150" y="115" class="benefit-title">🚀 俊敏性の向上</text>
+  <text x="80" y="135" class="description-text">【具体的効果】</text>
+  <text x="80" y="150" class="impact-text">• 新アイデアの即座検証</text>
+  <text x="80" y="165" class="impact-text">• A/Bテスト環境を数分で構築</text>
+  <text x="80" y="180" class="impact-text">• 失敗コストの激減</text>
+  <text x="80" y="195" class="impact-text">• 市場変化への迅速対応</text>
+  <text x="80" y="215" class="description-text">【ビジネスインパクト】</text>
+  <text x="80" y="230" class="impact-text">• イノベーションの加速・競争優位性の獲得</text>
+  
+  <!-- Scalability -->
+  <rect x="250" y="100" width="160" height="140" rx="4" class="benefit-node"/>
+  <text x="330" y="115" class="benefit-title">📊 弾力的スケーラビリティ</text>
+  <text x="260" y="135" class="description-text">【自動スケーリング】</text>
+  <text x="260" y="150" class="impact-text">• ECサイトセール対応</text>
+  <text x="260" y="165" class="impact-text">• メディアバズコンテンツ対応</text>
+  <text x="260" y="180" class="impact-text">• シーズナル需要変動</text>
+  <text x="260" y="200" class="description-text">【コスト効果】</text>
+  <text x="260" y="215" class="impact-text">• 過剰投資の回避</text>
+  <text x="260" y="230" class="impact-text">• 機会損失の防止</text>
+  
+  <!-- Cost Structure -->
+  <rect x="430" y="100" width="160" height="140" rx="4" class="benefit-node"/>
+  <text x="510" y="115" class="benefit-title">💰 コスト構造変革</text>
+  <text x="440" y="135" class="description-text">【CAPEXからOPEXへ】</text>
+  <text x="440" y="150" class="impact-text">• 初期投資の大幅減</text>
+  <text x="440" y="165" class="impact-text">• 予測可能なランニングコスト</text>
+  <text x="440" y="180" class="impact-text">• キャッシュフロー改善</text>
+  <text x="440" y="200" class="description-text">【従量課金】</text>
+  <text x="440" y="215" class="impact-text">• 使用した分だけ支払</text>
+  <text x="440" y="230" class="impact-text">• リソース無駄の排除</text>
+  
+  <!-- Global Reach -->
+  <rect x="610" y="100" width="160" height="140" rx="4" class="benefit-node"/>
+  <text x="690" y="115" class="benefit-title">🌍 グローバル展開</text>
+  <text x="620" y="135" class="description-text">【世界中のリージョン】</text>
+  <text x="620" y="150" class="impact-text">• 数クリックでデプロイ</text>
+  <text x="620" y="165" class="impact-text">• レイテンシー最適化</text>
+  <text x="620" y="180" class="impact-text">• データレジデンシー対応</text>
+  <text x="620" y="200" class="description-text">【地理的制約の解除】</text>
+  <text x="620" y="215" class="impact-text">• グローバルビジネス機会</text>
+  <text x="620" y="230" class="impact-text">• 多地域災害対策</text>
+  
+  <!-- Risks Section -->
+  <rect x="50" y="280" width="700" height="20" rx="3" fill="var(--risk-bg)" stroke="var(--error)" stroke-width="1"/>
+  <text x="400" y="294" class="section-title">主要なリスクと課題</text>
+  
+  <!-- Vendor Lock-in -->
+  <rect x="70" y="320" width="160" height="140" rx="4" class="risk-node"/>
+  <text x="150" y="335" class="benefit-title">🔒 ベンダーロックイン</text>
+  <text x="80" y="355" class="description-text">【リスク要因】</text>
+  <text x="80" y="370" class="impact-text">• プロプライエタリサービス依存</text>
+  <text x="80" y="385" class="impact-text">• 特定プロバイダー依存</text>
+  <text x="80" y="400" class="impact-text">• 移行コストの高騰化</text>
+  <text x="80" y="420" class="description-text">【緩和策】</text>
+  <text x="80" y="435" class="impact-text">• オープンスタンダード技術</text>
+  <text x="80" y="450" class="impact-text">• マルチクラウド戦略・移行可能性考慮設計</text>
+  
+  <!-- Security -->
+  <rect x="250" y="320" width="160" height="140" rx="4" class="risk-node"/>
+  <text x="330" y="335" class="benefit-title">🔐 セキュリティ・コンプライアンス</text>
+  <text x="260" y="355" class="description-text">【複雑性の要因】</text>
+  <text x="260" y="370" class="impact-text">• 共有責任モデルの理解</text>
+  <text x="260" y="385" class="impact-text">• データ所在地管理</text>
+  <text x="260" y="400" class="impact-text">• 多層的セキュリティ対策</text>
+  <text x="260" y="420" class="description-text">【必要な対応】</text>
+  <text x="260" y="435" class="impact-text">• 暗号化戦略・アクセス制御</text>
+  <text x="260" y="450" class="impact-text">• 監査ログ管理</text>
+  
+  <!-- Cost Management -->
+  <rect x="430" y="320" width="160" height="140" rx="4" class="risk-node"/>
+  <text x="510" y="335" class="benefit-title">📈 コスト管理の難しさ</text>
+  <text x="440" y="355" class="description-text">【コスト超過リスク】</text>
+  <text x="440" y="370" class="impact-text">• 開発環境のリソース放置</text>
+  <text x="440" y="385" class="impact-text">• データ転送料金累積</text>
+  <text x="440" y="400" class="impact-text">• ストレージ継続増加</text>
+  <text x="440" y="420" class="description-text">【管理必要性】</text>
+  <text x="440" y="435" class="impact-text">• 監視ツール導入</text>
+  <text x="440" y="450" class="impact-text">• ガバナンス体制・自動化ルール</text>
+  
+  <!-- Skill Gap -->
+  <rect x="610" y="320" width="160" height="140" rx="4" class="risk-node"/>
+  <text x="690" y="335" class="benefit-title">🏋️ スキルギャップ</text>
+  <text x="620" y="355" class="description-text">【必要な新スキル】</text>
+  <text x="620" y="370" class="impact-text">• クラウドネイティブ設計</text>
+  <text x="620" y="385" class="impact-text">• DevOpsプラクティス</text>
+  <text x="620" y="400" class="impact-text">• IaCツール習得</text>
+  <text x="620" y="420" class="description-text">【組織課題】</text>
+  <text x="620" y="435" class="impact-text">• 既存エンジニアの再教育</text>
+  <text x="620" y="450" class="impact-text">• 人材確保競争・ナレッジ蓄積</text>
+  
+  <!-- Strategy Section -->
+  <rect x="50" y="500" width="700" height="20" rx="3" fill="var(--strategy-bg)" stroke="var(--primary)" stroke-width="1"/>
+  <text x="400" y="514" class="section-title">🎯 成功要因と戦略</text>
+  
+  <rect x="100" y="540" width="600" height="120" rx="6" class="strategy-node"/>
+  <text x="400" y="560" class="benefit-title">採用戦略</text>
+  <text x="120" y="585" class="description-text">【段階的アプローチ】</text>
+  <text x="120" y="600" class="impact-text">1. パイロットプロジェクト → 2. 非重要システム移行 → 3. コアシステム移行 → 4. デジタルトランスフォーメーション</text>
+  <text x="120" y="625" class="description-text">【リスク管理】</text>
+  <text x="120" y="640" class="impact-text">• ガバナンス体制構築 • コスト監視ツール • スキル投資計画</text>
+  
+  <!-- Decision Matrix Section -->
+  <rect x="50" y="700" width="700" height="20" rx="3" fill="var(--decision-bg)" stroke="var(--warning)" stroke-width="1"/>
+  <text x="400" y="714" class="section-title">🤔 意思決定フレームワーク</text>
+  
+  <rect x="100" y="740" width="600" height="140" rx="6" class="decision-node"/>
+  <text x="400" y="760" class="benefit-title">意思決定マトリックス</text>
+  
+  <text x="120" y="785" class="description-text">【メリット評価】</text>
+  <text x="120" y="800" class="impact-text">✅ 時間的メリットの定量化 ✅ コスト効果のROI計算 ✅ 競争優位性への影響</text>
+  
+  <text x="120" y="825" class="description-text">【リスク評価】</text>
+  <text x="120" y="840" class="impact-text">⚠️ ベンダー依存リスク ⚠️ セキュリティリスク ⚠️ コスト超過リスク ⚠️ スキルギャップリスク</text>
+  
+  <!-- Connection Lines -->
+  <line x1="150" y1="240" x2="250" y2="540" class="connection-line"/>
+  <line x1="330" y1="240" x2="350" y2="540" class="connection-line"/>
+  <line x1="510" y1="240" x2="450" y2="540" class="connection-line"/>
+  <line x1="690" y1="240" x2="550" y2="540" class="connection-line"/>
+  
+  <line x1="150" y1="460" x2="250" y2="740" class="connection-line"/>
+  <line x1="330" y1="460" x2="350" y2="740" class="connection-line"/>
+  <line x1="510" y1="460" x2="450" y2="740" class="connection-line"/>
+  <line x1="690" y1="460" x2="550" y2="740" class="connection-line"/>
+  
+  <line x1="400" y1="660" x2="400" y2="700" class="connection-line"/>
+  
+  <!-- Key Success Factors -->
+  <rect x="50" y="920" width="700" height="120" rx="6" fill="var(--bg-secondary)" stroke="var(--border)" stroke-width="1"/>
+  <text x="400" y="940" class="section-title">クラウド成功のための重要ポイント</text>
+  
+  <text x="70" y="965" class="benefit-title" text-anchor="start">段階的移行:</text>
+  <text x="80" y="980" class="description-text">• 小さく始めて学習しながら拡大 • リスクを管理しながら価値を実証</text>
+  
+  <text x="70" y="1005" class="benefit-title" text-anchor="start">継続的最適化:</text>
+  <text x="80" y="1020" class="description-text">• 定期的なコスト見直し • セキュリティ強化 • スキル向上投資</text>
+  
+</svg>
