@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="1000" viewBox="0 0 800 1000" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      /* Color Palette */
+      :root {
+        --bg-primary: #FFFFFF;
+        --bg-secondary: #F8F9FA;
+        --text-primary: #1A1A1A;
+        --text-secondary: #6B7280;
+        --primary: #3B82F6;
+        --success: #10B981;
+        --warning: #F59E0B;
+        --error: #EF4444;
+        --neutral: #6B7280;
+        --border: #E5E7EB;
+        --center-bg: #4c1d95;
+        --basic-bg: #dcfce7;
+        --core-bg: #fef3c7;
+        --ops-bg: #dbeafe;
+        --advanced-bg: #f3e8ff;
+        --integration-bg: #fed7d7;
+      }
+      
+      /* Dark Theme */
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-primary: #1A1A1A;
+          --bg-secondary: #2D2D2D;
+          --text-primary: #FFFFFF;
+          --text-secondary: #9CA3AF;
+          --primary: #60A5FA;
+          --success: #34D399;
+          --warning: #FBBF24;
+          --error: #F87171;
+          --neutral: #9CA3AF;
+          --border: #374151;
+          --center-bg: #312e81;
+          --basic-bg: #065f46;
+          --core-bg: #92400e;
+          --ops-bg: #1e40af;
+          --advanced-bg: #6b21a8;
+          --integration-bg: #991b1b;
+        }
+      }
+      
+      /* Typography */
+      .title-text {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        text-anchor: middle;
+        fill: var(--text-primary);
+      }
+      
+      .center-text {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        text-anchor: middle;
+        fill: white;
+      }
+      
+      .branch-title {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        text-anchor: middle;
+        fill: var(--text-primary);
+      }
+      
+      .topic-text {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 10px;
+        font-weight: 500;
+        text-anchor: middle;
+        fill: var(--text-primary);
+      }
+      
+      .subtopic-text {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 9px;
+        font-weight: 400;
+        text-anchor: middle;
+        fill: var(--text-secondary);
+      }
+      
+      /* Node Styles */
+      .center-node {
+        fill: var(--center-bg);
+        stroke: var(--border);
+        stroke-width: 2;
+      }
+      
+      .basic-node {
+        fill: var(--basic-bg);
+        stroke: var(--success);
+        stroke-width: 1.5;
+      }
+      
+      .core-node {
+        fill: var(--core-bg);
+        stroke: var(--warning);
+        stroke-width: 1.5;
+      }
+      
+      .ops-node {
+        fill: var(--ops-bg);
+        stroke: var(--primary);
+        stroke-width: 1.5;
+      }
+      
+      .advanced-node {
+        fill: var(--advanced-bg);
+        stroke: var(--error);
+        stroke-width: 1.5;
+      }
+      
+      .integration-node {
+        fill: var(--integration-bg);
+        stroke: var(--neutral);
+        stroke-width: 1.5;
+      }
+      
+      /* Connection Lines */
+      .main-branch {
+        stroke: var(--primary);
+        stroke-width: 3;
+      }
+      
+      .sub-branch {
+        stroke: var(--neutral);
+        stroke-width: 2;
+      }
+      
+      .detail-branch {
+        stroke: var(--border);
+        stroke-width: 1;
+      }
+    </style>
+  </defs>
+  
+  <title>クラウドインフラ実践ガイド</title>
+  <desc>包括的な学習マインドマップ</desc>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="var(--bg-primary)"/>
+  
+  <!-- Main Title -->
+  <text x="400" y="20" class="title-text">クラウドインフラ実践ガイド - 学習マップ</text>
+  
+  <!-- Central Node -->
+  <circle cx="400" cy="150" r="50" class="center-node"/>
+  <text x="400" y="145" class="center-text">クラウドインフラ</text>
+  <text x="400" y="160" class="center-text">実践ガイド</text>
+  
+  <!-- Branch 1: 基礎編 -->
+  <line x1="350" y1="120" x2="200" y2="80" class="main-branch"/>
+  <rect x="120" y="60" width="160" height="40" rx="6" class="basic-node"/>
+  <text x="200" y="84" class="branch-title">基礎編</text>
+  
+  <!-- 基礎編 - クラウド概念 -->
+  <line x1="120" y1="80" x2="80" y2="120" class="sub-branch"/>
+  <rect x="20" y="110" width="120" height="60" rx="4" class="basic-node"/>
+  <text x="80" y="130" class="topic-text">クラウド概念</text>
+  <text x="80" y="145" class="subtopic-text">IaaS/PaaS/SaaS</text>
+  <text x="80" y="155" class="subtopic-text">共有責任モデル</text>
+  <text x="80" y="165" class="subtopic-text">デプロイメントモデル</text>
+  
+  <!-- 基礎編 - 設計原則 -->
+  <line x1="280" y1="80" x2="320" y2="120" class="sub-branch"/>
+  <rect x="260" y="110" width="120" height="60" rx="4" class="basic-node"/>
+  <text x="320" y="130" class="topic-text">設計原則</text>
+  <text x="320" y="145" class="subtopic-text">可用性・拡張性</text>
+  <text x="320" y="155" class="subtopic-text">セキュリティ</text>
+  <text x="320" y="165" class="subtopic-text">コスト最適化</text>
+  
+  <!-- Branch 2: コアサービス編 -->
+  <line x1="450" y1="120" x2="600" y2="80" class="main-branch"/>
+  <rect x="520" y="60" width="160" height="40" rx="6" class="core-node"/>
+  <text x="600" y="84" class="branch-title">コアサービス編</text>
+  
+  <!-- コアサービス編 - 仮想マシン -->
+  <line x1="520" y1="80" x2="480" y2="120" class="sub-branch"/>
+  <rect x="400" y="110" width="160" height="60" rx="4" class="core-node"/>
+  <text x="480" y="130" class="topic-text">仮想マシン</text>
+  <text x="480" y="145" class="subtopic-text">EC2/VM/Compute Engine</text>
+  <text x="480" y="155" class="subtopic-text">Auto Scaling</text>
+  <text x="480" y="165" class="subtopic-text">ロードバランシング</text>
+  
+  <!-- コアサービス編 - ストレージ -->
+  <line x1="600" y1="100" x2="640" y2="140" class="sub-branch"/>
+  <rect x="580" y="130" width="120" height="60" rx="4" class="core-node"/>
+  <text x="640" y="150" class="topic-text">ストレージ</text>
+  <text x="640" y="165" class="subtopic-text">オブジェクトストレージ</text>
+  <text x="640" y="175" class="subtopic-text">ブロックストレージ・DB</text>
+  
+  <!-- コアサービス編 - ネットワーク -->
+  <line x1="680" y1="80" x2="720" y2="120" class="sub-branch"/>
+  <rect x="660" y="110" width="120" height="60" rx="4" class="core-node"/>
+  <text x="720" y="130" class="topic-text">ネットワーク</text>
+  <text x="720" y="145" class="subtopic-text">VPC設計</text>
+  <text x="720" y="155" class="subtopic-text">DNS・CDN</text>
+  <text x="720" y="165" class="subtopic-text">セキュリティグループ</text>
+  
+  <!-- Branch 3: 運用管理編 -->
+  <line x1="350" y1="180" x2="200" y2="220" class="main-branch"/>
+  <rect x="120" y="200" width="160" height="40" rx="6" class="ops-node"/>
+  <text x="200" y="224" class="branch-title">運用管理編</text>
+  
+  <!-- 運用管理編 - セキュリティ -->
+  <line x1="120" y1="220" x2="80" y2="260" class="sub-branch"/>
+  <rect x="20" y="250" width="120" height="60" rx="4" class="ops-node"/>
+  <text x="80" y="270" class="topic-text">セキュリティ</text>
+  <text x="80" y="285" class="subtopic-text">IAM・認証</text>
+  <text x="80" y="295" class="subtopic-text">暗号化・コンプライアンス</text>
+  
+  <!-- 運用管理編 - 監視・ログ -->
+  <line x1="200" y1="240" x2="200" y2="280" class="sub-branch"/>
+  <rect x="140" y="270" width="120" height="60" rx="4" class="ops-node"/>
+  <text x="200" y="290" class="topic-text">監視・ログ</text>
+  <text x="200" y="305" class="subtopic-text">メトリクス収集</text>
+  <text x="200" y="315" class="subtopic-text">アラート設定・ログ分析</text>
+  
+  <!-- 運用管理編 - コスト管理 -->
+  <line x1="280" y1="220" x2="320" y2="260" class="sub-branch"/>
+  <rect x="260" y="250" width="120" height="60" rx="4" class="ops-node"/>
+  <text x="320" y="270" class="topic-text">コスト管理</text>
+  <text x="320" y="285" class="subtopic-text">課金最適化</text>
+  <text x="320" y="295" class="subtopic-text">リソース管理・予算管理</text>
+  
+  <!-- Branch 4: 先進技術編 -->
+  <line x1="450" y1="180" x2="600" y2="220" class="main-branch"/>
+  <rect x="520" y="200" width="160" height="40" rx="6" class="advanced-node"/>
+  <text x="600" y="224" class="branch-title">先進技術編</text>
+  
+  <!-- 先進技術編 - サーバーレス -->
+  <line x1="520" y1="220" x2="480" y2="260" class="sub-branch"/>
+  <rect x="400" y="250" width="160" height="60" rx="4" class="advanced-node"/>
+  <text x="480" y="270" class="topic-text">サーバーレス</text>
+  <text x="480" y="285" class="subtopic-text">Functions・イベント駆動</text>
+  <text x="480" y="295" class="subtopic-text">マイクロサービス</text>
+  
+  <!-- 先進技術編 - コンテナ -->
+  <line x1="600" y1="240" x2="640" y2="280" class="sub-branch"/>
+  <rect x="580" y="270" width="120" height="60" rx="4" class="advanced-node"/>
+  <text x="640" y="290" class="topic-text">コンテナ</text>
+  <text x="640" y="305" class="subtopic-text">Docker/Kubernetes</text>
+  <text x="640" y="315" class="subtopic-text">サービスメッシュ・DevOps</text>
+  
+  <!-- 先進技術編 - IaC -->
+  <line x1="680" y1="220" x2="720" y2="260" class="sub-branch"/>
+  <rect x="660" y="250" width="120" height="60" rx="4" class="advanced-node"/>
+  <text x="720" y="270" class="topic-text">IaC</text>
+  <text x="720" y="285" class="subtopic-text">Terraform・CloudFormation</text>
+  <text x="720" y="295" class="subtopic-text">自動化</text>
+  
+  <!-- Branch 5: 統合編 -->
+  <line x1="400" y1="200" x2="400" y2="280" class="main-branch"/>
+  <rect x="320" y="280" width="160" height="40" rx="6" class="integration-node"/>
+  <text x="400" y="304" class="branch-title">統合編</text>
+  
+  <!-- 統合編 - エンタープライズ -->
+  <line x1="320" y1="300" x2="280" y2="340" class="sub-branch"/>
+  <rect x="200" y="330" width="160" height="60" rx="4" class="integration-node"/>
+  <text x="280" y="350" class="topic-text">エンタープライズ</text>
+  <text x="280" y="365" class="subtopic-text">マルチクラウド・ハイブリッド</text>
+  <text x="280" y="375" class="subtopic-text">ガバナンス</text>
+  
+  <!-- Learning Path Section -->
+  <rect x="50" y="420" width="700" height="160" rx="6" fill="var(--bg-secondary)" stroke="var(--border)" stroke-width="1"/>
+  <text x="400" y="440" class="branch-title">学習ロードマップ</text>
+  
+  <text x="70" y="465" class="topic-text" text-anchor="start">段階的学習アプローチ:</text>
+  <text x="80" y="480" class="subtopic-text" text-anchor="start">1. 基礎概念 → 2. コアサービス → 3. 運用管理 → 4. 先進技術 → 5. エンタープライズ統合</text>
+  
+  <text x="70" y="505" class="topic-text" text-anchor="start">実践重視:</text>
+  <text x="80" y="520" class="subtopic-text" text-anchor="start">• 理論学習 30% • ハンズオン 50% • プロジェクト適用 20%</text>
+  
+  <text x="70" y="545" class="topic-text" text-anchor="start">継続的スキルアップ:</text>
+  <text x="80" y="560" class="subtopic-text" text-anchor="start">• 最新技術動向フォロー • コミュニティ参加 • 認定資格取得</text>
+  
+  <!-- Key Technologies -->
+  <rect x="50" y="600" width="700" height="200" rx="6" fill="var(--bg-secondary)" stroke="var(--border)" stroke-width="1"/>
+  <text x="400" y="620" class="branch-title">主要技術スタック</text>
+  
+  <text x="70" y="645" class="topic-text" text-anchor="start">パブリッククラウド:</text>
+  <text x="80" y="660" class="subtopic-text" text-anchor="start">• AWS (Amazon Web Services) • Microsoft Azure • Google Cloud Platform</text>
+  
+  <text x="70" y="685" class="topic-text" text-anchor="start">コンテナ・オーケストレーション:</text>
+  <text x="80" y="700" class="subtopic-text" text-anchor="start">• Docker • Kubernetes • Docker Compose • Helm</text>
+  
+  <text x="70" y="725" class="topic-text" text-anchor="start">Infrastructure as Code:</text>
+  <text x="80" y="740" class="subtopic-text" text-anchor="start">• Terraform • AWS CloudFormation • Azure ARM Templates • Ansible</text>
+  
+  <text x="70" y="765" class="topic-text" text-anchor="start">監視・ログ管理:</text>
+  <text x="80" y="780" class="subtopic-text" text-anchor="start">• Prometheus • Grafana • ELK Stack • CloudWatch • Application Insights</text>
+  
+  <!-- Career Paths -->
+  <rect x="50" y="820" width="700" height="140" rx="6" fill="var(--bg-secondary)" stroke="var(--border)" stroke-width="1"/>
+  <text x="400" y="840" class="branch-title">キャリアパス例</text>
+  
+  <text x="70" y="865" class="topic-text" text-anchor="start">技術専門職:</text>
+  <text x="80" y="880" class="subtopic-text" text-anchor="start">• クラウドアーキテクト • DevOpsエンジニア • SREスペシャリスト • セキュリティエンジニア</text>
+  
+  <text x="70" y="905" class="topic-text" text-anchor="start">マネジメント職:</text>
+  <text x="80" y="920" class="subtopic-text" text-anchor="start">• 技術リーダー • エンジニアリングマネージャー • CTOレベル • ITコンサルタント</text>
+  
+</svg>
