@@ -1,7 +1,7 @@
 ---
-title: "付録：参考資料"
 layout: book
-appendix: true
+order: 14
+title: "付録: リソースとツール"
 ---
 
 # 付録：参考資料

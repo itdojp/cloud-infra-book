@@ -1,7 +1,7 @@
 ---
-title: "第8章：バックアップ・災害復旧戦略"
-chapter: chapter08
 layout: book
+order: 10
+title: "第8章：コスト最適化"
 ---
 
 # 第8章：バックアップ・災害復旧戦略

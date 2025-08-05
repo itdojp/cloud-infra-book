@@ -1,7 +1,7 @@
 ---
-title: "第10章：Infrastructure as Code (IaC) と自動化"
-chapter: chapter10
 layout: book
+order: 12
+title: "第10章：Infrastructure as Code"
 ---
 
 # 第10章：Infrastructure as Code (IaC) と自動化
