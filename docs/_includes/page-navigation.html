@@ -1,83 +1,40 @@
 <!-- Page Navigation (Previous/Next) -->
-{% assign current_url = page.url %}
-{% assign previous_page = nil %}
-{% assign next_page = nil %}
+{% assign current_index = nil %}
+{% assign all_pages = site.pages | where: "layout", "book" | where_exp: "page", "page.order" | sort: 'order' %}
 
-<!-- Define page order manually for cloud-infra-book -->
-{% if current_url contains '/introduction/' %}
-    {% assign next_page_url = '/chapter-chapter01/' %}
-    {% assign next_page_title = '第1章 クラウドインフラストラクチャの概要' %}
-{% elsif current_url contains '/chapter-chapter01/' %}
-    {% assign previous_page_url = '/introduction/' %}
-    {% assign previous_page_title = 'はじめに' %}
-    {% assign next_page_url = '/chapter-chapter02/' %}
-    {% assign next_page_title = '第2章 クラウドアーキテクチャの基本原則' %}
-{% elsif current_url contains '/chapter-chapter02/' %}
-    {% assign previous_page_url = '/chapter-chapter01/' %}
-    {% assign previous_page_title = '第1章 クラウドインフラストラクチャの概要' %}
-    {% assign next_page_url = '/chapter-chapter03/' %}
-    {% assign next_page_title = '第3章 仮想マシン（Compute）の活用' %}
-{% elsif current_url contains '/chapter-chapter03/' %}
-    {% assign previous_page_url = '/chapter-chapter02/' %}
-    {% assign previous_page_title = '第2章 クラウドアーキテクチャの基本原則' %}
-    {% assign next_page_url = '/chapter-chapter04/' %}
-    {% assign next_page_title = '第4章 ストレージサービスの設計' %}
-{% elsif current_url contains '/chapter-chapter04/' %}
-    {% assign previous_page_url = '/chapter-chapter03/' %}
-    {% assign previous_page_title = '第3章 仮想マシン（Compute）の活用' %}
-    {% assign next_page_url = '/chapter-chapter05/' %}
-    {% assign next_page_title = '第5章 ネットワークインフラの構築' %}
-{% elsif current_url contains '/chapter-chapter05/' %}
-    {% assign previous_page_url = '/chapter-chapter04/' %}
-    {% assign previous_page_title = '第4章 ストレージサービスの設計' %}
-    {% assign next_page_url = '/chapter-chapter06/' %}
-    {% assign next_page_title = '第6章 セキュリティ対策の実装' %}
-{% elsif current_url contains '/chapter-chapter06/' %}
-    {% assign previous_page_url = '/chapter-chapter05/' %}
-    {% assign previous_page_title = '第5章 ネットワークインフラの構築' %}
-    {% assign next_page_url = '/chapter-chapter07/' %}
-    {% assign next_page_title = '第7章 監視・ログ管理の設計' %}
-{% elsif current_url contains '/chapter-chapter07/' %}
-    {% assign previous_page_url = '/chapter-chapter06/' %}
-    {% assign previous_page_title = '第6章 セキュリティ対策の実装' %}
-    {% assign next_page_url = '/chapter-chapter08/' %}
-    {% assign next_page_title = '第8章 バックアップ・災害復旧戦略' %}
-{% elsif current_url contains '/chapter-chapter08/' %}
-    {% assign previous_page_url = '/chapter-chapter07/' %}
-    {% assign previous_page_title = '第7章 監視・ログ管理の設計' %}
-    {% assign next_page_url = '/chapter-chapter09/' %}
-    {% assign next_page_title = '第9章 コンテナ・オーケストレーション' %}
-{% elsif current_url contains '/chapter-chapter09/' %}
-    {% assign previous_page_url = '/chapter-chapter08/' %}
-    {% assign previous_page_title = '第8章 バックアップ・災害復旧戦略' %}
-    {% assign next_page_url = '/chapter-chapter10/' %}
-    {% assign next_page_title = '第10章 Infrastructure as Code（IaC）' %}
-{% elsif current_url contains '/chapter-chapter10/' %}
-    {% assign previous_page_url = '/chapter-chapter09/' %}
-    {% assign previous_page_title = '第9章 コンテナ・オーケストレーション' %}
-    {% assign next_page_url = '/chapter-chapter11/' %}
-    {% assign next_page_title = '第11章 マルチクラウド戦略とガバナンス' %}
-{% elsif current_url contains '/chapter-chapter11/' %}
-    {% assign previous_page_url = '/chapter-chapter10/' %}
-    {% assign previous_page_title = '第10章 Infrastructure as Code（IaC）' %}
-    {% assign next_page_url = '/appendices/' %}
-    {% assign next_page_title = '付録 参考資料' %}
-{% elsif current_url contains '/appendices/' %}
-    {% assign previous_page_url = '/chapter-chapter11/' %}
-    {% assign previous_page_title = '第11章 マルチクラウド戦略とガバナンス' %}
+<!-- Find current page index -->
+{% for p in all_pages %}
+    {% if p.url == page.url %}
+        {% assign current_index = forloop.index0 %}
+        {% break %}
+    {% endif %}
+{% endfor %}
+
+<!-- Calculate previous and next indices -->
+{% if current_index %}
+    {% assign prev_index = current_index | minus: 1 %}
+    {% assign next_index = current_index | plus: 1 %}
+    
+    {% if prev_index >= 0 %}
+        {% assign previous_page = all_pages[prev_index] %}
+    {% endif %}
+    
+    {% if next_index < all_pages.size %}
+        {% assign next_page = all_pages[next_index] %}
+    {% endif %}
 {% endif %}
 
 <div class="page-nav">
     <!-- Previous Page -->
     <div class="page-nav-item page-nav-prev">
-        {% if previous_page_url %}
-        <a href="{{ previous_page_url | relative_url }}" class="page-nav-link">
+        {% if previous_page %}
+        <a href="{{ previous_page.url | relative_url }}" class="page-nav-link">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
             <div class="page-nav-content">
                 <span class="page-nav-label">前のページ</span>
-                <span class="page-nav-title">{{ previous_page_title }}</span>
+                <span class="page-nav-title">{{ previous_page.title }}</span>
             </div>
         </a>
         {% endif %}
@@ -85,11 +42,11 @@
 
     <!-- Next Page -->
     <div class="page-nav-item page-nav-next">
-        {% if next_page_url %}
-        <a href="{{ next_page_url | relative_url }}" class="page-nav-link">
+        {% if next_page %}
+        <a href="{{ next_page.url | relative_url }}" class="page-nav-link">
             <div class="page-nav-content">
                 <span class="page-nav-label">次のページ</span>
-                <span class="page-nav-title">{{ next_page_title }}</span>
+                <span class="page-nav-title">{{ next_page.title }}</span>
             </div>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9 18 15 12 9 6"></polyline>

@@ -1,7 +1,7 @@
 ---
-title: "第6章：IAMとセキュリティ実践"
-chapter: chapter06
 layout: book
+order: 8
+title: "第6章：セキュリティとコンプライアンス"
 ---
 
 # 第6章：IAMとセキュリティ実践

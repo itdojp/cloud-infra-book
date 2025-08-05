@@ -1,5 +1,8 @@
 /* Main CSS for Book Template */
 
+/* Import CSS-only responsive sidebar implementation */
+@import url('./mobile-responsive.css');
+
 /* CSS Variables */
 :root {
     /* Colors */
@@ -96,10 +99,10 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 { font-size: 2.25rem; }
 h2 { font-size: 1.875rem; }
-h3 { font-size: 1.25rem; }
-h4 { font-size: 1.125rem; }
-h5 { font-size: 1rem; }
-h6 { font-size: 0.875rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.125rem; }
+h6 { font-size: 1rem; }
 
 p {
     margin-top: 0;
@@ -115,29 +118,6 @@ a {
 a:hover {
     color: var(--primary-hover);
     text-decoration: underline;
-}
-
-strong, b {
-    font-weight: 600;
-    font-size: inherit !important;
-    color: inherit;
-    line-height: inherit;
-}
-
-/* Ensure consistent font size for bold text in content */
-.page-content strong,
-.page-content b {
-    font-size: inherit !important;
-    font-weight: 600;
-    color: inherit;
-}
-
-/* Specific styling for bold text in paragraphs */
-p strong,
-p b {
-    font-size: inherit !important;
-    font-weight: 600;
-    color: inherit;
 }
 
 /* Layout */
@@ -423,35 +403,40 @@ p b {
     color: var(--primary-color);
 }
 
-/* Mobile Styles */
-.sidebar-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 850;
+/* Copy Button Styles */
+.copy-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 10;
 }
 
-@media (max-width: 1024px) {
-    .book-sidebar {
-        transform: translateX(-100%);
-    }
-    
-    .book-sidebar.active {
-        transform: translateX(0);
-    }
-    
-    .book-main {
-        margin-left: 0;
-    }
-    
-    .sidebar-overlay.active {
-        display: block;
-    }
+.copy-button:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
 }
+
+.copy-button.copied {
+    background: var(--success-color);
+    color: white;
+    border-color: var(--success-color);
+}
+
+.copy-button.error {
+    background: var(--danger-color);
+    color: white;
+    border-color: var(--danger-color);
+}
+
+/* Legacy mobile styles removed - using CSS-only implementation in mobile-responsive.css */
 
 @media (max-width: 768px) {
     .book-content {
@@ -465,6 +450,23 @@ p b {
     .header-center {
         display: none;
     }
+}
+
+/* Page Content Layout Improvements */
+.page-content {
+    min-height: 60vh;
+    margin-bottom: 2rem;
+}
+
+.book-content {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - var(--header-height));
+}
+
+.page-navigation {
+    margin-top: auto;
+    padding-top: 3rem;
 }
 
 /* Print Styles */

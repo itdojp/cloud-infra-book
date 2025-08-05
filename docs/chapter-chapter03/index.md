@@ -1,7 +1,7 @@
 ---
-title: "第3章：仮想マシン（Compute）の活用"
-chapter: chapter03
 layout: book
+order: 5
+title: "第3章：仮想マシン（Compute）の活用"
 ---
 
 # 第3章：仮想マシン（Compute）の活用

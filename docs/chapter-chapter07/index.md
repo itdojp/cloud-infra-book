@@ -1,7 +1,7 @@
 ---
-title: "第7章：監視とログ管理"
-chapter: chapter07
 layout: book
+order: 9
+title: "第7章：監視・運用・トラブルシューティング"
 ---
 
 # 第7章：監視とログ管理
