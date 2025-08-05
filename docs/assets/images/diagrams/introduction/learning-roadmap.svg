@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="1200" viewBox="0 0 800 1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      /* Color Palette */
+      :root {
+        --bg-primary: #FFFFFF;
+        --bg-secondary: #F8F9FA;
+        --text-primary: #1A1A1A;
+        --text-secondary: #6B7280;
+        --primary: #3B82F6;
+        --success: #10B981;
+        --warning: #F59E0B;
+        --error: #EF4444;
+        --neutral: #6B7280;
+        --border: #E5E7EB;
+        --beginner-bg: #e8f5e8;
+        --intermediate-bg: #fff3e0;
+        --advanced-bg: #e3f2fd;
+        --skill-bg: #f3e5f5;
+        --career-bg: #ffe0b2;
+      }
+      
+      /* Dark Theme */
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-primary: #1A1A1A;
+          --bg-secondary: #2D2D2D;
+          --text-primary: #FFFFFF;
+          --text-secondary: #9CA3AF;
+          --primary: #60A5FA;
+          --success: #34D399;
+          --warning: #FBBF24;
+          --error: #F87171;
+          --neutral: #9CA3AF;
+          --border: #374151;
+          --beginner-bg: #1B5E20;
+          --intermediate-bg: #E65100;
+          --advanced-bg: #1A237E;
+          --skill-bg: #4A148C;
+          --career-bg: #8B4513;
+        }
+      }
+      
+      /* Typography */
+      .title-text {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        text-anchor: middle;
+        fill: var(--text-primary);
+      }
+      
+      .level-title {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        text-anchor: middle;
+        fill: var(--text-primary);
+      }
+      
+      .skill-title {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        text-anchor: middle;
+        fill: var(--text-primary);
+      }
+      
+      .description-text {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 10px;
+        font-weight: 400;
+        text-anchor: start;
+        fill: var(--text-secondary);
+      }
+      
+      .detail-text {
+        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 9px;
+        font-weight: 400;
+        text-anchor: start;
+        fill: var(--text-primary);
+      }
+      
+      /* Node Styles */
+      .beginner-node {
+        fill: var(--beginner-bg);
+        stroke: var(--success);
+        stroke-width: 1.5;
+      }
+      
+      .intermediate-node {
+        fill: var(--intermediate-bg);
+        stroke: var(--warning);
+        stroke-width: 1.5;
+      }
+      
+      .advanced-node {
+        fill: var(--advanced-bg);
+        stroke: var(--primary);
+        stroke-width: 1.5;
+      }
+      
+      .skill-node {
+        fill: var(--skill-bg);
+        stroke: var(--error);
+        stroke-width: 1.5;
+      }
+      
+      .career-node {
+        fill: var(--career-bg);
+        stroke: var(--neutral);
+        stroke-width: 2;
+      }
+      
+      /* Connection Lines */
+      .progression-line {
+        stroke: var(--primary);
+        stroke-width: 2;
+        marker-end: url(#arrow);
+      }
+      
+      .skill-line {
+        stroke: var(--error);
+        stroke-width: 1.5;
+        stroke-dasharray: 4,4;
+        marker-end: url(#arrow-red);
+      }
+      
+      .career-line {
+        stroke: var(--neutral);
+        stroke-width: 1.5;
+        stroke-dasharray: 8,4;
+        marker-end: url(#arrow-gray);
+      }
+    </style>
+    
+    <!-- Arrow Markers -->
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="var(--primary)"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="var(--error)"/>
+    </marker>
+    <marker id="arrow-gray" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="var(--neutral)"/>
+    </marker>
+  </defs>
+  
+  <title>学習ロードマップとスキル習得の流れ</title>
+  <desc>初級から上級まで段階的なクラウドスキル習得パス</desc>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="var(--bg-primary)"/>
+  
+  <!-- Main Title -->
+  <text x="400" y="24" class="title-text">学習ロードマップとスキル習得の流れ</text>
+  
+  <!-- Beginner Level (1-2年目) -->
+  <rect x="50" y="60" width="700" height="20" rx="3" fill="var(--beginner-bg)" stroke="var(--success)" stroke-width="1"/>
+  <text x="400" y="74" class="level-title">初級レベル (1-2年目)</text>
+  
+  <!-- Basic 1 -->
+  <rect x="70" y="100" width="200" height="80" rx="4" class="beginner-node"/>
+  <text x="170" y="120" class="skill-title">基礎概念理解</text>
+  <text x="80" y="140" class="detail-text">• クラウドサービスモデル</text>
+  <text x="80" y="155" class="detail-text">• 主要プロバイダー比較</text>
+  <text x="80" y="170" class="detail-text">• 基本的な料金体系</text>
+  
+  <!-- Basic 2 -->
+  <rect x="300" y="100" width="200" height="80" rx="4" class="beginner-node"/>
+  <text x="400" y="120" class="skill-title">コアサービス操作</text>
+  <text x="310" y="140" class="detail-text">• VM作成・管理</text>
+  <text x="310" y="155" class="detail-text">• ストレージ設定</text>
+  <text x="310" y="170" class="detail-text">• 基本的なネットワーク設定</text>
+  
+  <!-- Basic 3 -->
+  <rect x="530" y="100" width="200" height="80" rx="4" class="beginner-node"/>
+  <text x="630" y="120" class="skill-title">セキュリティ基礎</text>
+  <text x="540" y="140" class="detail-text">• IAM基本設定</text>
+  <text x="540" y="155" class="detail-text">• セキュリティグループ</text>
+  <text x="540" y="170" class="detail-text">• 暗号化の適用</text>
+  
+  <!-- Intermediate Level (2-4年目) -->
+  <rect x="50" y="220" width="700" height="20" rx="3" fill="var(--intermediate-bg)" stroke="var(--warning)" stroke-width="1"/>
+  <text x="400" y="234" class="level-title">中級レベル (2-4年目)</text>
+  
+  <!-- Mid 1 -->
+  <rect x="70" y="260" width="200" height="80" rx="4" class="intermediate-node"/>
+  <text x="170" y="280" class="skill-title">アーキテクチャ設計</text>
+  <text x="80" y="300" class="detail-text">• 可用性設計</text>
+  <text x="80" y="315" class="detail-text">• スケーラビリティ考慮</text>
+  <text x="80" y="330" class="detail-text">• コスト最適化</text>
+  
+  <!-- Mid 2 -->
+  <rect x="300" y="260" width="200" height="80" rx="4" class="intermediate-node"/>
+  <text x="400" y="280" class="skill-title">運用自動化</text>
+  <text x="310" y="300" class="detail-text">• 監視・ログ設定</text>
+  <text x="310" y="315" class="detail-text">• バックアップ戦略</text>
+  <text x="310" y="330" class="detail-text">• 災害復旧計画</text>
+  
+  <!-- Mid 3 -->
+  <rect x="530" y="260" width="200" height="80" rx="4" class="intermediate-node"/>
+  <text x="630" y="280" class="skill-title">先進技術活用</text>
+  <text x="540" y="300" class="detail-text">• コンテナ導入</text>
+  <text x="540" y="315" class="detail-text">• サーバーレス設計</text>
+  <text x="540" y="330" class="detail-text">• IaC実装</text>
+  
+  <!-- Advanced Level (4年目以上) -->
+  <rect x="50" y="380" width="700" height="20" rx="3" fill="var(--advanced-bg)" stroke="var(--primary)" stroke-width="1"/>
+  <text x="400" y="394" class="level-title">上級レベル (4年目以上)</text>
+  
+  <!-- Adv 1 -->
+  <rect x="70" y="420" width="200" height="80" rx="4" class="advanced-node"/>
+  <text x="170" y="440" class="skill-title">エンタープライズ設計</text>
+  <text x="80" y="460" class="detail-text">• マルチクラウド戦略</text>
+  <text x="80" y="475" class="detail-text">• ハイブリッド環境</text>
+  <text x="80" y="490" class="detail-text">• ガバナンス体制</text>
+  
+  <!-- Adv 2 -->
+  <rect x="300" y="420" width="200" height="80" rx="4" class="advanced-node"/>
+  <text x="400" y="440" class="skill-title">組織レベル最適化</text>
+  <text x="310" y="460" class="detail-text">• DevOps文化醸成</text>
+  <text x="310" y="475" class="detail-text">• 技術戦略立案</text>
+  <text x="310" y="490" class="detail-text">• チームリーダーシップ</text>
+  
+  <!-- Adv 3 -->
+  <rect x="530" y="420" width="200" height="80" rx="4" class="advanced-node"/>
+  <text x="630" y="440" class="skill-title">イノベーション推進</text>
+  <text x="540" y="460" class="detail-text">• 新技術評価</text>
+  <text x="540" y="475" class="detail-text">• PoC企画・実行</text>
+  <text x="540" y="490" class="detail-text">• 業界トレンド発信</text>
+  
+  <!-- Skill Acquisition Process -->
+  <rect x="50" y="540" width="700" height="20" rx="3" fill="var(--skill-bg)" stroke="var(--error)" stroke-width="1"/>
+  <text x="400" y="554" class="level-title">実践スキル獲得プロセス</text>
+  
+  <!-- Theory -->
+  <rect x="100" y="580" width="150" height="60" rx="4" class="skill-node"/>
+  <text x="175" y="600" class="skill-title">理論学習</text>
+  <text x="175" y="620" class="skill-title">30%</text>
+  
+  <!-- Hands-on -->
+  <rect x="325" y="580" width="150" height="60" rx="4" class="skill-node"/>
+  <text x="400" y="600" class="skill-title">ハンズオン</text>
+  <text x="400" y="620" class="skill-title">50%</text>
+  
+  <!-- Project -->
+  <rect x="550" y="580" width="150" height="60" rx="4" class="skill-node"/>
+  <text x="625" y="600" class="skill-title">プロジェクト適用</text>
+  <text x="625" y="620" class="skill-title">20%</text>
+  
+  <!-- Career Paths -->
+  <rect x="50" y="680" width="700" height="20" rx="3" fill="var(--career-bg)" stroke="var(--neutral)" stroke-width="1"/>
+  <text x="400" y="694" class="level-title">キャリアパス例</text>
+  
+  <!-- Path 1 -->
+  <rect x="70" y="720" width="160" height="60" rx="4" class="career-node"/>
+  <text x="150" y="740" class="skill-title">インフラエンジニア</text>
+  <text x="150" y="755" class="description-text">↓</text>
+  <text x="150" y="770" class="skill-title">クラウドアーキテクト</text>
+  
+  <!-- Path 2 -->
+  <rect x="250" y="720" width="160" height="60" rx="4" class="career-node"/>
+  <text x="330" y="740" class="skill-title">DevOpsエンジニア</text>
+  <text x="330" y="755" class="description-text">↓</text>
+  <text x="330" y="770" class="skill-title">SREスペシャリスト</text>
+  
+  <!-- Path 3 -->
+  <rect x="430" y="720" width="160" height="60" rx="4" class="career-node"/>
+  <text x="510" y="740" class="skill-title">セキュリティエンジニア</text>
+  <text x="510" y="755" class="description-text">↓</text>
+  <text x="510" y="770" class="skill-title">クラウドセキュリティ</text>
+  
+  <!-- Path 4 -->
+  <rect x="610" y="720" width="160" height="60" rx="4" class="career-node"/>
+  <text x="690" y="740" class="skill-title">技術リーダー</text>
+  <text x="690" y="755" class="description-text">↓</text>
+  <text x="690" y="770" class="skill-title">CTOレベル</text>
+  
+  <!-- Connection Lines -->
+  <!-- Progression between levels -->
+  <line x1="170" y1="180" x2="170" y2="260" class="progression-line"/>
+  <line x1="400" y1="180" x2="400" y2="260" class="progression-line"/>
+  <line x1="630" y1="180" x2="630" y2="260" class="progression-line"/>
+  
+  <line x1="170" y1="340" x2="170" y2="420" class="progression-line"/>
+  <line x1="400" y1="340" x2="400" y2="420" class="progression-line"/>
+  <line x1="630" y1="340" x2="630" y2="420" class="progression-line"/>
+  
+  <!-- Skill process connections -->
+  <line x1="175" y1="540" x2="175" y2="580" class="skill-line"/>
+  <line x1="400" y1="540" x2="400" y2="580" class="skill-line"/>
+  <line x1="625" y1="540" x2="625" y2="580" class="skill-line"/>
+  
+  <!-- Career path connections -->
+  <line x1="630" y1="180" x2="150" y2="720" class="career-line"/>
+  <line x1="400" y1="340" x2="330" y2="720" class="career-line"/>
+  <line x1="630" y1="340" x2="510" y2="720" class="career-line"/>
+  <line x1="630" y1="500" x2="690" y2="720" class="career-line"/>
+  
+  <!-- Learning Guidelines -->
+  <rect x="50" y="820" width="700" height="160" rx="6" fill="var(--bg-secondary)" stroke="var(--border)" stroke-width="1"/>
+  <text x="400" y="840" class="level-title">効果的な学習アプローチ</text>
+  
+  <text x="70" y="865" class="skill-title" text-anchor="start">段階的スキルアップ:</text>
+  <text x="80" y="880" class="description-text">• 基礎を固めてから応用へ • 実践を通じた経験値蓄積 • 継続的な学習習慣</text>
+  
+  <text x="70" y="905" class="skill-title" text-anchor="start">実践重視の学習:</text>
+  <text x="80" y="920" class="description-text">• 座学だけでなく実際に手を動かす • 小さなプロジェクトから始める • 失敗から学ぶ姿勢</text>
+  
+  <text x="70" y="945" class="skill-title" text-anchor="start">コミュニティ活用:</text>
+  <text x="80" y="960" class="description-text">• 技術コミュニティへの参加 • 勉強会・カンファレンス参加 • メンター・同僚との情報交換</text>
+  
+  <!-- Key Success Factors -->
+  <rect x="50" y="1000" width="700" height="140" rx="6" fill="var(--bg-secondary)" stroke="var(--border)" stroke-width="1"/>
+  <text x="400" y="1020" class="level-title">成功のための重要ポイント</text>
+  
+  <text x="70" y="1045" class="skill-title" text-anchor="start">技術力の継続的向上:</text>
+  <text x="80" y="1060" class="description-text">• 最新技術動向のキャッチアップ • 認定資格の取得 • 英語技術文書の読解力</text>
+  
+  <text x="70" y="1085" class="skill-title" text-anchor="start">ビジネス理解:</text>
+  <text x="80" y="1100" class="description-text">• 技術とビジネス価値の結び付け • コスト意識 • ステークホルダーとのコミュニケーション</text>
+  
+  <text x="70" y="1125" class="skill-title" text-anchor="start">リーダーシップ:</text>
+  <text x="80" y="1140" class="description-text">• チームをリードする力 • 技術的な意思決定能力 • 次世代エンジニア育成</text>
+  
+</svg>

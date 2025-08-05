@@ -31,6 +31,64 @@ introduction: true
 
 主要クラウドプロバイダー（AWS、Azure、GCP）に共通する概念と実装パターンを中心に、プロバイダー固有の特徴も適切に解説します。
 
+```mermaid
+mindmap
+  root((クラウドインフラ実践ガイド))
+    基礎編
+      クラウド概念
+        IaaS/PaaS/SaaS
+        共有責任モデル
+        デプロイメントモデル
+      設計原則
+        可用性・拡張性
+        セキュリティ
+        コスト最適化
+    コアサービス編
+      仮想マシン
+        EC2/VM/Compute Engine
+        Auto Scaling
+        ロードバランシング
+      ストレージ
+        オブジェクトストレージ
+        ブロックストレージ
+        データベース
+      ネットワーク
+        VPC設計
+        DNS・CDN
+        セキュリティグループ
+    運用管理編
+      セキュリティ
+        IAM・認証
+        暗号化
+        コンプライアンス
+      監視・ログ
+        メトリクス収集
+        アラート設定
+        ログ分析
+      コスト管理
+        課金最適化
+        リソース管理
+        予算管理
+    先進技術編
+      サーバーレス
+        Functions
+        イベント駆動
+        マイクロサービス
+      コンテナ
+        Docker/Kubernetes
+        サービスメッシュ
+        DevOps統合
+      IaC
+        Terraform
+        CloudFormation
+        自動化
+    統合編
+      エンタープライズ
+        マルチクラウド
+        ハイブリッド
+        ガバナンス
+```
+
 ## 本書の構成
 
 ### 第一部：基礎編（第1-2章）
@@ -63,6 +121,68 @@ introduction: true
 - 変化する要件に対応できる拡張性のある設計
 
 クラウドインフラエンジニアとして、一歩先を行く設計・構築能力を身につけるための実践的なガイドとして、本書をご活用ください。
+
+```mermaid
+flowchart TD
+    subgraph "学習ロードマップとスキル習得の流れ"
+        subgraph "初級レベル (1-2年目)"
+            Basic1["基礎概念理解<br/>・クラウドサービスモデル<br/>・主要プロバイダー比較<br/>・基本的な料金体系"]
+            Basic2["コアサービス操作<br/>・VM作成・管理<br/>・ストレージ設定<br/>・基本的なネットワーク設定<br/>・効果的なリソース利用"]
+            Basic3["セキュリティ基礎<br/>・IAM基本設定<br/>・セキュリティグループ<br/>・暗号化の適用"]
+        end
+        
+        subgraph "中級レベル (2-4年目)"
+            Mid1["アーキテクチャ設計<br/>・可用性設計<br/>・スケーラビリティ考慮<br/>・コスト最適化"]
+            Mid2["運用自動化<br/>・監視・ログ設定<br/>・バックアップ戦略<br/>・災害復旧計画"]
+            Mid3["先進技術活用<br/>・コンテナ導入<br/>・サーバーレス設計<br/>・IaC実装"]
+        end
+        
+        subgraph "上級レベル (4年目以上)"
+            Adv1["エンタープライズ設計<br/>・マルチクラウド戦略<br/>・ハイブリッド環境<br/>・ガバナンス体制"]
+            Adv2["組織レベル最適化<br/>・DevOps文化醸成<br/>・技術戦略立案<br/>・チームリーダーシップ"]
+            Adv3["イノベーション推進<br/>・新技術評価<br/>・PoC企画・実行<br/>・業界トレンド発信"]
+        end
+        
+        subgraph "実践スキル獲得プロセス"
+            Theory["理論学習<br/>30%"]
+            HandsOn["ハンズオン<br/>50%"]
+            Project["プロジェクト適用<br/>20%"]
+        end
+        
+        subgraph "キャリアパス例"
+            Path1["インフラエンジニア<br/>→ クラウドアーキテクト"]
+            Path2["DevOpsエンジニア<br/>→ SREスペシャリスト"]
+            Path3["セキュリティエンジニア<br/>→ クラウドセキュリティ"]
+            Path4["技術リーダー<br/>→ CTOレベル"]
+        end
+        
+        Basic1 --> Basic2
+        Basic2 --> Basic3
+        Basic3 --> Mid1
+        
+        Mid1 --> Mid2
+        Mid2 --> Mid3
+        Mid3 --> Adv1
+        
+        Adv1 --> Adv2
+        Adv2 --> Adv3
+        
+        Theory -.-> Basic1
+        HandsOn -.-> Mid1
+        Project -.-> Adv1
+        
+        Basic3 -.-> Path1
+        Mid2 -.-> Path2
+        Mid3 -.-> Path3
+        Adv3 -.-> Path4
+    end
+    
+    style Basic1 fill:#e8f5e8
+    style Mid1 fill:#fff3e0
+    style Adv1 fill:#e3f2fd
+    style Theory fill:#f3e5f5
+    style Path4 fill:#ffe0b2
+```
 
 ---
 
