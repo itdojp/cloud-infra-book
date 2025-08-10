@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="700" viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: 'Noto Sans JP', sans-serif; font-size: 20px; font-weight: bold; fill: #2c3e50; }
+      .layer-title { font-family: 'Noto Sans JP', sans-serif; font-size: 14px; font-weight: bold; fill: #fff; }
+      .section-title { font-family: 'Noto Sans JP', sans-serif; font-size: 12px; font-weight: bold; fill: #2c3e50; }
+      .text-content { font-family: 'Noto Sans JP', sans-serif; font-size: 11px; fill: #2c3e50; }
+      .small-text { font-family: 'Noto Sans JP', sans-serif; font-size: 10px; fill: #7f8c8d; }
+      .app-layer { fill: #3498db; stroke: #2980b9; stroke-width: 2; }
+      .platform-layer { fill: #2ecc71; stroke: #27ae60; stroke-width: 2; }
+      .runtime-layer { fill: #f39c12; stroke: #e67e22; stroke-width: 2; }
+      .orchestration-layer { fill: #e74c3c; stroke: #c0392b; stroke-width: 2; }
+      .infra-layer { fill: #9b59b6; stroke: #8e44ad; stroke-width: 2; }
+      .component { fill: #fff; stroke: #95a5a6; stroke-width: 1; }
+      .cncf-badge { fill: #446ca9; stroke: #2e4e7c; stroke-width: 2; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="30" class="title" text-anchor="middle">Cloud Native スタック (CNCF Landscape)</text>
+
+  <!-- Application Development Layer -->
+  <g id="app-layer">
+    <rect x="50" y="60" width="800" height="100" class="app-layer" rx="10"/>
+    <text x="450" y="85" class="layer-title" text-anchor="middle">アプリケーション開発層</text>
+    
+    <rect x="70" y="95" width="110" height="50" class="component" rx="3"/>
+    <text x="125" y="115" class="text-content" text-anchor="middle">CI/CD</text>
+    <text x="125" y="130" class="small-text" text-anchor="middle">Jenkins, GitLab</text>
+    <text x="125" y="142" class="small-text" text-anchor="middle">Argo CD</text>
+    
+    <rect x="200" y="95" width="110" height="50" class="component" rx="3"/>
+    <text x="255" y="115" class="text-content" text-anchor="middle">API管理</text>
+    <text x="255" y="130" class="small-text" text-anchor="middle">Kong, Istio</text>
+    <text x="255" y="142" class="small-text" text-anchor="middle">GraphQL</text>
+    
+    <rect x="330" y="95" width="110" height="50" class="component" rx="3"/>
+    <text x="385" y="115" class="text-content" text-anchor="middle">Database</text>
+    <text x="385" y="130" class="small-text" text-anchor="middle">PostgreSQL</text>
+    <text x="385" y="142" class="small-text" text-anchor="middle">MongoDB, Redis</text>
+    
+    <rect x="460" y="95" width="110" height="50" class="component" rx="3"/>
+    <text x="515" y="115" class="text-content" text-anchor="middle">Messaging</text>
+    <text x="515" y="130" class="small-text" text-anchor="middle">Kafka, RabbitMQ</text>
+    <text x="515" y="142" class="small-text" text-anchor="middle">NATS</text>
+    
+    <rect x="590" y="95" width="110" height="50" class="component" rx="3"/>
+    <text x="645" y="115" class="text-content" text-anchor="middle">Streaming</text>
+    <text x="645" y="130" class="small-text" text-anchor="middle">Apache Flink</text>
+    <text x="645" y="142" class="small-text" text-anchor="middle">Spark</text>
+    
+    <rect x="720" y="95" width="110" height="50" class="component" rx="3"/>
+    <text x="775" y="115" class="text-content" text-anchor="middle">Serverless</text>
+    <text x="775" y="130" class="small-text" text-anchor="middle">Knative</text>
+    <text x="775" y="142" class="small-text" text-anchor="middle">OpenFaaS</text>
+  </g>
+
+  <!-- Platform Layer -->
+  <g id="platform-layer">
+    <rect x="50" y="180" width="800" height="100" class="platform-layer" rx="10"/>
+    <text x="450" y="205" class="layer-title" text-anchor="middle">プラットフォーム層</text>
+    
+    <rect x="70" y="215" width="140" height="50" class="component" rx="3"/>
+    <text x="140" y="235" class="text-content" text-anchor="middle">Service Mesh</text>
+    <text x="140" y="250" class="small-text" text-anchor="middle">Istio, Linkerd</text>
+    <text x="140" y="262" class="small-text" text-anchor="middle">Consul Connect</text>
+    
+    <rect x="230" y="215" width="140" height="50" class="component" rx="3"/>
+    <text x="300" y="235" class="text-content" text-anchor="middle">Service Proxy</text>
+    <text x="300" y="250" class="small-text" text-anchor="middle">Envoy, HAProxy</text>
+    <text x="300" y="262" class="small-text" text-anchor="middle">NGINX</text>
+    
+    <rect x="390" y="215" width="140" height="50" class="component" rx="3"/>
+    <text x="460" y="235" class="text-content" text-anchor="middle">API Gateway</text>
+    <text x="460" y="250" class="small-text" text-anchor="middle">Kong, Tyk</text>
+    <text x="460" y="262" class="small-text" text-anchor="middle">Zuul</text>
+    
+    <rect x="550" y="215" width="140" height="50" class="component" rx="3"/>
+    <text x="620" y="235" class="text-content" text-anchor="middle">Service Discovery</text>
+    <text x="620" y="250" class="small-text" text-anchor="middle">Consul, etcd</text>
+    <text x="620" y="262" class="small-text" text-anchor="middle">CoreDNS</text>
+    
+    <rect x="710" y="215" width="120" height="50" class="component" rx="3"/>
+    <text x="770" y="235" class="text-content" text-anchor="middle">Registry</text>
+    <text x="770" y="250" class="small-text" text-anchor="middle">Harbor</text>
+    <text x="770" y="262" class="small-text" text-anchor="middle">Docker Hub</text>
+  </g>
+
+  <!-- Runtime Layer -->
+  <g id="runtime-layer">
+    <rect x="50" y="300" width="800" height="100" class="runtime-layer" rx="10"/>
+    <text x="450" y="325" class="layer-title" text-anchor="middle">ランタイム層</text>
+    
+    <rect x="70" y="335" width="180" height="50" class="component" rx="3"/>
+    <text x="160" y="355" class="text-content" text-anchor="middle">Container Runtime</text>
+    <text x="160" y="370" class="small-text" text-anchor="middle">containerd, CRI-O</text>
+    <text x="160" y="382" class="small-text" text-anchor="middle">Docker</text>
+    
+    <rect x="270" y="335" width="140" height="50" class="component" rx="3"/>
+    <text x="340" y="355" class="text-content" text-anchor="middle">Storage</text>
+    <text x="340" y="370" class="small-text" text-anchor="middle">Rook, Longhorn</text>
+    <text x="340" y="382" class="small-text" text-anchor="middle">OpenEBS</text>
+    
+    <rect x="430" y="335" width="140" height="50" class="component" rx="3"/>
+    <text x="500" y="355" class="text-content" text-anchor="middle">Networking</text>
+    <text x="500" y="370" class="small-text" text-anchor="middle">Calico, Cilium</text>
+    <text x="500" y="382" class="small-text" text-anchor="middle">Flannel, Weave</text>
+    
+    <rect x="590" y="335" width="140" height="50" class="component" rx="3"/>
+    <text x="660" y="355" class="text-content" text-anchor="middle">Security</text>
+    <text x="660" y="370" class="small-text" text-anchor="middle">Falco, OPA</text>
+    <text x="660" y="382" class="small-text" text-anchor="middle">Vault</text>
+    
+    <rect x="750" y="335" width="80" height="50" class="component" rx="3"/>
+    <text x="790" y="355" class="text-content" text-anchor="middle">VM</text>
+    <text x="790" y="370" class="small-text" text-anchor="middle">KubeVirt</text>
+    <text x="790" y="382" class="small-text" text-anchor="middle">Kata</text>
+  </g>
+
+  <!-- Orchestration Layer -->
+  <g id="orchestration-layer">
+    <rect x="50" y="420" width="800" height="80" class="orchestration-layer" rx="10"/>
+    <text x="450" y="445" class="layer-title" text-anchor="middle">オーケストレーション層</text>
+    
+    <rect x="100" y="455" width="200" height="35" class="component" rx="3"/>
+    <text x="200" y="475" class="text-content" text-anchor="middle">Kubernetes</text>
+    <text x="200" y="487" class="small-text" text-anchor="middle">デファクトスタンダード</text>
+    
+    <rect x="350" y="455" width="200" height="35" class="component" rx="3"/>
+    <text x="450" y="475" class="text-content" text-anchor="middle">Managed Kubernetes</text>
+    <text x="450" y="487" class="small-text" text-anchor="middle">EKS, GKE, AKS</text>
+    
+    <rect x="600" y="455" width="200" height="35" class="component" rx="3"/>
+    <text x="700" y="475" class="text-content" text-anchor="middle">Alternative</text>
+    <text x="700" y="487" class="small-text" text-anchor="middle">Docker Swarm, Nomad</text>
+  </g>
+
+  <!-- Infrastructure Layer -->
+  <g id="infra-layer">
+    <rect x="50" y="520" width="800" height="80" class="infra-layer" rx="10"/>
+    <text x="450" y="545" class="layer-title" text-anchor="middle">インフラストラクチャ層</text>
+    
+    <rect x="70" y="555" width="120" height="35" class="component" rx="3"/>
+    <text x="130" y="575" class="text-content" text-anchor="middle">IaaS</text>
+    <text x="130" y="587" class="small-text" text-anchor="middle">AWS, Azure, GCP</text>
+    
+    <rect x="210" y="555" width="120" height="35" class="component" rx="3"/>
+    <text x="270" y="575" class="text-content" text-anchor="middle">Private Cloud</text>
+    <text x="270" y="587" class="small-text" text-anchor="middle">OpenStack, VMware</text>
+    
+    <rect x="350" y="555" width="120" height="35" class="component" rx="3"/>
+    <text x="410" y="575" class="text-content" text-anchor="middle">Bare Metal</text>
+    <text x="410" y="587" class="small-text" text-anchor="middle">Metal as a Service</text>
+    
+    <rect x="490" y="555" width="120" height="35" class="component" rx="3"/>
+    <text x="550" y="575" class="text-content" text-anchor="middle">Edge</text>
+    <text x="550" y="587" class="small-text" text-anchor="middle">K3s, MicroK8s</text>
+    
+    <rect x="630" y="555" width="120" height="35" class="component" rx="3"/>
+    <text x="690" y="575" class="text-content" text-anchor="middle">IaC</text>
+    <text x="690" y="587" class="small-text" text-anchor="middle">Terraform, Pulumi</text>
+    
+    <rect x="770" y="555" width="60" height="35" class="component" rx="3"/>
+    <text x="800" y="575" class="text-content" text-anchor="middle">OS</text>
+    <text x="800" y="587" class="small-text" text-anchor="middle">CoreOS</text>
+  </g>
+
+  <!-- Observability & Management -->
+  <g id="observability">
+    <rect x="50" y="620" width="800" height="60" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2" rx="10"/>
+    <text x="450" y="645" class="layer-title" text-anchor="middle">可観測性・管理</text>
+    
+    <rect x="70" y="650" width="90" height="25" class="component" rx="3"/>
+    <text x="115" y="665" class="small-text" text-anchor="middle">Prometheus</text>
+    
+    <rect x="170" y="650" width="90" height="25" class="component" rx="3"/>
+    <text x="215" y="665" class="small-text" text-anchor="middle">Grafana</text>
+    
+    <rect x="270" y="650" width="90" height="25" class="component" rx="3"/>
+    <text x="315" y="665" class="small-text" text-anchor="middle">Jaeger</text>
+    
+    <rect x="370" y="650" width="90" height="25" class="component" rx="3"/>
+    <text x="415" y="665" class="small-text" text-anchor="middle">Fluentd</text>
+    
+    <rect x="470" y="650" width="90" height="25" class="component" rx="3"/>
+    <text x="515" y="665" class="small-text" text-anchor="middle">OpenTelemetry</text>
+    
+    <rect x="570" y="650" width="90" height="25" class="component" rx="3"/>
+    <text x="615" y="665" class="small-text" text-anchor="middle">Thanos</text>
+    
+    <rect x="670" y="650" width="80" height="25" class="component" rx="3"/>
+    <text x="710" y="665" class="small-text" text-anchor="middle">Loki</text>
+    
+    <rect x="760" y="650" width="70" height="25" class="component" rx="3"/>
+    <text x="795" y="665" class="small-text" text-anchor="middle">Tempo</text>
+  </g>
+</svg>
