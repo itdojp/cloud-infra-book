@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <title>マルチクラウドアーキテクチャ戦略</title>
+  <desc>AWS、Azure、GCPを統合したマルチクラウド戦略と相互接続アーキテクチャの詳細図</desc>
+  <defs>
+    <style>
+      :root {
+        --svg-bg: #ffffff;
+        --svg-text: #1a1a1a;
+        --svg-primary: #0066cc;
+        --svg-success: #16a34a;
+        --svg-warning: #ca8a04;
+        --svg-error: #dc2626;
+        --svg-neutral: #6b7280;
+      }
+      .title-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 16px; font-weight: 600; fill: var(--svg-text); }
+      .cloud-title { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 500; fill: var(--svg-bg); }
+      .service-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 400; fill: var(--svg-text); }
+      .annotation-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 10px; font-weight: 400; fill: var(--svg-neutral); }
+      .aws-zone { fill: #ff9900; stroke: #ff9900; stroke-width: 2; }
+      .azure-zone { fill: #0078d4; stroke: #0078d4; stroke-width: 2; }
+      .gcp-zone { fill: #4285f4; stroke: #4285f4; stroke-width: 2; }
+      .management-zone { fill: var(--svg-success); stroke: var(--svg-success); stroke-width: 2; }
+      .connection-line { stroke: var(--svg-primary); stroke-width: 2; stroke-dasharray: 5,3; fill: none; }
+      .data-flow { stroke: var(--svg-warning); stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="var(--svg-warning)"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="30" class="title-text" text-anchor="middle">マルチクラウドアーキテクチャ戦略</text>
+
+  <!-- AWS Cloud -->
+  <g id="aws-cloud">
+    <rect x="60" y="60" width="200" height="200" class="aws-zone" rx="4"/>
+    <text x="160" y="80" class="cloud-title" text-anchor="middle">AWS Cloud</text>
+    
+    <!-- Compute -->
+    <rect x="80" y="90" width="70" height="40" fill="var(--svg-bg)" stroke="#ff9900" stroke-width="1" rx="4"/>
+    <text x="115" y="105" class="service-text" text-anchor="middle" font-weight="500">Compute</text>
+    <text x="115" y="120" class="annotation-text" text-anchor="middle">EC2, Lambda</text>
+    
+    <!-- Storage -->
+    <rect x="170" y="90" width="70" height="40" fill="var(--svg-bg)" stroke="#ff9900" stroke-width="1" rx="4"/>
+    <text x="205" y="105" class="service-text" text-anchor="middle" font-weight="500">Storage</text>
+    <text x="205" y="120" class="annotation-text" text-anchor="middle">S3, EBS</text>
+    
+    <!-- Database -->
+    <rect x="80" y="140" width="70" height="40" fill="var(--svg-bg)" stroke="#ff9900" stroke-width="1" rx="4"/>
+    <text x="115" y="155" class="service-text" text-anchor="middle" font-weight="500">Database</text>
+    <text x="115" y="170" class="annotation-text" text-anchor="middle">RDS, DynamoDB</text>
+    
+    <!-- Analytics -->
+    <rect x="170" y="140" width="70" height="40" fill="var(--svg-bg)" stroke="#ff9900" stroke-width="1" rx="4"/>
+    <text x="205" y="155" class="service-text" text-anchor="middle" font-weight="500">Analytics</text>
+    <text x="205" y="170" class="annotation-text" text-anchor="middle">Redshift, EMR</text>
+    
+    <!-- Network -->
+    <rect x="125" y="190" width="70" height="40" fill="var(--svg-bg)" stroke="#ff9900" stroke-width="1" rx="4"/>
+    <text x="160" y="205" class="service-text" text-anchor="middle" font-weight="500">Network</text>
+    <text x="160" y="220" class="annotation-text" text-anchor="middle">VPC, Route53</text>
+  </g>
+
+  <!-- Azure Cloud -->
+  <g id="azure-cloud">
+    <rect x="300" y="60" width="200" height="200" class="azure-zone" rx="4"/>
+    <text x="400" y="80" class="cloud-title" text-anchor="middle">Microsoft Azure</text>
+    
+    <!-- Compute -->
+    <rect x="320" y="90" width="70" height="40" fill="var(--svg-bg)" stroke="#0078d4" stroke-width="1" rx="4"/>
+    <text x="355" y="105" class="service-text" text-anchor="middle" font-weight="500">Compute</text>
+    <text x="355" y="120" class="annotation-text" text-anchor="middle">VMs, Functions</text>
+    
+    <!-- Storage -->
+    <rect x="410" y="90" width="70" height="40" fill="var(--svg-bg)" stroke="#0078d4" stroke-width="1" rx="4"/>
+    <text x="445" y="105" class="service-text" text-anchor="middle" font-weight="500">Storage</text>
+    <text x="445" y="120" class="annotation-text" text-anchor="middle">Blob, Files</text>
+    
+    <!-- Database -->
+    <rect x="320" y="140" width="70" height="40" fill="var(--svg-bg)" stroke="#0078d4" stroke-width="1" rx="4"/>
+    <text x="355" y="155" class="service-text" text-anchor="middle" font-weight="500">Database</text>
+    <text x="355" y="170" class="annotation-text" text-anchor="middle">SQL DB, Cosmos</text>
+    
+    <!-- AI/ML -->
+    <rect x="410" y="140" width="70" height="40" fill="var(--svg-bg)" stroke="#0078d4" stroke-width="1" rx="4"/>
+    <text x="445" y="155" class="service-text" text-anchor="middle" font-weight="500">AI/ML</text>
+    <text x="445" y="170" class="annotation-text" text-anchor="middle">ML Studio</text>
+    
+    <!-- Network -->
+    <rect x="365" y="190" width="70" height="40" fill="var(--svg-bg)" stroke="#0078d4" stroke-width="1" rx="4"/>
+    <text x="400" y="205" class="service-text" text-anchor="middle" font-weight="500">Network</text>
+    <text x="400" y="220" class="annotation-text" text-anchor="middle">VNet, ExpressRoute</text>
+  </g>
+
+  <!-- GCP Cloud -->
+  <g id="gcp-cloud">
+    <rect x="540" y="60" width="200" height="200" class="gcp-zone" rx="4"/>
+    <text x="640" y="80" class="cloud-title" text-anchor="middle">Google Cloud Platform</text>
+    
+    <!-- Compute -->
+    <rect x="560" y="90" width="70" height="40" fill="var(--svg-bg)" stroke="#4285f4" stroke-width="1" rx="4"/>
+    <text x="595" y="105" class="service-text" text-anchor="middle" font-weight="500">Compute</text>
+    <text x="595" y="120" class="annotation-text" text-anchor="middle">GCE, Cloud Run</text>
+    
+    <!-- Storage -->
+    <rect x="650" y="90" width="70" height="40" fill="var(--svg-bg)" stroke="#4285f4" stroke-width="1" rx="4"/>
+    <text x="685" y="105" class="service-text" text-anchor="middle" font-weight="500">Storage</text>
+    <text x="685" y="120" class="annotation-text" text-anchor="middle">GCS, Filestore</text>
+    
+    <!-- Database -->
+    <rect x="560" y="140" width="70" height="40" fill="var(--svg-bg)" stroke="#4285f4" stroke-width="1" rx="4"/>
+    <text x="595" y="155" class="service-text" text-anchor="middle" font-weight="500">Database</text>
+    <text x="595" y="170" class="annotation-text" text-anchor="middle">Spanner, BigQuery</text>
+    
+    <!-- Kubernetes -->
+    <rect x="650" y="140" width="70" height="40" fill="var(--svg-bg)" stroke="#4285f4" stroke-width="1" rx="4"/>
+    <text x="685" y="155" class="service-text" text-anchor="middle" font-weight="500">Container</text>
+    <text x="685" y="170" class="annotation-text" text-anchor="middle">GKE, Anthos</text>
+    
+    <!-- Network -->
+    <rect x="605" y="190" width="70" height="40" fill="var(--svg-bg)" stroke="#4285f4" stroke-width="1" rx="4"/>
+    <text x="640" y="205" class="service-text" text-anchor="middle" font-weight="500">Network</text>
+    <text x="640" y="220" class="annotation-text" text-anchor="middle">VPC, Cloud CDN</text>
+  </g>
+
+  <!-- Multi-Cloud Management Layer -->
+  <g id="management-layer">
+    <rect x="80" y="290" width="640" height="120" class="management-zone" rx="4"/>
+    <text x="400" y="310" class="cloud-title" text-anchor="middle">マルチクラウド管理層</text>
+    
+    <!-- Orchestration -->
+    <rect x="100" y="320" width="100" height="70" fill="var(--svg-bg)" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="150" y="340" class="service-text" text-anchor="middle" font-weight="500">オーケストレーション</text>
+    <text x="110" y="355" class="annotation-text">• Terraform</text>
+    <text x="110" y="370" class="annotation-text">• Ansible</text>
+    <text x="110" y="385" class="annotation-text">• CloudFormation</text>
+    
+    <!-- Cost Management -->
+    <rect x="220" y="320" width="100" height="70" fill="var(--svg-bg)" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="270" y="340" class="service-text" text-anchor="middle" font-weight="500">コスト管理</text>
+    <text x="230" y="355" class="annotation-text">• FinOps</text>
+    <text x="230" y="370" class="annotation-text">• 予算管理</text>
+    <text x="230" y="385" class="annotation-text">• 最適化</text>
+    
+    <!-- Security -->
+    <rect x="340" y="320" width="100" height="70" fill="var(--svg-bg)" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="390" y="340" class="service-text" text-anchor="middle" font-weight="500">セキュリティ</text>
+    <text x="350" y="355" class="annotation-text">• CSPM</text>
+    <text x="350" y="370" class="annotation-text">• CWPP</text>
+    <text x="350" y="385" class="annotation-text">• SIEM統合</text>
+    
+    <!-- Monitoring -->
+    <rect x="460" y="320" width="100" height="70" fill="var(--svg-bg)" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="510" y="340" class="service-text" text-anchor="middle" font-weight="500">監視</text>
+    <text x="470" y="355" class="annotation-text">• Datadog</text>
+    <text x="470" y="370" class="annotation-text">• New Relic</text>
+    <text x="470" y="385" class="annotation-text">• Prometheus</text>
+    
+    <!-- Governance -->
+    <rect x="580" y="320" width="100" height="70" fill="var(--svg-bg)" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="630" y="340" class="service-text" text-anchor="middle" font-weight="500">ガバナンス</text>
+    <text x="590" y="355" class="annotation-text">• ポリシー管理</text>
+    <text x="590" y="370" class="annotation-text">• コンプライアンス</text>
+    <text x="590" y="385" class="annotation-text">• 監査</text>
+  </g>
+
+  <!-- Connection Lines -->
+  <line x1="160" y1="260" x2="150" y2="290" class="connection-line"/>
+  <line x1="400" y1="260" x2="400" y2="290" class="connection-line"/>
+  <line x1="640" y1="260" x2="630" y2="290" class="connection-line"/>
+  
+  <!-- Inter-cloud connections -->
+  <path d="M 260 160 L 300 160" class="data-flow"/>
+  <path d="M 500 160 L 540 160" class="data-flow"/>
+
+  <!-- Strategy Benefits -->
+  <g id="strategy-benefits">
+    <rect x="100" y="430" width="600" height="140" fill="var(--svg-primary)" fill-opacity="0.05" stroke="var(--svg-primary)" stroke-width="2" rx="4"/>
+    <text x="400" y="450" class="service-text" text-anchor="middle" font-weight="500">マルチクラウド戦略の利点と考慮事項</text>
+    
+    <!-- Benefits -->
+    <rect x="120" y="470" width="250" height="80" fill="var(--svg-bg)" stroke="var(--svg-primary)" stroke-width="1" rx="4"/>
+    <text x="245" y="490" class="service-text" text-anchor="middle" font-weight="500">利点</text>
+    <text x="130" y="505" class="annotation-text">• ベンダーロックイン回避</text>
+    <text x="130" y="520" class="annotation-text">• 各クラウドのベストサービス活用</text>
+    <text x="130" y="535" class="annotation-text">• 地理的冗長性とDR対策</text>
+    <text x="130" y="545" class="annotation-text">• コスト最適化の選択肢</text>
+    
+    <!-- Challenges -->
+    <rect x="390" y="470" width="250" height="80" fill="var(--svg-bg)" stroke="var(--svg-primary)" stroke-width="1" rx="4"/>
+    <text x="515" y="490" class="service-text" text-anchor="middle" font-weight="500">課題と対策</text>
+    <text x="400" y="505" class="annotation-text">• 複雑性の増大 → 統合管理ツール</text>
+    <text x="400" y="520" class="annotation-text">• スキル要件 → トレーニング強化</text>
+    <text x="400" y="535" class="annotation-text">• セキュリティ → 統一ポリシー</text>
+    <text x="400" y="545" class="annotation-text">• ネットワーク遅延 → 専用線接続</text>
+  </g>
+</svg>
