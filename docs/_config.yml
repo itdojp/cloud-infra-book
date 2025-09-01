@@ -53,3 +53,4 @@ kramdown:
 github:
   is_project_page: true
 
+permalink: pretty
