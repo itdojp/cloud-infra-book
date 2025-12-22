@@ -1,7 +1,7 @@
 ---
 layout: book
 order: 14
-title: "付録: リソースとツール"
+title: "付録：参考資料"
 ---
 
 # 付録：参考資料
