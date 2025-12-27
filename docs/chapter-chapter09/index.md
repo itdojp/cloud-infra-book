@@ -17,7 +17,7 @@ title: "第9章：サーバーレスとコンテナサービス"
 
 従来のアプリケーション開発では、開発者は以下のような運用タスクに多大な時間を費やしていました。
 
-`yaml
+```yaml
 従来の責任範囲:
   インフラ層:
     - サーバーのプロビジョニング
@@ -36,7 +36,7 @@ title: "第9章：サーバーレスとコンテナサービス"
     - ログ収集と分析
     - バックアップとリカバリ
     - コスト管理
-`
+```
 
 サーバーレスは、これらすべての責任をクラウドプロバイダーに委譲し、開発者を運用の複雑性から解放します。
 
@@ -46,7 +46,7 @@ title: "第9章：サーバーレスとコンテナサービス"
 
 サーバーレスの真の価値は、イベント駆動型の設計思想にあります。システムは外部イベントに反応し、必要な時にのみ処理を実行します。
 
-`python
+```python
 # Lambda関数の例：S3イベントに反応する画像処理
 import json
 import boto3
@@ -92,11 +92,11 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': json.dumps('Image processing completed')
     }
-`
+```
 
 **多様なイベントソース**
 
-`yaml
+```yaml
 イベントソースの分類:
   HTTPリクエスト:
     - API Gateway（REST/GraphQL）
@@ -122,7 +122,7 @@ def lambda_handler(event, context):
     - IoT Core（デバイスメッセージ）
     - Cognito（認証イベント）
     - Step Functions（ワークフロー）
-`
+```
 
 ### Function as a Service (FaaS) の実行モデル
 
@@ -130,7 +130,7 @@ def lambda_handler(event, context):
 
 コールドスタートは、サーバーレスの特性上避けられない課題ですが、適切な対策により影響を最小化できます。
 
-`python
+```python
 # コールドスタート最適化のテクニック
 
 # 1. グローバル変数で接続を再利用
@@ -166,11 +166,11 @@ def lambda_handler(event, context):
 
 # 3. レイヤーの活用
 # 共通ライブラリをLambda Layerとして分離
-`
+```
 
 **実行時間とメモリの最適化**
 
-`yaml
+```yaml
 Lambda設定の最適化戦略:
   メモリ割り当て:
     - 128MB〜10,240MB（10GB）の範囲
@@ -186,13 +186,13 @@ Lambda設定の最適化戦略:
     - デフォルト: 1,000
     - 予約同時実行数の設定
     - スロットリング対策
-`
+```
 
 ### 経済モデルの革新
 
 **真の従量課金の実現**
 
-`python
+```python
 # コスト計算の例
 def calculate_lambda_cost(memory_mb, duration_ms, requests):
     """
@@ -230,13 +230,13 @@ monthly_cost = calculate_lambda_cost(
     requests=1000000
 )
 print(f"月間コスト: ${monthly_cost['total_cost']:.2f}")
-`
+```
 
 ### サーバーレスの適用パターン
 
 **理想的なユースケース**
 
-`yaml
+```yaml
 1. イベント処理パターン:
    画像/動画処理:
      trigger: S3アップロード
@@ -272,11 +272,11 @@ print(f"月間コスト: ${monthly_cost['total_cost']:.2f}")
    レポート生成:
      schedule: "0 9 * * MON"  # 毎週月曜AM9:00
      process: 週次レポート作成・配信
-`
+```
 
 **アンチパターンの認識**
 
-`yaml
+```yaml
 サーバーレスに適さないケース:
   長時間実行:
     - 15分を超える処理
@@ -293,13 +293,13 @@ print(f"月間コスト: ${monthly_cost['total_cost']:.2f}")
   超低レイテンシ要求:
     - 10ms以下の応答時間
     - 解決策: EC2、Lambda@Edge
-`
+```
 
 ### サーバーレスアーキテクチャの設計パターン
 
 **マイクロサービス分解**
 
-`python
+```python
 # API Gatewayと複数Lambda関数による構成
 # serverless.yml (Serverless Framework)
 service: ecommerce-api
@@ -393,7 +393,7 @@ resources:
       Properties:
         QueueName: ${self:service}-payment-queue
         VisibilityTimeout: 60
-`
+```
 
 ## 9.2 コンテナ技術の基礎とDocker
 
@@ -405,7 +405,7 @@ resources:
 
 **ハードウェア仮想化からOS仮想化へ**
 
-`
+```
 仮想マシン（VM）のアーキテクチャ:
 ┌─────────────┬─────────────┬─────────────┐
 │   App A     │   App B     │   App C     │
@@ -431,11 +431,11 @@ resources:
 ├─────────────────────────────────────────┤
 │            Hardware                      │
 └─────────────────────────────────────────┘
-`
+```
 
 **性能とリソース効率の比較**
 
-`python
+```python
 # リソース使用量の比較
 comparison = {
     "仮想マシン": {
@@ -453,7 +453,7 @@ comparison = {
         "同時実行可能数": "100-1000（標準的なホスト）"
     }
 }
-`
+```
 
 ### Dockerの基本概念と実装
 
@@ -461,7 +461,7 @@ comparison = {
 
 Dockerイメージのレイヤー構造は、効率的なストレージとネットワーク転送を実現します。
 
-`dockerfile
+```dockerfile
 # 最適化されたDockerfile
 # Stage 1: ビルド環境
 FROM node:16-alpine AS builder
@@ -502,11 +502,11 @@ RUN apk add --no-cache tini
 ENTRYPOINT ["/sbin/tini", "--"]
 
 CMD ["node", "dist/server.js"]
-`
+```
 
 **ビルドキャッシュの最適化**
 
-`dockerfile
+```dockerfile
 # キャッシュを効果的に活用する順序
 # 変更頻度: 低 → 高
 
@@ -527,13 +527,13 @@ COPY . /app
 WORKDIR /app
 
 CMD ["python", "app.py"]
-`
+```
 
 ### コンテナネットワーキングの詳細
 
 **ネットワークドライバーの選択と設計**
 
-`yaml
+```yaml
 # docker-compose.yml でのネットワーク設計
 version: '3.8'
 
@@ -611,13 +611,13 @@ volumes:
 secrets:
   db_password:
     file: ./secrets/db_password.txt
-`
+```
 
 ### 本番環境でのコンテナ運用
 
 **ログ管理戦略**
 
-`python
+```python
 # Fluentdを使用した統合ログ管理
 # fluent.conf
 <source>
@@ -670,11 +670,11 @@ secrets:
     flush_interval 10s
   </buffer>
 </match>
-`
+```
 
 **セキュリティスキャンの自動化**
 
-`yaml
+```yaml
 # CI/CDパイプラインでのセキュリティチェック
 # .gitlab-ci.yml
 stages:
@@ -714,7 +714,7 @@ secrets_scan:
   image: trufflesecurity/trufflehog:latest
   script:
     - trufflehog docker --image=$IMAGE_TAG
-`
+```
 
 ## 9.3 コンテナオーケストレーション（ECS, EKS, GKE, AKS）
 
@@ -724,7 +724,7 @@ secrets_scan:
 
 **オーケストレーターが解決する課題**
 
-`yaml
+```yaml
 コンテナ管理の複雑性:
   配置とスケジューリング:
     - 適切なホストの選択
@@ -751,13 +751,13 @@ secrets_scan:
     - 永続ボリューム
     - ConfigMap/Secrets
     - StatefulSets
-`
+```
 
 ### Kubernetes：デファクトスタンダード
 
 **Kubernetesのアーキテクチャ**
 
-`yaml
+```yaml
 # Kubernetes デプロイメント例
 apiVersion: apps/v1
 kind: Deployment
@@ -925,13 +925,13 @@ spec:
         value: 4
         periodSeconds: 15
       selectPolicy: Max
-`
+```
 
 ### マネージドKubernetesサービスの比較
 
 **Amazon EKS（Elastic Kubernetes Service）**
 
-`yaml
+```yaml
 # EKS特有の機能活用
 # ALB Ingress Controller
 apiVersion: networking.k8s.io/v1
@@ -973,11 +973,11 @@ metadata:
   namespace: production
   annotations:
     eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/WebAppRole
-`
+```
 
 **Google GKE（Google Kubernetes Engine）**
 
-`yaml
+```yaml
 # GKE Autopilot モード設定
 apiVersion: v1
 kind: ResourceQuota
@@ -1017,13 +1017,13 @@ spec:
       name: web-app-service
       port:
         number: 80
-`
+```
 
 ### Amazon ECS：シンプルさを追求
 
 **タスク定義によるコンテナ管理**
 
-`json
+```json
 {
   "family": "web-app",
   "networkMode": "awsvpc",
@@ -1073,11 +1073,11 @@ spec:
     }
   ]
 }
-`
+```
 
 **ECSサービスの設定**
 
-`python
+```python
 # CDKによるECSサービス定義
 from aws_cdk import (
     aws_ecs as ecs,
@@ -1165,7 +1165,7 @@ class EcsServiceStack(core.Stack):
             requests_per_target=1000,
             target_group=target_group
         )
-`
+```
 
 ## 9.4 コンテナレジストリとCI/CD連携
 
@@ -1175,7 +1175,7 @@ class EcsServiceStack(core.Stack):
 
 **マルチステージレジストリ戦略**
 
-`yaml
+```yaml
 # レジストリ構成
 registries:
   development:
@@ -1195,13 +1195,13 @@ registries:
     scan: continuous
     approval: manual
     signing: required
-`
+```
 
 ### Amazon ECR（Elastic Container Registry）
 
 **ライフサイクルポリシーによる自動管理**
 
-`json
+```json
 {
   "rules": [
     {
@@ -1245,11 +1245,11 @@ registries:
     }
   ]
 }
-`
+```
 
 **脆弱性スキャンの自動化**
 
-`python
+```python
 # ECRスキャン結果の監視
 import boto3
 import json
@@ -1309,13 +1309,13 @@ def lambda_handler(event, context):
             'low': low
         })
     }
-`
+```
 
 ### 包括的なCI/CDパイプライン
 
 **GitHub Actions による完全自動化**
 
-`yaml
+```yaml
 # .github/workflows/container-pipeline.yml
 name: Container CI/CD Pipeline
 
@@ -1460,13 +1460,13 @@ jobs:
         run: |
           npm install
           npm run test:smoke -- --env=production
-`
+```
 
 ### イメージ管理のベストプラクティス
 
 **セマンティックバージョニングとタグ戦略**
 
-`python
+```python
 # 自動タグ生成スクリプト
 import re
 import subprocess
@@ -1530,13 +1530,13 @@ def get_next_version(existing_tags):
     
     # パッチバージョンをインクリメント
     return f"{latest[0]}.{latest[1]}.{latest[2] + 1}"
-`
+```
 
 ### コンテナのサプライチェーンセキュリティ
 
 **イメージ署名とポリシー**
 
-`yaml
+```yaml
 # Notary/DCTによるイメージ署名
 # docker-compose.yml
 version: '3.8'
@@ -1573,7 +1573,7 @@ admission-policy:
               - keyless:
                   issuer: https://token.actions.githubusercontent.com
                   subject: repo:myorg/myrepo:ref:refs/heads/main
-`
+```
 
 サーバーレスとコンテナは、それぞれ異なる強みを持つクラウドネイティブ技術です。サーバーレスはイベント駆動で断続的なワークロードに最適であり、コンテナは複雑なアプリケーションや継続的な処理に適しています。重要なのは、それぞれの特性を理解し、適切なワークロードに適切な技術を選択することです。両者を組み合わせることで、スケーラブルで効率的、かつ管理しやすいクラウドネイティブアーキテクチャを実現できます。
 ---
