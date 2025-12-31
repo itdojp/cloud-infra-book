@@ -671,7 +671,7 @@ class S3PerformanceOptimizer:
             'multipart_upload': {
                 'description': '大きなオブジェクトの並列アップロード',
                 'threshold': '100MB以上のファイル',
-                'part_size': '10-100MB'
+                'part_size': '10〜100MB'
             },
             'transfer_acceleration': {
                 'description': 'エッジロケーションを利用した高速転送',
@@ -2303,12 +2303,12 @@ class ManagedDatabaseBenefits:
             'patching': {
                 'traditional': '月次メンテナンスウィンドウでの手動適用',
                 'managed': '自動適用、メンテナンスウィンドウ内で実施',
-                'time_saved': '4-8時間/月'
+                'time_saved': '4〜8時間/月'
             },
             'backups': {
                 'traditional': 'スクリプト作成、ストレージ管理、テスト',
                 'managed': '自動バックアップ、ポイントインタイムリストア',
-                'time_saved': '2-4時間/週'
+                'time_saved': '2〜4時間/週'
             },
             'high_availability': {
                 'traditional': 'レプリケーション設定、フェイルオーバー手順',
@@ -2318,7 +2318,7 @@ class ManagedDatabaseBenefits:
             'scaling': {
                 'traditional': 'ダウンタイム、データ移行、アプリケーション変更',
                 'managed': 'オンラインでのスケールアップ/ダウン',
-                'time_saved': '8-16時間/回'
+                'time_saved': '8〜16時間/回'
             },
             'monitoring': {
                 'traditional': '監視ツールの設定、アラート設定',
