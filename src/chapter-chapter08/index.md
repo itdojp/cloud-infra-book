@@ -699,13 +699,13 @@ S3ライフサイクルポリシー設計:
     0〜1日: Standard
     1〜30日: Standard-IA
     30〜180日: Glacier Flexible
-    180日-7年: Glacier Deep Archive（コスト95%削減）
+    180日〜7年: Glacier Deep Archive（コスト95%削減）
     年間節約額: $45,000
     
   ユーザーアップロード:
     0〜30日: Standard
     30〜90日: Intelligent-Tiering（自動最適化）
-    90日-1年: Standard-IA
+    90日〜1年: Standard-IA
     1年以降: Glacier Instant
 ```
 
