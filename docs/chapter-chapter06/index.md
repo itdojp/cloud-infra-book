@@ -27,7 +27,7 @@ RBACは、ゼロトラストセキュリティモデルの中核を成す実装�
 
 以下のコード例は、ゼロトラスト原則を整理するための学習用サンプルです。本番環境のIAMポリシーを設計する際は、自組織のセキュリティポリシーやコンプライアンス要件に従い、ここで示す権限よりもさらに細かく絞り込むことを前提としてください。特に削除系アクションや権限変更に関する操作は、厳格なレビューと制約のもとでのみ許可する設計が望まれます。
 
-`python
+```python
 class ZeroTrustRBAC:
     """
     ゼロトラストに基づくRBACの実装
@@ -68,7 +68,7 @@ class ZeroTrustRBAC:
         }
         
         return zero_trust_principles
-`
+```
 
 ### 効果的なロール設計の原則
 
@@ -77,7 +77,7 @@ class ZeroTrustRBAC:
 単一の個人やロールが、重要なプロセス全体を制御できないようにする設計原則です。
 以下のコード例では、開発者、運用エンジニア、セキュリティ監査といった代表的なロール分割を示しています。実際の環境では、ここで挙げているアクション一覧をそのまま使用するのではなく、自組織のリスク許容度や役割分担に応じて、より細かく権限を絞り込む前提で読み進めてください。
 
-`python
+```python
 class RoleDesignPrinciples:
     """
     ロール設計の原則と実装
@@ -219,13 +219,13 @@ class RoleDesignPrinciples:
             'operations': operations_role,
             'auditor': security_auditor_role
         }
-`
+```
 
 **階層的ロール構造**
 
 組織構造を反映した階層的なロール設計により、管理の複雑さを軽減：
 
-`python
+```python
 class HierarchicalRoleStructure:
     """
     階層的ロール構造の実装
@@ -341,7 +341,7 @@ class HierarchicalRoleStructure:
         }
         
         return inheritance_model
-`
+```
 
 ### 動的な権限管理
 
@@ -349,7 +349,7 @@ class HierarchicalRoleStructure:
 
 常時付与される権限を最小化し、必要な時にのみ一時的に昇格：
 
-`python
+```python
 class JustInTimeAccess:
     """
     Just-In-Timeアクセスの実装
@@ -474,13 +474,13 @@ class JustInTimeAccess:
             'implementation': jit_lambda_function,
             'workflow': jit_workflow
         }
-`
+```
 
 **条件付きアクセス**
 
 権限の付与に条件を設定することで、より細かい制御を実現：
 
-`python
+```python
 class ConditionalAccess:
     """
     条件付きアクセスの実装
@@ -588,7 +588,7 @@ class ConditionalAccess:
             'device_based': device_based_policy,
             'risk_based': risk_based_policy
         }
-`
+```
 
 ### RBACの実装パターン
 
@@ -596,7 +596,7 @@ class ConditionalAccess:
 
 個々のユーザーではなく、グループに権限を付与：
 
-`python
+```python
 class GroupBasedManagement:
     """
     グループベースの権限管理
@@ -699,13 +699,13 @@ class GroupBasedManagement:
             'sso_mapping': sso_group_mapping,
             'dynamic_membership': dynamic_membership
         }
-`
+```
 
 **ロールの合成と継承**
 
 複数の基本ロールを組み合わせて複雑な権限セットを構築：
 
-`python
+```python
 class RoleComposition:
     """
     ロールの合成と継承
@@ -831,7 +831,7 @@ class RoleComposition:
             'composite_roles': composite_roles,
             'inheritance_logic': role_inheritance
         }
-`
+```
 
 ### クロスアカウント/サブスクリプションアクセス
 
@@ -839,7 +839,7 @@ class RoleComposition:
 
 組織内の異なるアカウント間でセキュアなアクセスを実現：
 
-`python
+```python
 class CrossAccountAccess:
     """
     クロスアカウントアクセスの実装
@@ -967,13 +967,13 @@ class CrossAccountAccess:
             'scp_control': scp_policy,
             'implementation': cross_account_implementation
         }
-`
+```
 
 **委任管理の実現**
 
 中央のIDプロバイダーから複数のアカウントへのアクセス：
 
-`python
+```python
 class DelegatedAdministration:
     """
     委任管理の実装
@@ -1073,7 +1073,7 @@ class DelegatedAdministration:
             'assignment_strategy': account_assignment_strategy,
             'federation': federation_config
         }
-`
+```
 
 ## 6.2 多要素認証（MFA）とセキュリティ認証情報管理
 
@@ -1085,7 +1085,7 @@ class DelegatedAdministration:
 
 多要素認証は、「知っているもの」（パスワード）に加えて、「持っているもの」（デバイス）や「本人であること」（生体認証）を要求することで、セキュリティを劇的に向上させます。
 
-`python
+```python
 class MFAImplementation:
     """
     多要素認証の実装
@@ -1170,7 +1170,7 @@ class MFAImplementation:
         }
         
         return mfa_enforcement_policy
-`
+```
 
 ### MFAの実装方式と選択基準
 
@@ -1178,7 +1178,7 @@ class MFAImplementation:
 
 最も広く採用されているMFA方式：
 
-`python
+```python
 class TOTPImplementation:
     """
     TOTP実装と管理
@@ -1266,13 +1266,13 @@ class TOTPImplementation:
         """
         
         return totp_validation
-`
+```
 
 **ハードウェアセキュリティキー**
 
 最高レベルのセキュリティ：
 
-`python
+```python
 class HardwareKeyImplementation:
     """
     ハードウェアセキュリティキーの実装
@@ -1369,7 +1369,7 @@ class HardwareKeyImplementation:
             'config': hardware_key_config,
             'implementation': webauthn_implementation
         }
-`
+```
 
 ### 認証情報のライフサイクル管理
 
@@ -1377,7 +1377,7 @@ class HardwareKeyImplementation:
 
 定期的な認証情報の更新：
 
-`python
+```python
 class CredentialLifecycleManagement:
     """
     認証情報のライフサイクル管理
@@ -1474,13 +1474,13 @@ class CredentialLifecycleManagement:
             'policies': rotation_policies,
             'automation': auto_rotation_lambda
         }
-`
+```
 
 **最小権限での発行**
 
 認証情報には必要最小限の権限のみを付与：
 
-`python
+```python
 class LeastPrivilegeCredentials:
     """
     最小権限での認証情報管理
@@ -1618,7 +1618,7 @@ class LeastPrivilegeCredentials:
             'templates': credential_templates,
             'review_process': permission_review_process
         }
-`
+```
 
 ### シークレット管理のベストプラクティス
 
@@ -1626,7 +1626,7 @@ class LeastPrivilegeCredentials:
 
 AWS Systems Manager Parameter Store、Azure Key Vault、Google Secret Manager：
 
-`python
+```python
 class SecretsManagement:
     """
     シークレット管理の実装
@@ -1752,13 +1752,13 @@ class SecretsManagement:
             'parameter_store': parameter_store_config,
             'implementation': secret_retrieval
         }
-`
+```
 
 **環境変数とコンフィギュレーション管理**
 
 アプリケーションへの安全な認証情報の注入：
 
-`python
+```python
 class ConfigurationManagement:
     """
     設定管理の実装
@@ -1866,13 +1866,13 @@ type: Opaque
             'kubernetes': k8s_secrets_management,
             'hierarchy': configuration_hierarchy
         }
-`
+```
 
 **緊急時アクセス手順**
 
 Break Glass手順の確立：
 
-`python
+```python
 class BreakGlassAccess:
     """
     緊急時アクセス手順の実装
@@ -1977,7 +1977,7 @@ class BreakGlassAccess:
             'procedures': post_incident_procedure,
             'testing': testing_schedule
         }
-`
+```
 
 ### ゼロスタンディング権限
 
@@ -1985,7 +1985,7 @@ class BreakGlassAccess:
 
 永続的な認証情報を最小化：
 
-`python
+```python
 class ZeroStandingPrivileges:
     """
     ゼロスタンディング権限の実装
@@ -2105,13 +2105,13 @@ class ZeroStandingPrivileges:
             'architecture': architecture,
             'implementation': privilege_broker
         }
-`
+```
 
 **サービスアカウントの管理**
 
 人間以外のアイデンティティの適切な管理：
 
-`python
+```python
 class ServiceAccountManagement:
     """
     サービスアカウント管理の実装
@@ -2263,7 +2263,7 @@ class ServiceAccountManagement:
             'lifecycle': lifecycle_management,
             'automation': service_account_automation
         }
-`
+```
 
 ## 6.3 監査ログとセキュリティイベントの監視
 
@@ -2275,7 +2275,7 @@ class ServiceAccountManagement:
 
 監査ログの価値は、その完全性と信頼性にあります：
 
-`python
+```python
 class AuditLogIntegrity:
     """
     監査ログの完全性保証
@@ -2410,7 +2410,7 @@ class AuditLogIntegrity:
             'encryption': encryption_config,
             'validation': log_validation
         }
-`
+```
 
 ### 包括的なログ収集戦略
 
@@ -2418,7 +2418,7 @@ class AuditLogIntegrity:
 
 CloudTrail、Azure Activity Log、Cloud Audit Logs：
 
-`python
+```python
 class ComprehensiveLogging:
     """
     包括的なログ収集の実装
@@ -2608,13 +2608,13 @@ class ComprehensiveLogging:
             'resource_logs': resource_logging,
             'pipeline': collection_pipeline
         }
-`
+```
 
 **アプリケーションレベルのログ**
 
 ビジネスロジックとユーザー行動：
 
-`python
+```python
 class ApplicationLogging:
     """
     アプリケーションログの実装
@@ -2765,7 +2765,7 @@ class ApplicationLogging:
             'implementation': logging_implementation,
             'categories': log_categories
         }
-`
+```
 
 ### リアルタイム脅威検出
 
@@ -2773,7 +2773,7 @@ class ApplicationLogging:
 
 Security Information and Event Management システムによる相関分析：
 
-`python
+```python
 class SIEMIntegration:
     """
     SIEM統合の実装
@@ -2943,13 +2943,13 @@ class SIEMIntegration:
             'rules': correlation_rules,
             'forwarder': siem_forwarder
         }
-`
+```
 
 **機械学習による異常検出**
 
 通常のパターンからの逸脱を自動検出：
 
-`python
+```python
 class AnomalyDetection:
     """
     異常検出の実装
@@ -3089,7 +3089,7 @@ class AnomalyDetection:
             'pipeline': realtime_pipeline,
             'scoring': anomaly_scoring
         }
-`
+```
 
 ### コンプライアンスとフォレンジック
 
@@ -3097,7 +3097,7 @@ class AnomalyDetection:
 
 業界固有の監査要件：
 
-`python
+```python
 class ComplianceLogging:
     """
     コンプライアンスログの実装
@@ -3234,13 +3234,13 @@ class ComplianceLogging:
             'requirements': compliance_requirements,
             'reporting': compliance_reporting
         }
-`
+```
 
 **証跡の長期保存**
 
 法的要件と調査のニーズ：
 
-`python
+```python
 class LogArchival:
     """
     ログアーカイブの実装
@@ -3396,13 +3396,13 @@ class LogArchival:
             'search': search_optimization,
             'restoration': restoration_procedure
         }
-`
+```
 
 **インシデント調査の手順**
 
 体系的なフォレンジック分析：
 
-`python
+```python
 class IncidentForensics:
     """
     インシデントフォレンジックの実装
@@ -3655,7 +3655,7 @@ class IncidentForensics:
             'queries': forensic_queries,
             'automation': incident_response_automation
         }
-`
+```
 
 ## 6.4 クラウドWAF（Web Application Firewall）とDDoS対策
 
@@ -3667,7 +3667,7 @@ class IncidentForensics:
 
 WAFは、アプリケーションとインターネットの間に配置される防御層です：
 
-`python
+```python
 class WAFImplementation:
     """
     WAF実装と管理
@@ -3712,7 +3712,7 @@ class WAFImplementation:
         }
         
         return waf_capabilities
-`
+```
 
 ### WAFルールの設計と最適化
 
@@ -3720,7 +3720,7 @@ class WAFImplementation:
 
 クラウドプロバイダーとセキュリティベンダーが提供する事前定義ルール：
 
-`python
+```python
 class WAFRuleManagement:
     """
     WAFルール管理の実装
@@ -3851,13 +3851,13 @@ class WAFRuleManagement:
             'web_acl': web_acl_config,
             'rule_groups': rule_group_management
         }
-`
+```
 
 **カスタムルールの作成**
 
 アプリケーション固有の保護：
 
-`python
+```python
 class CustomWAFRules:
     """
     カスタムWAFルールの実装
@@ -4043,13 +4043,13 @@ class CustomWAFRules:
             'rate_limit': custom_rate_limit,
             'pattern_matching': regex_pattern_rule
         }
-`
+```
 
 **誤検知の最小化**
 
 正当なトラフィックをブロックしないための調整：
 
-`python
+```python
 class WAFTuning:
     """
     WAFチューニングの実装
@@ -4199,7 +4199,7 @@ class WAFTuning:
             'analysis': false_positive_analysis,
             'exclusions': exclusion_management
         }
-`
+```
 
 ### DDoS攻撃への多層防御
 
@@ -4207,7 +4207,7 @@ class WAFTuning:
 
 大容量攻撃への対処：
 
-`python
+```python
 class DDoSProtection:
     """
     DDoS保護の実装
@@ -4323,13 +4323,13 @@ class DDoSProtection:
             'architecture': ddos_architecture,
             'strategies': mitigation_strategies
         }
-`
+```
 
 **アプリケーション層（L7）のDDoS対策**
 
 より巧妙な攻撃への対応：
 
-`python
+```python
 class ApplicationDDoSProtection:
     """
     アプリケーション層DDoS保護
@@ -4477,7 +4477,7 @@ class ApplicationDDoSProtection:
             'bot_management': bot_management,
             'advanced_techniques': advanced_mitigation
         }
-`
+```
 
 ### 高度な保護機能
 
@@ -4485,7 +4485,7 @@ class ApplicationDDoSProtection:
 
 リソース枯渇攻撃からの保護：
 
-`python
+```python
 class RateLimiting:
     """
     レート制限の実装
@@ -4597,13 +4597,13 @@ class RateLimiting:
             'distributed': distributed_rate_limiting,
             'degradation': graceful_degradation
         }
-`
+```
 
 **ボット管理**
 
 自動化された脅威への対処：
 
-`python
+```python
 class BotManagement:
     """
     ボット管理の実装
@@ -4771,13 +4771,13 @@ class BotManagement:
             'detection': detection_techniques,
             'implementation': bot_management_implementation
         }
-`
+```
 
 **リアルタイムの脅威インテリジェンス**
 
 最新の脅威情報の活用：
 
-`python
+```python
 class ThreatIntelligence:
     """
     脅威インテリジェンスの実装
@@ -4942,7 +4942,7 @@ class ThreatIntelligence:
             'scoring': threat_scoring_system,
             'automation': automated_response
         }
-`
+```
 
 ## 6.5 脆弱性管理とパッチ適用
 
@@ -4954,7 +4954,7 @@ class ThreatIntelligence:
 
 クラウドプロバイダーとユーザーの責任範囲：
 
-`python
+```python
 class VulnerabilityManagement:
     """
     脆弱性管理の実装
@@ -5008,7 +5008,7 @@ class VulnerabilityManagement:
         }
         
         return responsibility_matrix
-`
+```
 
 ### 脆弱性の発見と評価
 
@@ -5016,7 +5016,7 @@ class VulnerabilityManagement:
 
 定期的かつ継続的な脆弱性検出：
 
-`python
+```python
 class VulnerabilityScanning:
     """
     脆弱性スキャニングの実装
@@ -5137,13 +5137,13 @@ class VulnerabilityScanning:
             'inspector': inspector_config,
             'pipeline': custom_scanning_pipeline
         }
-`
+```
 
 **リスクベースの優先順位付け**
 
 すべての脆弱性が同じ重要度ではない：
 
-`python
+```python
 class RiskAssessment:
     """
     リスク評価の実装
@@ -5291,7 +5291,7 @@ class RiskAssessment:
             'model': risk_model,
             'calculator': risk_calculator
         }
-`
+```
 
 ### パッチ管理の自動化
 
@@ -5299,7 +5299,7 @@ class RiskAssessment:
 
 パッチを適用するのではなく、新しいイメージで置き換え：
 
-`python
+```python
 class AutomatedPatching:
     """
     自動パッチ管理の実装
@@ -5426,13 +5426,13 @@ class AutomatedPatching:
             'pipeline': image_pipeline,
             'rollout': rollout_strategy
         }
-`
+```
 
 **段階的ロールアウト**
 
 リスクを最小化するパッチ適用戦略：
 
-`python
+```python
 class PhasedRollout:
     """
     段階的ロールアウトの実装
@@ -5598,7 +5598,7 @@ class PhasedRollout:
             'windows': maintenance_windows,
             'validation': validation_checks
         }
-`
+```
 
 ### コンテナとサーバーレスのセキュリティ
 
@@ -5606,7 +5606,7 @@ class PhasedRollout:
 
 新しいパラダイムに対応した管理：
 
-`python
+```python
 class ContainerSecurity:
     """
     コンテナセキュリティの実装
@@ -5740,13 +5740,13 @@ class ContainerSecurity:
             'policies': image_policies,
             'runtime': runtime_protection
         }
-`
+```
 
 **サーバーレス関数のセキュリティ**
 
 共有責任モデルの変化：
 
-`python
+```python
 class ServerlessSecurity:
     """
     サーバーレスセキュリティの実装
@@ -5888,7 +5888,7 @@ class ServerlessSecurity:
             'security_layer': security_layer,
             'dependencies': dependency_management
         }
-`
+```
 
 ### セキュリティの文化醸成
 
@@ -5896,7 +5896,7 @@ class ServerlessSecurity:
 
 セキュリティを開発プロセスに統合：
 
-`python
+```python
 class DevSecOpsCulture:
     """
     DevSecOps文化の実装
@@ -6006,13 +6006,13 @@ class DevSecOpsCulture:
             'metrics': security_metrics,
             'training': training_program
         }
-`
+```
 
 **継続的な改善サイクル**
 
 PDCAサイクルの実装：
 
-`python
+```python
 class ContinuousSecurityImprovement:
     """
     継続的セキュリティ改善の実装
@@ -6125,7 +6125,7 @@ class ContinuousSecurityImprovement:
             'pdca_cycle': improvement_cycle,
             'maturity': maturity_model
         }
-`
+```
 
 ## まとめ
 
