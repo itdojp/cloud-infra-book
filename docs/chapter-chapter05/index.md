@@ -27,7 +27,7 @@ title: "第5章：ネットワークとロードバランシング"
 以下のPythonコードは、良いVPC設計と悪いVPC設計を比較し、設計時に意識すべきポイントを整理したサンプルです。  
 コードそのものを実行することが目的ではなく、コメントやデータ構造を通じて「どのような観点で設計を評価するか」をイメージするためのものと考えてください。本番環境に適用する設定は、自組織のネットワークポリシーやセキュリティ要件に基づいて必ず見直してください。
 
-`python
+```python
 class VPCDesignPrinciples:
     """
     VPC設計の原則と実装
@@ -90,7 +90,7 @@ class VPCDesignPrinciples:
             'good_design': good_design,
             'recommendation': '初期設計に十分な時間を投資することが重要'
         }
-`
+```
 
 ### 階層型ネットワークアーキテクチャ
 
@@ -98,7 +98,7 @@ class VPCDesignPrinciples:
 
 従来のネットワーク設計では、プレゼンテーション層、アプリケーション層、データ層という三層構造が一般的でした。クラウドでは、この概念をセキュリティゾーンとして再解釈します：
 
-`python
+```python
 class ThreeTierArchitecture:
     """
     三層アーキテクチャの実装
@@ -235,7 +235,7 @@ class ThreeTierArchitecture:
             'subnets': subnets,
             'architecture': subnet_config
         }
-`
+```
 
 ### IPアドレス設計の芸術と科学
 
@@ -243,7 +243,7 @@ class ThreeTierArchitecture:
 
 IPアドレス空間の設計は、現在のニーズと将来の拡張性のバランスを取る必要があります：
 
-`python
+```python
 class IPAddressPlanning:
     """
     IPアドレス計画の実装
@@ -372,7 +372,7 @@ class IPAddressPlanning:
             'has_conflicts': False,
             'message': 'No conflicts detected'
         }
-`
+```
 
 ### マルチAZ設計の実装
 
@@ -380,7 +380,7 @@ class IPAddressPlanning:
 
 各アベイラビリティゾーンに同じサブネット構造を複製することで、管理の複雑さを軽減し、自動化を容易にします：
 
-`python
+```python
 class MultiAZDesign:
     """
     マルチAZ設計の実装
@@ -479,7 +479,7 @@ class MultiAZDesign:
             'route_table_design': route_table_design,
             'availability': availability_calculation
         }
-`
+```
 
 ### セキュリティを考慮したセグメンテーション
 
@@ -487,7 +487,7 @@ class MultiAZDesign:
 
 ゼロトラストセキュリティモデルでは、ネットワーク内部でも信頼しない原則を適用します：
 
-`python
+```python
 class SecuritySegmentation:
     """
     セキュリティセグメンテーションの実装
@@ -687,7 +687,7 @@ class SecuritySegmentation:
             'principles': zero_trust_principles,
             'privatelink': privatelink_design
         }
-`
+```
 
 ### 拡張性を考慮した設計
 
@@ -695,7 +695,7 @@ class SecuritySegmentation:
 
 設計時に考慮すべき将来シナリオ：
 
-`python
+```python
 class ScalableNetworkDesign:
     """
     拡張可能なネットワーク設計
@@ -813,11 +813,11 @@ class ScalableNetworkDesign:
             'transit_gateway': transit_gateway_design,
             'cidr_plan': cidr_reservation_plan
         }
-`
+```
 
 ### VPC設計のベストプラクティス実装
 
-`python
+```python
 class VPCBestPractices:
     """
     VPC設計のベストプラクティス
@@ -947,7 +947,7 @@ class VPCBestPractices:
             'template_example': vpc_template,
             'validation_command': 'aws ec2 describe-vpc-attribute --vpc-id vpc-xxx --attribute enableDnsSupport'
         }
-`
+```
 
 ## 5.2 ルーティングとVPN接続
 
@@ -959,7 +959,7 @@ class VPCBestPractices:
 
 各サブネットは、トラフィックの宛先を決定するルートテーブルに関連付けられます。このシンプルな仕組みが、複雑なネットワークトポロジーの実現を可能にします。
 
-`python
+```python
 class CloudRouting:
     """
     クラウドルーティングの実装
@@ -1087,7 +1087,7 @@ class CloudRouting:
             'peering': peering_routing,
             'transit_gateway': transit_gateway_routing
         }
-`
+```
 
 ### ハイブリッドクラウド接続の実現
 
@@ -1095,7 +1095,7 @@ class CloudRouting:
 
 多くの組織にとって、VPNは最初のハイブリッドクラウド接続手段となります。その魅力は、既存のインターネット接続を利用できる手軽さと、比較的低いコストです。
 
-`python
+```python
 class HybridCloudConnection:
     """
     ハイブリッドクラウド接続の実装
@@ -1259,7 +1259,7 @@ class HybridCloudConnection:
             'configuration_example': bgp_configuration,
             'best_practices': bgp_best_practices
         }
-`
+```
 
 ### 専用接続の価値
 
@@ -1267,7 +1267,7 @@ class HybridCloudConnection:
 
 専用接続サービスは、インターネットを経由しない、プライベートな接続を提供します：
 
-`python
+```python
 class DedicatedConnection:
     """
     専用接続の実装
@@ -1407,7 +1407,7 @@ class DedicatedConnection:
         }
         
         return hybrid_patterns
-`
+```
 
 ### トランジットゲートウェイとハブ＆スポーク
 
@@ -1415,7 +1415,7 @@ class DedicatedConnection:
 
 複数のVPCやオンプレミスネットワークを接続する場合、メッシュ型の接続は管理が複雑になります。トランジットゲートウェイは、中央ハブとして機能し、接続を簡素化します。
 
-`python
+```python
 class TransitGatewayArchitecture:
     """
     Transit Gatewayアーキテクチャの実装
@@ -1548,13 +1548,13 @@ class TransitGatewayArchitecture:
         }
         
         return segmentation_strategy
-`
+```
 
 ### VPNのパフォーマンスとトラブルシューティング
 
 **パフォーマンスの最適化**
 
-`python
+```python
 class VPNOptimization:
     """
     VPNパフォーマンスの最適化
@@ -1698,7 +1698,7 @@ class VPNOptimization:
         }
         
         return troubleshooting_guide
-`
+```
 
 ## 5.3 ロードバランサーの種類と活用
 
@@ -1710,7 +1710,7 @@ class VPNOptimization:
 
 現代のアプリケーションは、以下を実現する必要があります：
 
-`python
+```python
 class LoadBalancerEvolution:
     """
     ロードバランサーの進化と重要性
@@ -1806,7 +1806,7 @@ class LoadBalancerEvolution:
             'functions': critical_functions,
             'evolution': evolution_timeline
         }
-`
+```
 
 ### レイヤー4とレイヤー7の使い分け
 
@@ -1814,7 +1814,7 @@ class LoadBalancerEvolution:
 
 トランスポート層（TCP/UDP）で動作し、高速で低レイテンシ：
 
-`python
+```python
 class NetworkLoadBalancer:
     """
     ネットワークロードバランサー（NLB）の実装
@@ -1944,13 +1944,13 @@ class NetworkLoadBalancer:
         }
         
         return proxy_protocol_policy
-`
+```
 
 **アプリケーションロードバランサー（L7）**
 
 HTTPレイヤーで動作し、高度なルーティング機能：
 
-`python
+```python
 class ApplicationLoadBalancer:
     """
     アプリケーションロードバランサー（ALB）の実装
@@ -2172,7 +2172,7 @@ class ApplicationLoadBalancer:
             'waf': waf_integration,
             'lambda': lambda_target
         }
-`
+```
 
 ### 高度なロードバランシング機能
 
@@ -2180,7 +2180,7 @@ class ApplicationLoadBalancer:
 
 特定のクライアントを同じバックエンドサーバーに固定：
 
-`python
+```python
 class AdvancedLoadBalancing:
     """
     高度なロードバランシング機能
@@ -2376,13 +2376,13 @@ class AdvancedLoadBalancing:
         }
         
         return best_practices
-`
+```
 
 ### グローバルロードバランシング
 
 **地理的分散とレイテンシ最適化**
 
-`python
+```python
 class GlobalLoadBalancing:
     """
     グローバルロードバランシングの実装
@@ -2523,13 +2523,13 @@ class GlobalLoadBalancing:
             'geolocation': geolocation_policy,
             'multi_cdn': multi_cdn_strategy
         }
-`
+```
 
 ### ロードバランサーのセキュリティ
 
 **SSL/TLS終端とオフロード**
 
-`python
+```python
 class LoadBalancerSecurity:
     """
     ロードバランサーのセキュリティ実装
@@ -2686,11 +2686,11 @@ class LoadBalancerSecurity:
             'web_acl_arn': web_acl['Summary']['ARN'],
             'custom_rules': custom_rules
         }
-`
+```
 
 **ゼロダウンタイムデプロイメント**
 
-`python
+```python
 class ZeroDowntimeDeployment:
     """
     ゼロダウンタイムデプロイメントの実装
@@ -2780,7 +2780,7 @@ class ZeroDowntimeDeployment:
         }
         
         return rolling_strategy
-`
+```
 
 ## 5.4 DNSサービス（Route 53, Azure DNS, Cloud DNS）
 
@@ -2792,7 +2792,7 @@ DNSは「インターネットの電話帳」という単純な説明を超え�
 
 従来のDNSサーバーと異なり、クラウドのマネージドDNSは：
 
-`python
+```python
 class CloudNativeDNS:
     """
     クラウドネイティブDNSの実装
@@ -2892,13 +2892,13 @@ class CloudNativeDNS:
             'private_zone_id': private_zone['HostedZone']['Id'],
             'design': zone_design
         }
-`
+```
 
 ### レコードタイプとその活用
 
 **基本的なレコードタイプ**
 
-`python
+```python
 class DNSRecordManagement:
     """
     DNSレコード管理の実装
@@ -3063,13 +3063,13 @@ class DNSRecordManagement:
             ],
             'example': service_discovery
         }
-`
+```
 
 ### 高度なルーティングポリシー
 
 **地理的ルーティング**
 
-`python
+```python
 class AdvancedDNSRouting:
     """
     高度なDNSルーティングの実装
@@ -3282,13 +3282,13 @@ class AdvancedDNSRouting:
             'health_check': health_check_config,
             'strategy': failover_strategy
         }
-`
+```
 
 ### DNSセキュリティ
 
 **DNSSEC（DNS Security Extensions）**
 
-`python
+```python
 class DNSSecurity:
     """
     DNSセキュリティの実装
@@ -3369,13 +3369,13 @@ class DNSSecurity:
             'firewall_rules': dns_firewall_rules,
             'rate_limiting': rate_limiting
         }
-`
+```
 
 ### 障害対策とフェイルオーバー
 
 **ヘルスチェックとの連携**
 
-`python
+```python
 class DNSResilience:
     """
     DNS障害対策の実装
@@ -3482,7 +3482,7 @@ class DNSResilience:
             'architecture': failover_architecture,
             'procedures': failover_procedures
         }
-`
+```
 
 ## 5.5 CDN（Content Delivery Network）の利用
 
@@ -3494,7 +3494,7 @@ CDNは単なるキャッシュサーバーの集合ではありません。そ�
 
 CDNは、計算とストレージをユーザーの近くに配置するエッジコンピューティングの先駆けです：
 
-`python
+```python
 class CDNFundamentals:
     """
     CDNの基本概念と価値
@@ -3582,13 +3582,13 @@ class CDNFundamentals:
         }
         
         return distribution_config
-`
+```
 
 ### 静的コンテンツから動的コンテンツへ
 
 **静的コンテンツの最適化**
 
-`python
+```python
 class StaticContentOptimization:
     """
     静的コンテンツの最適化
@@ -3676,11 +3676,11 @@ class StaticContentOptimization:
         ]
         
         return cache_behaviors
-`
+```
 
 **動的コンテンツの加速**
 
-`python
+```python
 class DynamicContentAcceleration:
     """
     動的コンテンツの加速
@@ -3837,13 +3837,13 @@ class DynamicContentAcceleration:
             'edge_computing': edge_functions,
             'example': edge_function_example
         }
-`
+```
 
 ### キャッシュ戦略の設計
 
 **インテリジェントなキャッシュ管理**
 
-`python
+```python
 class CacheStrategyDesign:
     """
     キャッシュ戦略の設計
@@ -3987,13 +3987,13 @@ class CacheStrategyDesign:
         }
         
         return cache_warming
-`
+```
 
 ### セキュリティ機能の活用
 
 **包括的なセキュリティ実装**
 
-`python
+```python
 class CDNSecurity:
     """
     CDNセキュリティの実装
@@ -4129,13 +4129,13 @@ class CDNSecurity:
         }
         
         return ddos_protection
-`
+```
 
 ### パフォーマンス最適化
 
 **包括的な最適化戦略**
 
-`python
+```python
 class CDNPerformanceOptimization:
     """
     CDNパフォーマンス最適化
@@ -4272,13 +4272,13 @@ class CDNPerformanceOptimization:
             'monitoring': monitoring_config,
             'dashboard': dashboard_config
         }
-`
+```
 
 ### マルチCDN戦略
 
 **冗長性とパフォーマンスの最適化**
 
-`python
+```python
 class MultiCDNStrategy:
     """
     マルチCDN戦略の実装
@@ -4384,7 +4384,7 @@ class MultiCDNStrategy:
         """
         
         return selection_logic
-`
+```
 
 ## まとめ
 
