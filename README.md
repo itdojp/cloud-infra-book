@@ -4,28 +4,27 @@
 
 ## 対象読者
 
-- クラウドインフラエンジニア（経験年数 1-5年）
+- クラウドインフラエンジニア（経験年数 1〜5年）
 - オンプレミス環境からクラウドへの移行を検討している方
 - より体系的なクラウド知識を身につけたい方
 
 ## 章構成（概要）
 
-- 第1-2章: 基礎編（概念と共通アーキテクチャ）
-- 第3-5章: コアサービス編（Compute / Storage / Network）
-- 第6-8章: 運用管理編（セキュリティ / 監視 / バックアップ・災害復旧）
-- 第9-10章: 先進技術編（サーバーレス・コンテナ / IaC）
+- 第1〜2章: 基礎編（概念と共通アーキテクチャ）
+- 第3〜5章: コアサービス編（Compute / Storage / Network）
+- 第6〜8章: 運用管理編（セキュリティ / 監視 / バックアップ・災害復旧）
+- 第9〜10章: 先進技術編（サーバーレス・コンテナ / IaC）
 - 第11章: 統合編（エンタープライズ設計パターンと事例）
 
 ## オンライン版（入口）
 
 - リポジトリ内: `docs/index.md`
-- GitHub Pages を有効化している場合: `https://itdojp.github.io/cloud-infra-book/`
+- GitHub Pages を有効化している場合: https://itdojp.github.io/cloud-infra-book/
 
 ## フィードバック
 
-- Issue: `https://github.com/itdojp/cloud-infra-book/issues`
+- Issue: https://github.com/itdojp/cloud-infra-book/issues
 
 ## ライセンス
 
 本書は `LICENSE.md` に記載の条件で提供されます。
-
