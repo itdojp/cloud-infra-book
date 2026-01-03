@@ -2576,7 +2576,7 @@ class LoadBalancerSecurity:
         # SSL/TLSオフロードの利点
         ssl_offload_benefits = {
             'performance': {
-                'backend_cpu_reduction': '30-50%',
+                'backend_cpu_reduction': '30〜50%',
                 'simplified_backend': 'HTTP only communication',
                 'session_resumption': 'TLS session caching'
             },
@@ -3504,7 +3504,7 @@ class CDNFundamentals:
         cdn_benefits = {
             'performance': {
                 'latency_reduction': {
-                    'global_average': '50-70% reduction',
+                    'global_average': '50〜70% reduction',
                     'first_byte_time': 'Sub-100ms globally',
                     'throughput': '10x improvement'
                 },
@@ -3522,7 +3522,7 @@ class CDNFundamentals:
             },
             'cost_optimization': {
                 'origin_offload': '90%+ cache hit ratio',
-                'bandwidth_savings': '70-90% reduction',
+                'bandwidth_savings': '70〜90% reduction',
                 'infrastructure': 'No need for global servers'
             },
             'security': {

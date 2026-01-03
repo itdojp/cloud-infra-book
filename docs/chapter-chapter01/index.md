@@ -504,7 +504,7 @@ Kubernetesの発祥の地として、Google Kubernetes Engine（GKE）は業界�
 3. Spot Instances（バッチ処理用）
 4. CloudWatch監視による無駄リソースの特定
 
-**期待効果：**30-50%のコスト削減
+**期待効果：**30〜50%のコスト削減
 </details>
 
 ### 演習5：失敗事例から学ぶリスク対策

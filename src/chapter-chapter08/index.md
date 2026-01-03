@@ -42,9 +42,9 @@ EC2インスタンス料金構成:
     - リージョンによる価格差（東京 vs バージニア: 約20%差）
     
   追加料金:
-    - Windowsライセンス: +50-100%
-    - SQL Serverライセンス: +200-400%
-    - RHEL/SUSEライセンス: +10-20%
+    - Windowsライセンス: +50〜100%
+    - SQL Serverライセンス: +200〜400%
+    - RHEL/SUSEライセンス: +10〜20%
     
   課金単位:
     - AWS: 秒単位（最小60秒）
@@ -141,17 +141,17 @@ Savings Plans比較:
   1. ビッグデータ処理:
      - 用途: EMR、Spark処理
      - 中断対策: チェックポイント機能
-     - 節約率: 70-90%
+     - 節約率: 70〜90%
      
   2. CI/CDパイプライン:
      - 用途: ビルド、テスト実行
      - 中断対策: ジョブキューでリトライ
-     - 節約率: 60-80%
+     - 節約率: 60〜80%
      
   3. Webアプリケーション:
      - 構成: オンデマンド（30%）+ スポット（70%）
      - 中断対策: ELBによる自動切り離し
-     - 節約率: 50-60%
+     - 節約率: 50〜60%
 ```
 
 ### 隠れたコストの識別と削減
@@ -193,7 +193,7 @@ Savings Plans比較:
   2. CloudFrontの戦略的使用:
      - オリジンからの転送を削減
      - キャッシュヒット率向上
-     - 節約額: 50-80%（キャッシュヒット率依存）
+     - 節約額: 50〜80%（キャッシュヒット率依存）
      
   3. データローカリティの最適化:
      - 同一AZ内での処理
@@ -455,7 +455,7 @@ def detect_cost_anomaly(daily_costs, sensitivity=2.5):
 
 ```yaml
 コンテキストルール:
-  - 月初（1-3日）: 
+  - 月初（1〜3日）: 
       理由: 月次バッチ処理
       許容上昇率: +50%
       
@@ -689,23 +689,23 @@ def calculate_managed_service_roi(current_costs, migration_scenario):
 ```yaml
 S3ライフサイクルポリシー設計:
   アプリケーションログ:
-    0-7日: Standard（頻繁なアクセス）
-    7-30日: Standard-IA（コスト20%削減）
-    30-90日: Glacier Instant（コスト80%削減）
+    0〜7日: Standard（頻繁なアクセス）
+    7〜30日: Standard-IA（コスト20%削減）
+    30〜90日: Glacier Instant（コスト80%削減）
     90日以降: 削除
     年間節約額: $15,000
     
   バックアップデータ:
-    0-1日: Standard
-    1-30日: Standard-IA
-    30-180日: Glacier Flexible
-    180日-7年: Glacier Deep Archive（コスト95%削減）
+    0〜1日: Standard
+    1〜30日: Standard-IA
+    30〜180日: Glacier Flexible
+    180日〜7年: Glacier Deep Archive（コスト95%削減）
     年間節約額: $45,000
     
   ユーザーアップロード:
-    0-30日: Standard
-    30-90日: Intelligent-Tiering（自動最適化）
-    90日-1年: Standard-IA
+    0〜30日: Standard
+    30〜90日: Intelligent-Tiering（自動最適化）
+    90日〜1年: Standard-IA
     1年以降: Glacier Instant
 ```
 
@@ -780,7 +780,7 @@ def optimize_reservation_portfolio(usage_history, forecast):
         },
         'スポット': {
             'coverage': 'spike対応',
-            'savings': '70-90%',
+            'savings': '70〜90%',
             'risk': 'high'
         }
     }

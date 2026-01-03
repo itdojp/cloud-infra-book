@@ -351,8 +351,8 @@ disaster_recovery_strategies:
       
   pilot_light:
     description: "最小限のリソースを別リージョンで維持"
-    rpo: "1-4時間"
-    rto: "1-4時間"
+    rpo: "1〜4時間"
+    rto: "1〜4時間"
     cost: "$$"
     implementation:
       - データベースのレプリケーション
