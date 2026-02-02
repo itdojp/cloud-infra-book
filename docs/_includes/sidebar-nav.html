@@ -1,156 +1,138 @@
-<!-- Sidebar Navigation - Cloud Infrastructure Design & Implementation Guide -->
+<!-- Sidebar Navigation (data-driven) -->
+{% assign navigation = site.data.navigation %}
+
 <div class="sidebar-content">
-    <!-- Book Info -->
     <div class="book-info">
-        <h2 class="book-title">☁️ クラウドインフラ設計・構築ガイド</h2>
-        
-        <p class="book-subtitle">クラウドインフラエンジニアが実際の設計・構築業務で必要な知識を体系的に学べる実践書</p>
-        
+        <h2 class="book-title">{{ site.title | escape }}</h2>
+        {% if site.subtitle %}
+        <p class="book-subtitle">{{ site.subtitle | escape }}</p>
+        {% elsif site.description %}
+        <p class="book-subtitle">{{ site.description | escape }}</p>
+        {% endif %}
     </div>
 
-    <!-- Table of Contents -->
     <div class="toc">
         <h3 class="toc-title">目次</h3>
-        
-        <!-- Introduction -->
+
         <div class="toc-section">
             <ul class="toc-list">
                 <li class="toc-item">
                     <a href="{{ '/' | relative_url }}" class="toc-link {% if page.url == '/' %}active{% endif %}">
-                        🏠 はじめに
-                    </a>
-                </li>
-                <li class="toc-item">
-                    <a href="{{ '/introduction/index.html' | relative_url }}" class="toc-link {% if page.url contains 'introduction' %}active{% endif %}">
-                        📖 イントロダクション
+                        はじめに
                     </a>
                 </li>
             </ul>
         </div>
 
-        <!-- Part I: 基礎編 -->
-        <div class="toc-section">
-            <h3 class="toc-section-title">📚 Part I: 基礎編</h3>
-            <ul class="toc-list">
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapter-chapter01/index.html' | relative_url }}" class="toc-link {% if page.url contains 'chapter-chapter01' %}active{% endif %}">
-                        <span class="chapter-number">1.</span>クラウドコンピューティングの基礎
-                    </a>
-                </li>
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapter-chapter02/index.html' | relative_url }}" class="toc-link {% if page.url contains 'chapter-chapter02' %}active{% endif %}">
-                        <span class="chapter-number">2.</span>クラウドアーキテクチャの基本原則
-                    </a>
-                </li>
-            </ul>
-        </div>
+        {% if navigation %}
+            {% if navigation.introduction %}
+            <div class="toc-section">
+                <h4 class="toc-section-title">導入</h4>
+                <ul class="toc-list">
+                    {% for item in navigation.introduction %}
+                    <li class="toc-item">
+                        <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path %}active{% endif %}" {% if page.url == item.path %}aria-current="page"{% endif %}>
+                            {{ item.title | escape }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
-        <!-- Part II: コアサービス編 -->
-        <div class="toc-section">
-            <h3 class="toc-section-title">⚙️ Part II: コアサービス編</h3>
-            <ul class="toc-list">
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapter-chapter03/index.html' | relative_url }}" class="toc-link {% if page.url contains 'chapter-chapter03' %}active{% endif %}">
-                        <span class="chapter-number">3.</span>仮想マシン（Compute）の活用
-                    </a>
-                </li>
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapter-chapter04/index.html' | relative_url }}" class="toc-link {% if page.url contains 'chapter-chapter04' %}active{% endif %}">
-                        <span class="chapter-number">4.</span>ストレージサービスの設計
-                    </a>
-                </li>
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapter-chapter05/index.html' | relative_url }}" class="toc-link {% if page.url contains 'chapter-chapter05' %}active{% endif %}">
-                        <span class="chapter-number">5.</span>ネットワークの設計と実装
-                    </a>
-                </li>
-            </ul>
-        </div>
+            {% if navigation.chapters %}
+            <div class="toc-section">
+                <h4 class="toc-section-title">本編</h4>
+                <ul class="toc-list">
+                    {% for chapter in navigation.chapters %}
+                    <li class="toc-item toc-chapter">
+                        <a href="{{ chapter.path | relative_url }}" class="toc-link {% if page.url == chapter.path or page.url contains chapter.path %}active{% endif %}" {% if page.url == chapter.path or page.url contains chapter.path %}aria-current="page"{% endif %}>
+                            {{ chapter.title | escape }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
-        <!-- Part III: 運用管理編 -->
-        <div class="toc-section">
-            <h3 class="toc-section-title">🔧 Part III: 運用管理編</h3>
-            <ul class="toc-list">
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapter-chapter06/index.html' | relative_url }}" class="toc-link {% if page.url contains 'chapter-chapter06' %}active{% endif %}">
-                        <span class="chapter-number">6.</span>セキュリティとコンプライアンス
-                    </a>
-                </li>
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapter-chapter07/index.html' | relative_url }}" class="toc-link {% if page.url contains 'chapter-chapter07' %}active{% endif %}">
-                        <span class="chapter-number">7.</span>監視・運用・トラブルシューティング
-                    </a>
-                </li>
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapter-chapter08/index.html' | relative_url }}" class="toc-link {% if page.url contains 'chapter-chapter08' %}active{% endif %}">
-                        <span class="chapter-number">8.</span>コスト最適化
-                    </a>
-                </li>
-            </ul>
-        </div>
+            {% if navigation.additional %}
+            <div class="toc-section">
+                <h4 class="toc-section-title">追加</h4>
+                <ul class="toc-list">
+                    {% for item in navigation.additional %}
+                    <li class="toc-item">
+                        <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path or page.url contains item.path %}active{% endif %}" {% if page.url == item.path or page.url contains item.path %}aria-current="page"{% endif %}>
+                            {{ item.title | escape }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
-        <!-- Part IV: 先進技術編 -->
-        <div class="toc-section">
-            <h3 class="toc-section-title">🚀 Part IV: 先進技術編</h3>
-            <ul class="toc-list">
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapter-chapter09/index.html' | relative_url }}" class="toc-link {% if page.url contains 'chapter-chapter09' %}active{% endif %}">
-                        <span class="chapter-number">9.</span>コンテナとサーバーレス
-                    </a>
-                </li>
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapter-chapter10/index.html' | relative_url }}" class="toc-link {% if page.url contains 'chapter-chapter10' %}active{% endif %}">
-                        <span class="chapter-number">10.</span>Infrastructure as Code
-                    </a>
-                </li>
-            </ul>
-        </div>
+            {% if navigation.resources %}
+            <div class="toc-section">
+                <h4 class="toc-section-title">リソース</h4>
+                <ul class="toc-list">
+                    {% for item in navigation.resources %}
+                    <li class="toc-item">
+                        <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path or page.url contains item.path %}active{% endif %}" {% if page.url == item.path or page.url contains item.path %}aria-current="page"{% endif %}>
+                            {{ item.title | escape }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
-        <!-- Part V: 統合編 -->
-        <div class="toc-section">
-            <h3 class="toc-section-title">🎯 Part V: 統合編</h3>
-            <ul class="toc-list">
-                <li class="toc-item toc-chapter">
-                    <a href="{{ '/chapter-chapter11/index.html' | relative_url }}" class="toc-link {% if page.url contains 'chapter-chapter11' %}active{% endif %}">
-                        <span class="chapter-number">11.</span>総合的なインフラ設計プロジェクト
-                    </a>
-                </li>
-            </ul>
-        </div>
+            {% if navigation.appendices %}
+            <div class="toc-section">
+                <h4 class="toc-section-title">付録</h4>
+                <ul class="toc-list">
+                    {% for item in navigation.appendices %}
+                    <li class="toc-item">
+                        <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path or page.url contains item.path %}active{% endif %}" {% if page.url == item.path or page.url contains item.path %}aria-current="page"{% endif %}>
+                            {{ item.title | escape }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
-        <!-- Appendices -->
-        <div class="toc-section">
-            <h3 class="toc-section-title">📋 付録</h3>
-            <ul class="toc-list">
-                <li class="toc-item">
-                    <a href="{{ '/appendices/index.html' | relative_url }}" class="toc-link {% if page.url contains 'appendices' %}active{% endif %}">
-                        付録: リソースとツール
-                    </a>
-                </li>
-            </ul>
-        </div>
+            {% if navigation.afterword %}
+            <div class="toc-section">
+                <h4 class="toc-section-title">あとがき</h4>
+                <ul class="toc-list">
+                    {% for item in navigation.afterword %}
+                    <li class="toc-item">
+                        <a href="{{ item.path | relative_url }}" class="toc-link {% if page.url == item.path or page.url contains item.path %}active{% endif %}" {% if page.url == item.path or page.url contains item.path %}aria-current="page"{% endif %}>
+                            {{ item.title | escape }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        {% endif %}
     </div>
 
-        <!-- Additional Resources -->
-        <div class="toc-section">
-            <h3 class="toc-section-title">📚 リソース</h3>
-            <ul class="toc-list">
-                <li class="toc-item">
-                    <a href="https://github.com/itdojp/cloud-infra-book" class="toc-link" target="_blank" rel="noopener">
-                        💾 GitHubリポジトリ
-                    </a>
-                </li>
-                <li class="toc-item">
-                    <a href="https://itdojp.github.io/it-engineer-knowledge-architecture/" class="toc-link" target="_blank" rel="noopener">
-                        📚 書籍一覧
-                    </a>
-                </li>
-                <li class="toc-item">
-                    <a href="https://itdo.jp" class="toc-link" target="_blank" rel="noopener">
-                        🏢 株式会社アイティードゥ
-                    </a>
-                </li>
-            </ul>
+    <div class="sidebar-footer">
+        {% assign repo_url = site.github.repository_url | default: site.repository_url | default: site.repository.github | default: site.repository %}
+        {% if repo_url and repo_url != '' %}
+            {% unless repo_url contains 'http' %}
+                {% assign repo_url = 'https://github.com/' | append: repo_url %}
+            {% endunless %}
+        {% endif %}
+
+        <div class="external-links">
+            {% if repo_url and site.show_github_links != false %}
+            <a href="{{ repo_url }}" target="_blank" rel="noopener" class="external-link">GitHub</a>
+            {% endif %}
+            {% if site.contact.email %}
+            <a href="mailto:{{ site.contact.email | escape }}" class="external-link">Contact</a>
+            {% endif %}
         </div>
     </div>
 </div>
+
