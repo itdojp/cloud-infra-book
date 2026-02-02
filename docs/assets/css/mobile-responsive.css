@@ -10,7 +10,7 @@
   opacity: 0;
 }
 
-/* Prevent page jumping and unwanted focus */
+/* Visible focus outline for keyboard accessibility */
 .sidebar-toggle:focus {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;

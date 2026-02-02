@@ -1,0 +1,29 @@
+introduction:
+- title: はじめに
+  path: /introduction/
+chapters:
+- title: 第1章：クラウドコンピューティングの基礎
+  path: /chapter-chapter01/
+- title: 第2章：クラウドインフラの共通概念とアーキテクチャ
+  path: /chapter-chapter02/
+- title: 第3章：仮想マシン（Compute）の活用
+  path: /chapter-chapter03/
+- title: 第4章：クラウドストレージの設計と利用
+  path: /chapter-chapter04/
+- title: 第5章：ネットワークとロードバランシング
+  path: /chapter-chapter05/
+- title: 第6章：IAMとセキュリティ実践
+  path: /chapter-chapter06/
+- title: 第7章：監視とログ管理
+  path: /chapter-chapter07/
+- title: 第8章：バックアップ・災害復旧戦略
+  path: /chapter-chapter08/
+- title: 第9章：サーバーレスとコンテナサービス
+  path: /chapter-chapter09/
+- title: 第10章：Infrastructure as Code (IaC) と自動化
+  path: /chapter-chapter10/
+- title: 第11章：エンタープライズ設計パターンと事例
+  path: /chapter-chapter11/
+appendices:
+- title: 付録：参考資料
+  path: /appendices/
