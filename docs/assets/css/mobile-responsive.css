@@ -12,7 +12,8 @@
 
 /* Prevent page jumping and unwanted focus */
 .sidebar-toggle:focus {
-  outline: none;
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 html {
