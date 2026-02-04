@@ -10,10 +10,9 @@
   opacity: 0;
 }
 
-/* Visible focus outline for keyboard accessibility */
+/* Prevent page jumping and unwanted focus */
 .sidebar-toggle:focus {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
+  outline: none;
 }
 
 html {
