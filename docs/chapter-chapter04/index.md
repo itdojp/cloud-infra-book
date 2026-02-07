@@ -1813,8 +1813,8 @@ sudo mkdir -p /mnt/azurefiles
 SERVER="//<storage-account>.file.core.windows.net/{share_name}"
 MOUNTPOINT="/mnt/azurefiles"
 CRED="/etc/smbcredentials/<storage-account>.cred"
-OPTS="nofail,vers=3.0,credentials=${CRED},dir_mode=0777,file_mode=0777,serverino"
-echo "${SERVER} ${MOUNTPOINT} cifs ${OPTS}" | sudo tee -a /etc/fstab
+OPTS="nofail,vers=3.0,credentials=$CRED,dir_mode=0777,file_mode=0777,serverino"
+echo "$SERVER $MOUNTPOINT cifs $OPTS" | sudo tee -a /etc/fstab
 
 # マウント実行
 sudo mount -a
