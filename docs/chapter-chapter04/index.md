@@ -1810,7 +1810,11 @@ sudo chmod 600 /etc/smbcredentials/<storage-account>.cred
 sudo mkdir -p /mnt/azurefiles
 
 # fstab への追加
-echo "//<storage-account>.file.core.windows.net/{share_name} /mnt/azurefiles cifs nofail,vers=3.0,credentials=/etc/smbcredentials/<storage-account>.cred,dir_mode=0777,file_mode=0777,serverino" | sudo tee -a /etc/fstab
+SERVER="//<storage-account>.file.core.windows.net/{share_name}"
+MOUNTPOINT="/mnt/azurefiles"
+CRED="/etc/smbcredentials/<storage-account>.cred"
+OPTS="nofail,vers=3.0,credentials=$CRED,dir_mode=0777,file_mode=0777,serverino"
+echo "$SERVER $MOUNTPOINT cifs $OPTS" | sudo tee -a /etc/fstab
 
 # マウント実行
 sudo mount -a
