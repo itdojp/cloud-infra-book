@@ -575,7 +575,7 @@ License Included：
 ```
 推奨構成：
 - インスタンスタイプ: m6i.large
-- OS: Ubuntu 20.04 LTS
+- OS: Ubuntu LTS（例: 22.04）
 - 配置: 複数AZでの冗長化
 - ロードバランサー: Application Load Balancer
 
