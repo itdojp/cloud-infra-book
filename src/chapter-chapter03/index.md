@@ -489,12 +489,12 @@ iperf3 -c target-server -t 60 -P 4
 
 #### 1. Linux ディストリビューション
 
-**Amazon Linux 2**
+**Amazon Linux 2023**
 ```
 特徴：
 - AWS 最適化
-- 長期サポート（5年）
-- Amazon Linux Extras
+- 長期サポート（最大5年）
+- dnf（RPM）によるパッケージ管理
 - セキュリティ更新の迅速な提供
 
 適用シナリオ：
@@ -596,7 +596,7 @@ License Included：
 ```
 推奨構成：
 - インスタンスタイプ: r6i.xlarge
-- OS: Amazon Linux 2
+- OS: Amazon Linux 2023
 - ストレージ: gp3 (プロビジョンド IOPS)
 - 配置: Multi-AZ 配置
 
@@ -766,15 +766,10 @@ provider "aws" {
   region = var.aws_region
 }
 
-# AMI の選択
-data "aws_ami" "amazon_linux" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
-  }
+# AMI の選択（Amazon Linux 2023）
+# SSM Public Parameter から最新AMIを取得
+data "aws_ssm_parameter" "amazon_linux_2023_ami" {
+  name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
 }
 
 # セキュリティグループ
@@ -821,7 +816,7 @@ resource "aws_security_group" "web_server" {
 # Launch Template
 resource "aws_launch_template" "web_server" {
   name_prefix   = "${var.environment}-web-"
-  image_id      = data.aws_ami.amazon_linux.id
+  image_id      = data.aws_ssm_parameter.amazon_linux_2023_ami.value
   instance_type = var.instance_type
   key_name      = var.key_pair_name
 
