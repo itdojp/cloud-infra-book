@@ -752,6 +752,15 @@ variable "instance_type" {
   default     = "m6i.large"
 }
 
+# NOTE:
+# - SSM Public Parameter の "-latest" は更新されるため、差分が出て意図しないロールアウトにつながる場合があります。
+# - 運用では AMI ID を変数で固定し、計画的に更新してください。
+variable "amazon_linux_2023_ami_id" {
+  description = "Pinned Amazon Linux 2023 AMI ID (optional)"
+  type        = string
+  default     = null
+}
+
 # main.tf
 terraform {
   required_providers {
@@ -770,6 +779,13 @@ provider "aws" {
 # SSM Public Parameter から最新AMIを取得
 data "aws_ssm_parameter" "amazon_linux_2023_ami" {
   name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
+}
+
+locals {
+  amazon_linux_2023_ami_id = coalesce(
+    var.amazon_linux_2023_ami_id,
+    data.aws_ssm_parameter.amazon_linux_2023_ami.value
+  )
 }
 
 # セキュリティグループ
@@ -816,7 +832,7 @@ resource "aws_security_group" "web_server" {
 # Launch Template
 resource "aws_launch_template" "web_server" {
   name_prefix   = "${var.environment}-web-"
-  image_id      = data.aws_ssm_parameter.amazon_linux_2023_ami.value
+  image_id      = local.amazon_linux_2023_ami_id
   instance_type = var.instance_type
   key_name      = var.key_pair_name
 
