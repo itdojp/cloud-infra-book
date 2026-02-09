@@ -5642,8 +5642,9 @@ class ContainerSecurity:
             'base_image_policy': {
                 'allowed_base_images': [
                     'alpine:latest',
-                    'ubuntu:20.04',
-                    'amazonlinux:2'
+                    'ubuntu:22.04',
+                    'ubuntu:24.04',
+                    'amazonlinux:2023'
                 ],
                 'prohibited_packages': [
                     'netcat',
