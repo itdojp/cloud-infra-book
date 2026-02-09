@@ -490,12 +490,12 @@ iperf3 -c target-server -t 60 -P 4
 
 #### 1. Linux ディストリビューション
 
-**Amazon Linux 2**
+**Amazon Linux 2023**
 ```
 特徴：
 - AWS 最適化
-- 長期サポート（5年）
-- Amazon Linux Extras
+- 長期サポート（最大5年）
+- dnf（RPM）によるパッケージ管理
 - セキュリティ更新の迅速な提供
 
 適用シナリオ：
@@ -597,7 +597,7 @@ License Included：
 ```
 推奨構成：
 - インスタンスタイプ: r6i.xlarge
-- OS: Amazon Linux 2
+- OS: Amazon Linux 2023
 - ストレージ: gp3 (プロビジョンド IOPS)
 - 配置: Multi-AZ 配置
 
@@ -753,6 +753,15 @@ variable "instance_type" {
   default     = "m6i.large"
 }
 
+# NOTE:
+# - SSM Public Parameter の "-latest" は更新されるため、差分が出て意図しないロールアウトにつながる場合があります。
+# - 運用では AMI ID を変数で固定し、計画的に更新してください。
+variable "amazon_linux_2023_ami_id" {
+  description = "Pinned Amazon Linux 2023 AMI ID (optional)"
+  type        = string
+  default     = null
+}
+
 # main.tf
 terraform {
   required_providers {
@@ -767,15 +776,17 @@ provider "aws" {
   region = var.aws_region
 }
 
-# AMI の選択
-data "aws_ami" "amazon_linux" {
-  most_recent = true
-  owners      = ["amazon"]
+# AMI の選択（Amazon Linux 2023）
+# SSM Public Parameter から最新AMIを取得
+data "aws_ssm_parameter" "amazon_linux_2023_ami" {
+  name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
+}
 
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
-  }
+locals {
+  amazon_linux_2023_ami_id = coalesce(
+    var.amazon_linux_2023_ami_id,
+    data.aws_ssm_parameter.amazon_linux_2023_ami.value
+  )
 }
 
 # セキュリティグループ
@@ -822,7 +833,7 @@ resource "aws_security_group" "web_server" {
 # Launch Template
 resource "aws_launch_template" "web_server" {
   name_prefix   = "${var.environment}-web-"
-  image_id      = data.aws_ami.amazon_linux.id
+  image_id      = local.amazon_linux_2023_ami_id
   instance_type = var.instance_type
   key_name      = var.key_pair_name
 

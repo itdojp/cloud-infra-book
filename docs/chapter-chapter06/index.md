@@ -5486,7 +5486,7 @@ class PhasedRollout:
         # Systems Manager Patch Manager設定
         patch_baseline = {
             'Name': 'production-patch-baseline',
-            'OperatingSystem': 'AMAZON_LINUX_2',
+            'OperatingSystem': 'AMAZON_LINUX_2023',
             'GlobalFilters': {
                 'PatchFilters': [{
                     'Key': 'CLASSIFICATION',
