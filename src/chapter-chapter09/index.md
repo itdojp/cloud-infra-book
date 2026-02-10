@@ -464,19 +464,22 @@ Dockerイメージのレイヤー構造は、効率的なストレージとネ�
 ```dockerfile
 # 最適化されたDockerfile
 # Stage 1: ビルド環境
-FROM node:16-alpine AS builder
+FROM node:20-alpine AS builder
 
 # 依存関係のキャッシュ効率を上げる
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci
 
 # アプリケーションコードをコピー
 COPY . .
 RUN npm run build
 
 # Stage 2: 実行環境（マルチステージビルド）
-FROM node:16-alpine
+FROM node:20-alpine
+
+# PID 1問題を回避するためtiniを使用（rootでインストール）
+RUN apk add --no-cache tini
 
 # セキュリティ: 非rootユーザーの作成
 RUN addgroup -g 1001 -S nodejs
@@ -491,14 +494,15 @@ COPY --from=builder --chown=nodejs:nodejs /app/package*.json ./
 
 # セキュリティ設定
 USER nodejs
+
+# builderでdevDependenciesを含めてインストールした場合は削除
+RUN npm prune --omit=dev
 EXPOSE 3000
 
 # ヘルスチェックの定義
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node healthcheck.js
 
-# PID 1問題を回避するためtiniを使用
-RUN apk add --no-cache tini
 ENTRYPOINT ["/sbin/tini", "--"]
 
 CMD ["node", "dist/server.js"]
