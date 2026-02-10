@@ -511,7 +511,7 @@ CMD ["node", "dist/server.js"]
 # 変更頻度: 低 → 高
 
 # 1. ベースイメージ（めったに変更されない）
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 # 2. システムパッケージ（たまに変更）
 RUN apt-get update && apt-get install -y \
