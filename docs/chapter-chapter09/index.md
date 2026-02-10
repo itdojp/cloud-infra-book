@@ -1340,7 +1340,7 @@ jobs:
   code-quality:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
@@ -1363,7 +1363,7 @@ jobs:
       contents: read
       
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -1413,7 +1413,7 @@ jobs:
     needs: build-and-scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Run Load Tests
         uses: grafana/k6-action@v0.3.0
@@ -1434,7 +1434,7 @@ jobs:
     environment: production
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
