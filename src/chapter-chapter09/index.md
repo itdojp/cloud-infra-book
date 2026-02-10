@@ -475,6 +475,9 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
+# 本番に不要なdevDependenciesを除去（最終イメージに含めない）
+RUN npm prune --omit=dev
+
 # Stage 2: 実行環境（マルチステージビルド）
 FROM node:20-alpine
 
@@ -495,8 +498,7 @@ COPY --from=builder --chown=nodejs:nodejs /app/package*.json ./
 # セキュリティ設定
 USER nodejs
 
-# builderでdevDependenciesを含めてインストールした場合は削除
-RUN npm prune --omit=dev
+# node_modules は builder ステージ側で `npm prune --omit=dev` 済みのものをコピーする
 EXPOSE 3000
 
 # ヘルスチェックの定義
