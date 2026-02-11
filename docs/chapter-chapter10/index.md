@@ -1609,7 +1609,7 @@ jobs:
           tflint --recursive
           
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           
@@ -1848,7 +1848,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           
