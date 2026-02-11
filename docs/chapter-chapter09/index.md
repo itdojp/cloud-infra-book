@@ -1421,7 +1421,7 @@ jobs:
           filename: tests/load-test.js
           
       - name: Upload Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: k6-results
           path: results.json
