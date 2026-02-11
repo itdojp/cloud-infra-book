@@ -1343,13 +1343,13 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
+        uses: sonarsource/sonarqube-scan-action@v7
         env:
           GITHUB_TOKEN: `{% raw %}`${{ secrets.GITHUB_TOKEN }}`{% endraw %}`
           SONAR_TOKEN: `{% raw %}`${{ secrets.SONAR_TOKEN }}`{% endraw %}`
           
       - name: Check Quality Gate
-        uses: sonarsource/sonarqube-quality-gate-action@master
+        uses: sonarsource/sonarqube-quality-gate-action@v1
         timeout-minutes: 5
         env:
           SONAR_TOKEN: `{% raw %}`${{ secrets.SONAR_TOKEN }}`{% endraw %}`
