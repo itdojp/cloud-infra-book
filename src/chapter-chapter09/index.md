@@ -1397,7 +1397,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
           
       - name: Upload Trivy Results
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: 'trivy-results.sarif'
           
