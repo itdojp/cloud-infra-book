@@ -1389,7 +1389,7 @@ jobs:
           outputs: type=docker,dest=/tmp/image.tar
           
       - name: Run Trivy Scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           input: /tmp/image.tar
           format: 'sarif'
