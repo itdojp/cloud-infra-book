@@ -1379,7 +1379,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
         
       - name: Build Image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: false
