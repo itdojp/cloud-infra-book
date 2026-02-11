@@ -1580,7 +1580,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: `{% raw %}`${{ env.TF_VERSION }}`{% endraw %}`
           
@@ -1707,7 +1707,7 @@ jobs:
           aws-region: `{% raw %}`${{ env.AWS_REGION }}`{% endraw %}`
           
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: `{% raw %}`${{ env.TF_VERSION }}`{% endraw %}`
           
@@ -1812,7 +1812,7 @@ jobs:
           aws-region: `{% raw %}`${{ env.AWS_REGION }}`{% endraw %}`
           
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: `{% raw %}`${{ env.TF_VERSION }}`{% endraw %}`
           

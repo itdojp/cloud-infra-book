@@ -1366,14 +1366,14 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: `{% raw %}`${{ secrets.AWS_ROLE_ARN }}`{% endraw %}`
           aws-region: ap-northeast-1
           
       - name: Login to ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
         
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -1437,7 +1437,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: `{% raw %}`${{ secrets.AWS_PROD_ROLE_ARN }}`{% endraw %}`
           aws-region: ap-northeast-1
