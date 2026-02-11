@@ -1598,7 +1598,7 @@ jobs:
           done
           
       - name: TFLint
-        uses: terraform-linters/setup-tflint@v3
+        uses: terraform-linters/setup-tflint@v6
         with:
           tflint_version: latest
           
