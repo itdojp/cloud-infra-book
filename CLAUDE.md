@@ -10,7 +10,7 @@ This is a Japanese-language technical book project about "クラウドインフ�
 
 This project uses the **book-formatter** system:
 
-```
+```text
 cloud-infra-book/
 ├── docs/                    # Generated output (GitHub Pages)
 ├── src/                     # Source content
