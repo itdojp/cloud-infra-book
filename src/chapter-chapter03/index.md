@@ -23,7 +23,7 @@ chapter: chapter03
 
 現代のアプリケーションは、極めて多様な特性を持っています。代表例は次のとおりです。
 
-```
+```text
 ウェブサーバー：
 - CPU: 中程度の使用率（20〜40%）
 - メモリ: リクエスト数に比例
@@ -50,7 +50,7 @@ chapter: chapter03
 #### 1. 汎用インスタンス（General Purpose）
 
 **特徴と設計思想：**
-```
+```text
 リソースバランス：
 - vCPU : メモリ = 1:4 の比率が一般的
 - 中程度のネットワーク性能
@@ -66,7 +66,7 @@ chapter: chapter03
 **各プロバイダーの詳細：**
 
 **AWS (M6i, M6a, T3, T4g)**
-```
+```text
 M6i/M6a シリーズ：
 - Intel Xeon 第3世代 / AMD EPYC 第3世代
 - ニトロシステムによる最適化
@@ -85,7 +85,7 @@ t3.large (2 vCPU, 8 GiB): $0.0832/時間
 ```
 
 **Azure (Dv4, Dav4, B シリーズ)**
-```
+```text
 Dv4/Dav4 シリーズ：
 - Intel Xeon Platinum 8272CL / AMD EPYC 7452
 - 最大 96 vCPU, 384 GiB メモリ
@@ -103,7 +103,7 @@ B2s (2 vCPU, 4 GiB): $0.0416/時間
 ```
 
 **GCP (N2, N2D, E2)**
-```
+```text
 N2/N2D シリーズ：
 - Intel Xeon / AMD EPYC 第2世代
 - カスタムマシンタイプ対応
@@ -123,7 +123,7 @@ e2-standard-2 (2 vCPU, 8 GiB): $0.0669/時間
 #### 2. コンピュート最適化（Compute Optimized）
 
 **設計思想：**
-```
+```text
 高性能CPU重視：
 - 高周波数プロセッサ
 - vCPU : メモリ = 1:2 の比率
@@ -139,7 +139,7 @@ e2-standard-2 (2 vCPU, 8 GiB): $0.0669/時間
 **各プロバイダーの詳細：**
 
 **AWS (C6i, C6a, C7g)**
-```
+```text
 C6i/C6a シリーズ：
 - Intel Xeon 第3世代 / AMD EPYC 第3世代
 - 最大 3.5 GHz の高クロック
@@ -157,7 +157,7 @@ c7g.large (2 vCPU, 4 GiB): $0.0725/時間
 ```
 
 **Azure (Fv2, Fx)**
-```
+```text
 Fv2 シリーズ：
 - Intel Xeon Platinum 8272CL
 - 最大 3.7 GHz ベースクロック
@@ -169,7 +169,7 @@ F2s_v2 (2 vCPU, 4 GiB): $0.085/時間
 ```
 
 **GCP (C2, C2D)**
-```
+```text
 C2/C2D シリーズ：
 - Intel Xeon / AMD EPYC 第2世代
 - 最大 3.9 GHz のターボクロック
@@ -184,7 +184,7 @@ c2d-standard-2 (2 vCPU, 8 GiB): $0.0891/時間
 #### 3. メモリ最適化（Memory Optimized）
 
 **設計思想：**
-```
+```text
 大容量メモリ重視：
 - vCPU : メモリ = 1:8 または 1:16 の比率
 - 高メモリ帯域幅
@@ -200,7 +200,7 @@ c2d-standard-2 (2 vCPU, 8 GiB): $0.0891/時間
 **各プロバイダーの詳細：**
 
 **AWS (R6i, R6a, X1e, z1d)**
-```
+```text
 R6i/R6a シリーズ：
 - Intel Xeon 第3世代 / AMD EPYC 第3世代
 - 最大 1024 GiB メモリ
@@ -224,7 +224,7 @@ z1d.large (2 vCPU, 16 GiB): $0.186/時間
 ```
 
 **Azure (Ev4, Eav4, Mv2)**
-```
+```text
 Ev4/Eav4 シリーズ：
 - Intel Xeon Platinum / AMD EPYC 第2世代
 - 最大 672 GiB メモリ
@@ -242,7 +242,7 @@ M64s_v2 (64 vCPU, 1024 GiB): $5.888/時間
 ```
 
 **GCP (N2-highmem, M1, M2)**
-```
+```text
 N2-highmem シリーズ：
 - Intel Xeon 第2世代
 - 最大 6.5 GiB メモリ/vCPU
@@ -262,7 +262,7 @@ m1-ultramem-40 (40 vCPU, 961 GiB): $6.7034/時間
 #### 4. ストレージ最適化（Storage Optimized）
 
 **設計思想：**
-```
+```text
 高速ストレージ重視：
 - NVMe SSD 搭載
 - 高 IOPS・低レイテンシ
@@ -278,7 +278,7 @@ m1-ultramem-40 (40 vCPU, 961 GiB): $6.7034/時間
 **各プロバイダーの詳細：**
 
 **AWS (I3, I3en, I4i, D2, D3)**
-```
+```text
 I3/I3en シリーズ：
 - NVMe SSD 搭載
 - 最大 15.2 TiB NVMe ストレージ
@@ -303,7 +303,7 @@ d3.large (2 vCPU, 8 GiB + 6000 GB HDD): $0.1662/時間
 ```
 
 **Azure (Lv2, Lv3)**
-```
+```text
 Lv2/Lv3 シリーズ：
 - NVMe SSD 搭載
 - 最大 1.92 TiB NVMe ストレージ
@@ -316,7 +316,7 @@ L8s_v3 (8 vCPU, 64 GiB + 1920 GB NVMe): $0.624/時間
 ```
 
 **GCP (Local SSD)**
-```
+```text
 Local SSD：
 - 375 GB NVMe SSD
 - 最大 24 個まで接続可能
@@ -331,7 +331,7 @@ n2-standard-2 + 1x Local SSD: $0.1371/時間
 #### 5. 高性能コンピューティング（HPC）
 
 **設計思想：**
-```
+```text
 大規模並列処理：
 - 高性能CPU・GPU
 - 高帯域幅ネットワーク
@@ -348,7 +348,7 @@ n2-standard-2 + 1x Local SSD: $0.1371/時間
 **各プロバイダーの詳細：**
 
 **AWS (HPC6a, HPC7g)**
-```
+```text
 HPC6a シリーズ：
 - AMD EPYC 第3世代
 - 最大 96 vCPU
@@ -367,7 +367,7 @@ hpc7g.4xlarge (16 vCPU, 128 GiB): $1.2848/時間
 ```
 
 **Azure (HBv3, HCv1, NCv3)**
-```
+```text
 HBv3 シリーズ：
 - AMD EPYC 第3世代
 - 最大 120 vCPU
@@ -393,7 +393,7 @@ NC24rs_v3 (24 vCPU, 448 GiB + 4x V100): $18.12/時間
 ```
 
 **GCP (C2, N2, A2)**
-```
+```text
 C2 シリーズ：
 - Intel Xeon Cascade Lake
 - 最大 60 vCPU
@@ -490,7 +490,7 @@ iperf3 -c target-server -t 60 -P 4
 #### 1. Linux ディストリビューション
 
 **Amazon Linux 2023**
-```
+```text
 特徴：
 - AWS 最適化
 - 長期サポート（最大5年）
@@ -504,7 +504,7 @@ iperf3 -c target-server -t 60 -P 4
 ```
 
 **Ubuntu**
-```
+```text
 特徴：
 - 豊富なパッケージ
 - 活発なコミュニティ
@@ -518,7 +518,7 @@ iperf3 -c target-server -t 60 -P 4
 ```
 
 **CentOS/RHEL**
-```
+```text
 特徴：
 - エンタープライズ志向
 - 長期サポート
@@ -534,7 +534,7 @@ iperf3 -c target-server -t 60 -P 4
 #### 2. Windows Server
 
 **Windows Server 2019/2022**
-```
+```text
 特徴：
 - Active Directory 統合
 - .NET アプリケーション
@@ -548,7 +548,7 @@ iperf3 -c target-server -t 60 -P 4
 ```
 
 **ライセンス考慮事項：**
-```
+```text
 BYOL (Bring Your Own License)：
 - 既存ライセンスの活用
 - ライセンス持込割引
@@ -571,7 +571,7 @@ License Included：
 - 高可用性要求
 
 **選択結果：**
-```
+```text
 推奨構成：
 - インスタンスタイプ: m6i.large
 - OS: Ubuntu LTS（例: 22.04）
@@ -593,7 +593,7 @@ License Included：
 - 99.9% 可用性
 
 **選択結果：**
-```
+```text
 推奨構成：
 - インスタンスタイプ: r6i.xlarge
 - OS: Amazon Linux 2023
@@ -615,7 +615,7 @@ License Included：
 - バッチ処理
 
 **選択結果：**
-```
+```text
 推奨構成：
 - インスタンスタイプ: p4d.24xlarge
 - OS: Deep Learning AMI
