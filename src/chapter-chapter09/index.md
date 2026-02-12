@@ -46,7 +46,7 @@ chapter: chapter09
 
 サーバーレスの真の価値は、イベント駆動型の設計思想にあります。システムは外部イベントに反応し、必要な時にのみ処理を実行します。
 
-```python
+```yaml
 # Lambda関数の例：S3イベントに反応する画像処理
 import json
 import boto3
