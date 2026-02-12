@@ -306,7 +306,7 @@ service: ecommerce-api
 
 provider:
   name: aws
-  runtime: python3.9
+  runtime: python3.12
   region: ap-northeast-1
   
   environment:
