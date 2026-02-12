@@ -16,7 +16,7 @@ title: "第11章：エンタープライズ設計パターンと事例"
 
 **可用性レベルと許容ダウンタイム**
 
-`python
+```python
 # 可用性計算
 def calculate_availability_metrics(availability_percentage):
     """
@@ -68,13 +68,13 @@ availability_levels = {
 # 99.95% = 年間4.38時間 = 月間21.9分
 # 99.99% = 年間52.6分 = 月間4.38分
 # 99.999% = 年間5.26分 = 月間26.3秒
-`
+```
 
 ### 障害モードの分析と対策
 
 **単一障害点（SPOF）の特定と排除**
 
-`yaml
+```yaml
 # 典型的なSPOFと対策
 単一障害点の分析:
   ネットワーク層:
@@ -116,13 +116,13 @@ availability_levels = {
       - サーキットブレーカーパターン
       - 非同期処理とメッセージキュー
       - キャッシュのフォールバック戦略
-`
+```
 
 ### 高可用性アーキテクチャパターン
 
 **マルチAZ構成の実装**
 
-`hcl
+```hcl
 # terraform/modules/ha-web-app/main.tf
 # 高可用性Webアプリケーションの構成
 
@@ -330,13 +330,13 @@ resource "aws_rds_cluster_instance" "aurora" {
   
   tags = var.common_tags
 }
-`
+```
 
 ### ディザスタリカバリ戦略
 
 **RPOとRTOに基づく戦略選択**
 
-`yaml
+```yaml
 # DR戦略の分類と実装
 disaster_recovery_strategies:
   backup_and_restore:
@@ -382,11 +382,11 @@ disaster_recovery_strategies:
       - リアルタイムデータ同期
       - グローバルロードバランシング
       - 自動フェイルオーバー
-`
+```
 
 **Pilot Light DR実装例**
 
-`python
+```python
 # scripts/dr_failover.py
 #!/usr/bin/env python3
 """
@@ -634,7 +634,7 @@ if __name__ == "__main__":
     if not healthy:
         print(f"Primary site unhealthy: {message}")
         dr_manager.activate_dr_site()
-`
+```
 
 ## 11.2 マルチクラウドとハイブリッドクラウド
 
@@ -646,7 +646,7 @@ if __name__ == "__main__":
 
 **1. ワークロード分散型**
 
-`yaml
+```yaml
 # マルチクラウド配置戦略
 workload_distribution:
   aws:
@@ -678,11 +678,11 @@ workload_distribution:
       - データ分析基盤（BigQuery）
       - コンテナワークロード
       - ML/AIワークロード
-`
+```
 
 **2. アクティブ-アクティブ型マルチクラウド**
 
-`hcl
+```hcl
 # terraform/multi-cloud/main.tf
 # マルチクラウドロードバランシング
 
@@ -780,13 +780,13 @@ resource "cloudflare_load_balancer_pool" "aws" {
   # カスタムヘルスチェック
   monitor = cloudflare_load_balancer_monitor.health.id
 }
-`
+```
 
 ### ハイブリッドクラウドの実装
 
 **オンプレミスとクラウドの統合**
 
-`python
+```python
 # hybrid_cloud_connector.py
 import boto3
 import requests
@@ -959,13 +959,13 @@ class HybridCloudConnector:
         )
         
         return sync_task
-`
+```
 
 ### マルチクラウド管理の統一化
 
 **Kubernetes によるワークロードの抽象化**
 
-`yaml
+```yaml
 # kubernetes/multi-cloud-app.yaml
 apiVersion: v1
 kind: Namespace
@@ -1070,7 +1070,7 @@ spec:
         port:
           number: 8080
       weight: 20
-`
+```
 
 ## 11.3 大規模システムの設計パターン
 
@@ -1082,7 +1082,7 @@ spec:
 
 **サービス分割と境界の設計**
 
-`yaml
+```yaml
 # マイクロサービス設計の原則
 microservices_design:
   bounded_contexts:
@@ -1126,11 +1126,11 @@ microservices_design:
       event_publishing:
         - InventoryUpdated
         - LowStockAlert
-`
+```
 
 **イベント駆動アーキテクチャ**
 
-`python
+```python
 # event_driven_architecture.py
 import json
 import asyncio
@@ -1321,11 +1321,11 @@ saga_state_machine = {
         }
     }
 }
-`
+```
 
 ### CQRS（Command Query Responsibility Segregation）パターン
 
-`python
+```python
 # cqrs_implementation.py
 from typing import Optional, List, Dict, Any
 from dataclasses import dataclass
@@ -1444,13 +1444,13 @@ class OrderProjectionHandler:
         
         # 顧客別の集計ビューも更新
         await self.update_customer_statistics(event.customer_id)
-`
+```
 
 ### 大規模データ処理パターン
 
 **ラムダアーキテクチャの実装**
 
-`yaml
+```yaml
 # Lambda Architecture 設計
 lambda_architecture:
   batch_layer:
@@ -1485,7 +1485,7 @@ lambda_architecture:
       - バッチとリアルタイムの結果を統合
       - クエリパターンに最適化
       - 高速なレスポンス
-`
+```
 
 ## 11.4 トラブルシューティング手法
 
@@ -1493,7 +1493,7 @@ lambda_architecture:
 
 **問題の切り分けフレームワーク**
 
-`python
+```python
 # troubleshooting_framework.py
 import asyncio
 import logging
@@ -1760,7 +1760,7 @@ async def investigate_production_issue():
         
         for solution in auto_remediation_solutions:
             await execute_remediation(solution)
-`
+```
 
 ## 11.5 実践事例から学ぶ
 
@@ -1774,7 +1774,7 @@ async def investigate_production_issue():
 
 **ソリューション**
 
-`yaml
+```yaml
 # ブラックフライデー対策アーキテクチャ
 architecture:
   frontend:
@@ -1813,7 +1813,7 @@ results:
   - Average response time: 180ms
   - Zero data loss
   - 40% cost reduction vs traditional scaling
-`
+```
 
 ### 事例2：金融機関のハイブリッドクラウド移行
 
@@ -1825,7 +1825,7 @@ results:
 
 **ソリューション**
 
-`python
+```python
 # 段階的移行戦略
 migration_phases = {
     "Phase 1": {
@@ -1895,7 +1895,7 @@ class HybridDataSync:
         )
         
         return dms
-`
+```
 
 ### 実装のベストプラクティス
 
