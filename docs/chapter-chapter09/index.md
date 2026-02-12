@@ -46,7 +46,7 @@ title: "第9章：サーバーレスとコンテナサービス"
 
 サーバーレスの真の価値は、イベント駆動型の設計思想にあります。システムは外部イベントに反応し、必要な時にのみ処理を実行します。
 
-```yaml
+```python
 # Lambda関数の例：S3イベントに反応する画像処理
 import json
 import boto3
@@ -299,7 +299,7 @@ print(f"月間コスト: ${monthly_cost['total_cost']:.2f}")
 
 **マイクロサービス分解**
 
-```python
+```yaml
 # API Gatewayと複数Lambda関数による構成
 # serverless.yml (Serverless Framework)
 service: ecommerce-api
