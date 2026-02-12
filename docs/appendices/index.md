@@ -48,7 +48,7 @@ title: "付録：参考資料"
 ### 1. 高可用性パターン
 
 #### マルチAZ構成
-```
+```text
 [Load Balancer]
       |
    [AZ-1A]  [AZ-1B]  [AZ-1C]
@@ -80,7 +80,7 @@ title: "付録：参考資料"
 ### 3. セキュリティパターン
 
 #### 多層防御
-```
+```text
 [Internet] → [WAF] → [Load Balancer] → [Web Tier]
                                           ↓
                                       [App Tier]
