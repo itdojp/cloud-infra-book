@@ -299,14 +299,14 @@ print(f"月間コスト: ${monthly_cost['total_cost']:.2f}")
 
 **マイクロサービス分解**
 
-```python
+```yaml
 # API Gatewayと複数Lambda関数による構成
 # serverless.yml (Serverless Framework)
 service: ecommerce-api
 
 provider:
   name: aws
-  runtime: python3.9
+  runtime: python3.12
   region: ap-northeast-1
   
   environment:

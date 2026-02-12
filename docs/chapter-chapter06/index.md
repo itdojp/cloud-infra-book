@@ -5762,7 +5762,7 @@ class ServerlessSecurity:
         """
         # セキュアな関数設定
         secure_function_config = {
-            'Runtime': 'python3.9',
+            'Runtime': 'python3.12',
             'Handler': 'index.handler',
             'Role': 'arn:aws:iam::account:role/minimal-lambda-role',
             'Timeout': 30,
