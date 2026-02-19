@@ -566,14 +566,22 @@ IAMポリシーでタグを条件として使用し、詳細なアクセス制�
         "StringEquals": {
           "aws:RequestedRegion": "us-west-2"
         },
+        "StringEqualsIfExists": {
+          "aws:RequestTag/Department": "${aws:PrincipalTag/Department}"
+        },
         "ForAllValues:StringEquals": {
-          "aws:PrincipalTag:Department": "${aws:RequestedTag:Department}"
+          "aws:TagKeys": ["Department"]
         }
       }
     }
   ]
 }
 ```
+
+補足（タグ条件キーの使い分け）:
+- `aws:RequestTag/<Key>`: 作成/更新リクエストで指定されたタグ（タグ付けを強制したい場合）
+- `aws:ResourceTag/<Key>`: 対象リソースに付いているタグ（操作対象を絞りたい場合）
+- `aws:PrincipalTag/<Key>`: IAMプリンシパル（ユーザー/ロール）に付いているタグ（所属/責任範囲で制御したい場合）
 
 ### リソースのライフサイクル管理
 

@@ -498,7 +498,7 @@ COPY --from=builder --chown=nodejs:nodejs /app/package*.json ./
 # セキュリティ設定
 USER nodejs
 
-# node_modules は builder ステージ側で `npm prune --omit=dev` 済みのものをコピーする
+# node_modules は builder ステージ側で npm prune --omit=dev 済みのものをコピーする
 EXPOSE 3000
 
 # ヘルスチェックの定義
@@ -1345,14 +1345,14 @@ jobs:
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@v7
         env:
-          GITHUB_TOKEN: `{% raw %}`${{ secrets.GITHUB_TOKEN }}`{% endraw %}`
-          SONAR_TOKEN: `{% raw %}`${{ secrets.SONAR_TOKEN }}`{% endraw %}`
+          GITHUB_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+          SONAR_TOKEN: {% raw %}${{ secrets.SONAR_TOKEN }}{% endraw %}
           
       - name: Check Quality Gate
         uses: sonarsource/sonarqube-quality-gate-action@v1
         timeout-minutes: 5
         env:
-          SONAR_TOKEN: `{% raw %}`${{ secrets.SONAR_TOKEN }}`{% endraw %}`
+          SONAR_TOKEN: {% raw %}${{ secrets.SONAR_TOKEN }}{% endraw %}
 
   # コンテナビルドとスキャン
   build-and-scan:
@@ -1368,7 +1368,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: `{% raw %}`${{ secrets.AWS_ROLE_ARN }}`{% endraw %}`
+          role-to-assume: {% raw %}${{ secrets.AWS_ROLE_ARN }}{% endraw %}
           aws-region: ap-northeast-1
           
       - name: Login to ECR
@@ -1383,7 +1383,7 @@ jobs:
         with:
           context: .
           push: false
-          tags: `{% raw %}`${{ env.REGISTRY }}`{% endraw %}`/`{% raw %}`${{ env.REPOSITORY }}`{% endraw %}`:`{% raw %}`${{ github.sha }}`{% endraw %}`
+          tags: {% raw %}${{ env.REGISTRY }}{% endraw %}/{% raw %}${{ env.REPOSITORY }}{% endraw %}:{% raw %}${{ github.sha }}{% endraw %}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           outputs: type=docker,dest=/tmp/image.tar
@@ -1404,7 +1404,7 @@ jobs:
       - name: Run Snyk Container Test
         run: |
           docker load -i /tmp/image.tar
-          snyk container test `{% raw %}`${{ env.REGISTRY }}`{% endraw %}`/`{% raw %}`${{ env.REPOSITORY }}`{% endraw %}`:`{% raw %}`${{ github.sha }}`{% endraw %}` \
+          snyk container test {% raw %}${{ env.REGISTRY }}{% endraw %}/{% raw %}${{ env.REPOSITORY }}{% endraw %}:{% raw %}${{ github.sha }}{% endraw %} \
             --severity-threshold=high \
             --file=Dockerfile
 
@@ -1439,15 +1439,15 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: `{% raw %}`${{ secrets.AWS_PROD_ROLE_ARN }}`{% endraw %}`
+          role-to-assume: {% raw %}${{ secrets.AWS_PROD_ROLE_ARN }}{% endraw %}
           aws-region: ap-northeast-1
           
       - name: Push to ECR
         run: |
           docker load -i /tmp/image.tar
-          docker tag `{% raw %}`${{ env.REGISTRY }}`{% endraw %}`/`{% raw %}`${{ env.REPOSITORY }}`{% endraw %}`:`{% raw %}`${{ github.sha }}`{% endraw %}` \
-                     `{% raw %}`${{ env.REGISTRY }}`{% endraw %}`/`{% raw %}`${{ env.REPOSITORY }}`{% endraw %}`:production
-          docker push `{% raw %}`${{ env.REGISTRY }}`{% endraw %}`/`{% raw %}`${{ env.REPOSITORY }}`{% endraw %}`:production
+          docker tag {% raw %}${{ env.REGISTRY }}{% endraw %}/{% raw %}${{ env.REPOSITORY }}{% endraw %}:{% raw %}${{ github.sha }}{% endraw %} \
+                     {% raw %}${{ env.REGISTRY }}{% endraw %}/{% raw %}${{ env.REPOSITORY }}{% endraw %}:production
+          docker push {% raw %}${{ env.REGISTRY }}{% endraw %}/{% raw %}${{ env.REPOSITORY }}{% endraw %}:production
           
       - name: Update ECS Service
         run: |

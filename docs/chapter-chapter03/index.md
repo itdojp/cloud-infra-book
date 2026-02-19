@@ -220,9 +220,10 @@ z1d シリーズ：
 
 価格例（us-east-1, 2024年）：
 r6i.large (2 vCPU, 16 GiB): $0.126/時間
-x1e.large (2 vCPU, 61 GiB): $0.334/時間
 z1d.large (2 vCPU, 16 GiB): $0.186/時間
 ```
+
+補足: X1e は大容量メモリ用途のインスタンスファミリーで、提供されるサイズ/リージョンが限定される場合があります。利用時は最新の公式インスタンスタイプ一覧で確認してください。
 
 **Azure (Ev4, Eav4, Mv2)**
 ```text
@@ -939,6 +940,24 @@ log "Configuring Apache"
 systemctl enable httpd
 systemctl start httpd
 
+# IMDSv2 からメタデータを取得（metadata_options http_tokens="required" を想定）
+IMDS_TOKEN="$(curl -fsS -X PUT "http://169.254.169.254/latest/api/token" \
+  -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" || true)"
+imds_get() {
+    local path="$1"
+    if [ -n "$IMDS_TOKEN" ]; then
+        curl -fsS -H "X-aws-ec2-metadata-token: $IMDS_TOKEN" \
+          "http://169.254.169.254/latest/meta-data/${path}" || echo "unknown"
+    else
+        echo "unknown"
+    fi
+}
+
+INSTANCE_ID="$(imds_get instance-id)"
+AVAILABILITY_ZONE="$(imds_get placement/availability-zone)"
+INSTANCE_TYPE="$(imds_get instance-type)"
+LOCAL_IP="$(imds_get local-ipv4)"
+
 # カスタムインデックスページの作成
 cat > /var/www/html/index.html << EOF
 <!DOCTYPE html>
@@ -948,10 +967,10 @@ cat > /var/www/html/index.html << EOF
 </head>
 <body>
     <h1>Welcome to $ENVIRONMENT Environment</h1>
-    <p>Instance ID: $(curl -s http://169.254.169.254/latest/meta-data/instance-id)</p>
-    <p>Availability Zone: $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)</p>
-    <p>Instance Type: $(curl -s http://169.254.169.254/latest/meta-data/instance-type)</p>
-    <p>Local IP: $(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)</p>
+    <p>Instance ID: ${INSTANCE_ID}</p>
+    <p>Availability Zone: ${AVAILABILITY_ZONE}</p>
+    <p>Instance Type: ${INSTANCE_TYPE}</p>
+    <p>Local IP: ${LOCAL_IP}</p>
     <p>Timestamp: $(date)</p>
 </body>
 </html>
@@ -1071,7 +1090,7 @@ cat > /var/www/html/health.html << EOF
 {
     "status": "healthy",
     "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-    "instance_id": "$(curl -s http://169.254.169.254/latest/meta-data/instance-id)",
+    "instance_id": "${INSTANCE_ID}",
     "services": {
         "httpd": "$(systemctl is-active httpd)",
         "cloudwatch-agent": "$(systemctl is-active amazon-cloudwatch-agent)"
@@ -1084,7 +1103,7 @@ log "Instance initialization completed successfully"
 # 完了通知（SNS等）
 aws sns publish \
     --topic-arn "arn:aws:sns:us-east-1:123456789012:instance-notifications" \
-    --message "Instance $(curl -s http://169.254.169.254/latest/meta-data/instance-id) initialized successfully in $ENVIRONMENT environment" \
+    --message "Instance ${INSTANCE_ID} initialized successfully in $ENVIRONMENT environment" \
     --subject "Instance Initialization Complete"
 
 log "Initialization complete"
@@ -1128,20 +1147,20 @@ log "Initialization complete"
     - name: Create virtual host
       template:
         src: vhost.conf.j2
-        dest: /etc/httpd/conf.d/`{% raw %}`{{ app_name }}`{% endraw %}`.conf
+        dest: /etc/httpd/conf.d/{% raw %}{{ app_name }}{% endraw %}.conf
       notify: restart httpd
 
     - name: Deploy application
       git:
-        repo: https://github.com/your-org/`{% raw %}`{{ app_name }}`{% endraw %}`.git
-        dest: /var/www/html/`{% raw %}`{{ app_name }}`{% endraw %}`
-        version: "`{% raw %}`{{ app_version }}`{% endraw %}`"
+        repo: https://github.com/your-org/{% raw %}{{ app_name }}{% endraw %}.git
+        dest: /var/www/html/{% raw %}{{ app_name }}{% endraw %}
+        version: "{% raw %}{{ app_version }}{% endraw %}"
         force: yes
       notify: restart httpd
 
     - name: Set file permissions
       file:
-        path: /var/www/html/`{% raw %}`{{ app_name }}`{% endraw %}`
+        path: /var/www/html/{% raw %}{{ app_name }}{% endraw %}
         owner: apache
         group: apache
         mode: '0755'
@@ -1150,7 +1169,7 @@ log "Initialization complete"
     - name: Configure logrotate
       template:
         src: logrotate.conf.j2
-        dest: /etc/logrotate.d/`{% raw %}`{{ app_name }}`{% endraw %}`
+        dest: /etc/logrotate.d/{% raw %}{{ app_name }}{% endraw %}
 
     - name: Setup monitoring
       include_tasks: monitoring.yml
@@ -1315,6 +1334,20 @@ log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
 }
 
+# IMDSv2 (EC2 メタデータ) - http_tokens="required" 環境でも動作する形式
+IMDS_TOKEN="$(curl -fsS -X PUT "http://169.254.169.254/latest/api/token" \
+  -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" || true)"
+imds_get() {
+    local path="$1"
+    if [ -n "$IMDS_TOKEN" ]; then
+        curl -fsS -H "X-aws-ec2-metadata-token: $IMDS_TOKEN" \
+          "http://169.254.169.254/latest/meta-data/${path}" || echo "unknown"
+    else
+        echo "unknown"
+    fi
+}
+INSTANCE_ID="$(imds_get instance-id)"
+
 # 事前チェック
 pre_patch_checks() {
     log "Starting pre-patch checks"
@@ -1373,7 +1406,7 @@ create_backup() {
     fi
     
     # S3へのバックアップ
-    aws s3 cp $BACKUP_DIR/ s3://your-backup-bucket/instances/$(curl -s http://169.254.169.254/latest/meta-data/instance-id)/$(date +%Y%m%d_%H%M%S)/ --recursive
+    aws s3 cp $BACKUP_DIR/ s3://your-backup-bucket/instances/${INSTANCE_ID}/$(date +%Y%m%d_%H%M%S)/ --recursive
     
     log "Backup created successfully at $BACKUP_DIR"
 }
