@@ -5350,11 +5350,11 @@ class AutomatedPatching:
             },
             'distribution': {
                 'amiDistributionConfiguration': {
-                    'name': 'golden-ami-`{% raw %}`{{ imagebuilder:buildDate }}`{% endraw %}`',    
+                    'name': 'golden-ami-{% raw %}{{ imagebuilder:buildDate }}{% endraw %}',
                     'description': 'Patched and hardened AMI',
                     'targetAccountIds': ['production-account', 'staging-account'],
                     'amiTags': {
-                        'PatchDate': '`{% raw %}`{{ imagebuilder:buildDate }}`{% endraw %}`',
+                        'PatchDate': '{% raw %}{{ imagebuilder:buildDate }}{% endraw %}',
                         'Compliance': 'CIS-Hardened',
                         'AutoUpdate': 'true'
                     }

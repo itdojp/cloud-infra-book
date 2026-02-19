@@ -595,13 +595,15 @@ class SecuritySegmentation:
         }
         
         # ネットワークACLの設計
+        # NACL のルール番号は 1-32766 の整数。どのルールにも一致しない場合は暗黙的に deny。
+        # 以下は説明のため、最後に 32766 の deny-all を明示している。
         nacl_design = {
             'public_nacl': {
                 'inbound': [
                     {'rule': 100, 'protocol': 'tcp', 'port': 443, 'source': '0.0.0.0/0', 'action': 'allow'},
                     {'rule': 110, 'protocol': 'tcp', 'port': 80, 'source': '0.0.0.0/0', 'action': 'allow'},
                     {'rule': 120, 'protocol': 'tcp', 'port': '1024-65535', 'source': '0.0.0.0/0', 'action': 'allow'},
-                    {'rule': '*', 'protocol': '-1', 'port': 'all', 'source': '0.0.0.0/0', 'action': 'deny'}
+                    {'rule': 32766, 'protocol': '-1', 'port': 'all', 'source': '0.0.0.0/0', 'action': 'deny'}
                 ],
                 'outbound': [
                     {'rule': 100, 'protocol': '-1', 'port': 'all', 'destination': '0.0.0.0/0', 'action': 'allow'}
@@ -611,13 +613,13 @@ class SecuritySegmentation:
                 'inbound': [
                     {'rule': 100, 'protocol': 'tcp', 'port': '1024-65535', 'source': '10.0.0.0/16', 'action': 'allow'},
                     {'rule': 110, 'protocol': 'tcp', 'port': 22, 'source': '10.0.0.0/24', 'action': 'allow'},
-                    {'rule': '*', 'protocol': '-1', 'port': 'all', 'source': '0.0.0.0/0', 'action': 'deny'}
+                    {'rule': 32766, 'protocol': '-1', 'port': 'all', 'source': '0.0.0.0/0', 'action': 'deny'}
                 ],
                 'outbound': [
                     {'rule': 100, 'protocol': 'tcp', 'port': 443, 'destination': '0.0.0.0/0', 'action': 'allow'},
                     {'rule': 110, 'protocol': 'tcp', 'port': 80, 'destination': '0.0.0.0/0', 'action': 'allow'},
                     {'rule': 120, 'protocol': '-1', 'port': 'all', 'destination': '10.0.0.0/16', 'action': 'allow'},
-                    {'rule': '*', 'protocol': '-1', 'port': 'all', 'destination': '0.0.0.0/0', 'action': 'deny'}
+                    {'rule': 32766, 'protocol': '-1', 'port': 'all', 'destination': '0.0.0.0/0', 'action': 'deny'}
                 ]
             }
         }
@@ -3823,11 +3825,11 @@ class DynamicContentAcceleration:
             if (!cookieValue) {
                 cookieValue = Math.random() < 0.5 ? 'A' : 'B';
                 headers['set-cookie'] = {
-                    value: `variant=${cookieValue}; Path=/; Max-Age=86400`
+                    value: 'variant=' + cookieValue + '; Path=/; Max-Age=86400'
                 };
             }
             
-            request.uri = `/${cookieValue}${request.uri}`;
+            request.uri = '/' + cookieValue + request.uri;
             
             return request;
         }

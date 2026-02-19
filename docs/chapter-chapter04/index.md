@@ -81,7 +81,7 @@ class ObjectStorageArchitecture:
 
 **イレブンナイン（99.999999999%）の意味**
 
-多くのクラウドプロバイダーは、オブジェクトストレージに対して年間99.999999999%（11個の9）の耐久性を謳っています。これは、100億個のオブジェクトを保存した場合、100年に1個のオブジェクトが失われる可能性があることを意味します。
+多くのクラウドプロバイダーは、オブジェクトストレージに対して年間99.999999999%（11個の9）の耐久性を謳っています。これは、オブジェクト単位の年損失確率が約 10^-11 であることを意味します。例えば 100億個（10^10）のオブジェクトを保存した場合、期待値ベースでは年あたり約0.1個、すなわち10年に1個程度の損失が起こり得る計算です（独立性と年率を前提とした概算）。
 
 ```python
 class DurabilityCalculator:
@@ -157,26 +157,30 @@ class StorageClassOptimizer:
     
     def analyze_access_patterns(self, bucket_name, prefix=''):
         """
-        アクセスパターンの分析
+        アクセスパターンの分析（バケット/プレフィックス単位の概算）
         """
-        # S3 Inventory または CloudWatch メトリクスから
-        # アクセス頻度を分析
+        # 注意:
+        # - NumberOfObjects は「オブジェクト数」でありアクセス頻度ではない
+        # - アクセス頻度は、S3 サーバーアクセスログ/CloudTrail/Storage Lens、
+        #   もしくは CloudWatch の S3 リクエストメトリクス（要有効化）などで推定する
         
         end_time = datetime.now()
         start_time = end_time - timedelta(days=90)
         
-        # オブジェクトごとのアクセス頻度を取得
+        # CloudWatch の S3 リクエストメトリクス例（要: Request Metrics 有効化）
+        # prefix ごとにメトリクスを分ける場合は、設定した FilterId を指定
+        filter_id = prefix or 'EntireBucket'
         response = self.cloudwatch.get_metric_statistics(
             Namespace='AWS/S3',
-            MetricName='NumberOfObjects',
+            MetricName='GetRequests',
             Dimensions=[
                 {'Name': 'BucketName', 'Value': bucket_name},
-                {'Name': 'StorageType', 'Value': 'AllStorageTypes'}
+                {'Name': 'FilterId', 'Value': filter_id}
             ],
             StartTime=start_time,
             EndTime=end_time,
             Period=86400,  # 1日
-            Statistics=['Average']
+            Statistics=['Sum']
         )
         
         return response
@@ -1782,7 +1786,7 @@ class SMBImplementation:
 $connectTestResult = Test-NetConnection -ComputerName <storage-account>.file.core.windows.net -Port 445
 {% raw %}if ($connectTestResult.TcpTestSucceeded) {
     # 資格情報の保存
-    cmd.exe /C "cmdkey /add:`"<storage-account>.file.core.windows.net`" /user:`"Azure\<storage-account>`" /pass:`"<storage-account-key>`""
+    cmdkey /add:"<storage-account>.file.core.windows.net" /user:"Azure\\<storage-account>" /pass:"<storage-account-key>"
     
     # ドライブのマウント
     New-PSDrive -Name Z -PSProvider FileSystem -Root "\\<storage-account>.file.core.windows.net\{share_name}" -Persist
