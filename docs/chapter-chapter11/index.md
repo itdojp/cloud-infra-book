@@ -18,9 +18,20 @@ title: "第11章：エンタープライズ設計パターンと事例"
 
 ```python
 # 可用性計算
+#
+# "nines" は慣習的な表現であり、文字列処理で機械的に数えると誤解を招きます。
+# 代表的な目標値は参照表として扱い、必要に応じて要件として明示します。
+availability_levels = {
+    99.0: "2 nines - 基本的なサービス",
+    99.9: "3 nines - 標準的なビジネスアプリケーション",
+    99.95: "3.5 nines - 重要なビジネスアプリケーション",
+    99.99: "4 nines - ミッションクリティカルなサービス",
+    99.999: "5 nines - 金融・医療などの最重要システム",
+}
+
 def calculate_availability_metrics(availability_percentage):
     """
-    可用性パーセンテージから各種メトリクスを計算
+    可用性（%）から各種メトリクスを計算（availability_percentage は 0〜100 の数値を想定）
     """
     # 年間の総分数
     minutes_per_year = 365.25 * 24 * 60
@@ -36,7 +47,7 @@ def calculate_availability_metrics(availability_percentage):
     
     return {
         "availability": f"{availability_percentage}%",
-        "nines": availability_percentage.count('9') if isinstance(availability_percentage, str) else None,
+        "availability_level": availability_levels.get(availability_percentage),
         "downtime_per_year": format_duration(downtime_minutes_per_year),
         "downtime_per_month": format_duration(downtime_per_month),
         "downtime_per_week": format_duration(downtime_per_week),
@@ -53,15 +64,6 @@ def format_duration(minutes):
         return f"{hours:.1f} hours"
     else:
         return f"{minutes:.1f} minutes"
-
-# 各可用性レベルの比較
-availability_levels = {
-    "99%": "2 nines - 基本的なサービス",
-    "99.9%": "3 nines - 標準的なビジネスアプリケーション",
-    "99.95%": "3.5 nines - 重要なビジネスアプリケーション",
-    "99.99%": "4 nines - ミッションクリティカルなサービス",
-    "99.999%": "5 nines - 金融・医療などの最重要システム"
-}
 
 # 実際の計算結果
 # 99.9% = 年間8.76時間 = 月間43.8分
@@ -964,6 +966,12 @@ class HybridCloudConnector:
 ### マルチクラウド管理の統一化
 
 **Kubernetes によるワークロードの抽象化**
+
+注記：
+- KubeFed（Kubernetes Federation）はマルチクラスタ/マルチクラウドにおける配置を抽象化する手段の一例ですが、
+  採用状況や運用成熟度は組織・要件によって大きく異なります。
+- 現場では、各クラスタを独立に運用しつつ GitOps（例：Argo CD / Flux）で同一のマニフェストを配布し、
+  グローバルなトラフィック制御は DNS / Ingress / サービスメッシュ等で実現する構成が選ばれることも多いです。
 
 ```yaml
 # kubernetes/multi-cloud-app.yaml
