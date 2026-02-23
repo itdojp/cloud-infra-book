@@ -675,13 +675,13 @@ class SecuritySegmentation:
         
         # AWS PrivateLinkの活用
         privatelink_design = """
-        # VPCエンドポイント（Interface型）
-        - S3, DynamoDB: Gateway型エンドポイント
-        - EC2, ECS, Lambda等: Interface型エンドポイント
+        # VPCエンドポイントの種類（AWSの例）
+        - Gateway型: S3, DynamoDB（ルートテーブルで制御）
+        - Interface型（PrivateLink）: 多くのAWSサービス（ENI + Security Groupで制御）
         
         利点:
         - インターネット経由なし
-        - NATゲートウェイ不要
+        - NATゲートウェイ不要（対象サービスへのアクセスに限る）
         - セキュリティグループで制御可能
         """
         
