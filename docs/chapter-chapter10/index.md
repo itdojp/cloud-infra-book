@@ -27,7 +27,8 @@ IaCツールを理解する上で最も重要な概念は、宣言的（Declarat
 resource "aws_instance" "web_servers" {
   count         = 3  # 3台のインスタンスが存在すべき
   instance_type = "t3.medium"
-  ami           = data.aws_ami.amazon_linux_2.id
+  # AMI は Amazon Linux 2023 を想定（選び方は第3章の例も参照）
+  ami           = data.aws_ssm_parameter.amazon_linux_2023_ami.value
   
   subnet_id              = aws_subnet.public[count.index % length(aws_subnet.public)].id
   vpc_security_group_ids = [aws_security_group.web.id]
