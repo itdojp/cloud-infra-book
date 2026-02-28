@@ -1490,7 +1490,7 @@ cleanup_old_backups() {
     log "Cleaning up old backups"
     
     # ローカルバックアップの削除
-    find /opt/backups -type d -mtime +$BACKUP_RETENTION_DAYS -exec rm -rf {} \;
+    find /opt/backups -mindepth 1 -maxdepth 1 -type d -mtime +"$BACKUP_RETENTION_DAYS" -exec rm -rf -- {} \;
     
     # S3バックアップの削除（S3 Lifecycle Policy推奨）
     aws s3api put-bucket-lifecycle-configuration \
