@@ -1222,12 +1222,12 @@ enable_log_shipping: true
     daemon_reload: yes
 
 # roles/nginx/templates/nginx.conf.j2
-user `{{ nginx_user }}`;
-worker_processes `{{ nginx_worker_processes }}`;
+user {% raw %}{{ nginx_user }}{% endraw %};
+worker_processes {% raw %}{{ nginx_worker_processes }}{% endraw %};
 pid /run/nginx.pid;
 
 events {
-    worker_connections `{{ nginx_worker_connections }}`;
+    worker_connections {% raw %}{{ nginx_worker_connections }}{% endraw %};
     multi_accept on;
     use epoll;
 }
@@ -1239,22 +1239,22 @@ http {
     tcp_nodelay on;
     keepalive_timeout 65;
     types_hash_max_size 2048;
-    server_tokens `{{ nginx_server_tokens | default('on') }}`;
+    server_tokens {% raw %}{{ nginx_server_tokens | default('on') }}{% endraw %};
     
     # MIME types
     include /etc/nginx/mime.types;
     default_type application/octet-stream;
     
     # SSL設定
-    {% if nginx_use_ssl | default(false) %}
-    ssl_protocols `{{ nginx_ssl_protocols }}`;
-    ssl_ciphers `{{ nginx_ssl_ciphers }}`;
+    {% raw %}{% if nginx_use_ssl | default(false) %}
+    ssl_protocols {{ nginx_ssl_protocols }};
+    ssl_ciphers {{ nginx_ssl_ciphers }};
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
     ssl_stapling on;
     ssl_stapling_verify on;
-    {% endif %}
+    {% endif %}{% endraw %}
     
     # ログ設定
     access_log /var/log/nginx/access.log;
@@ -1488,9 +1488,9 @@ $ANSIBLE_VAULT;1.1;AES256
     - name: Create database configuration
       template:
         src: database.yml.j2
-        dest: "`{{ app_home }}`/config/database.yml"
-        owner: "`{{ app_user }}`"
-        group: "`{{ app_group }}`"
+        dest: "{% raw %}{{ app_home }}{% endraw %}/config/database.yml"
+        owner: "{% raw %}{{ app_user }}{% endraw %}"
+        group: "{% raw %}{{ app_group }}{% endraw %}"
         mode: '0600'  # 機密情報のため厳格な権限
       no_log: true    # ログに機密情報を出力しない
 
@@ -1498,12 +1498,12 @@ $ANSIBLE_VAULT;1.1;AES256
 production:
   adapter: postgresql
   encoding: unicode
-  database: `{{ database_name }}`
-  pool: `{{ database_pool | default(5) }}`
-  username: `{{ database_user }}`
-  password: `{{ database_password }}`  # Vaultから取得
-  host: `{{ database_host }}`
-  port: `{{ database_port | default(5432) }}`
+  database: {% raw %}{{ database_name }}{% endraw %}
+  pool: {% raw %}{{ database_pool | default(5) }}{% endraw %}
+  username: {% raw %}{{ database_user }}{% endraw %}
+  password: {% raw %}{{ database_password }}{% endraw %}  # Vaultから取得
+  host: {% raw %}{{ database_host }}{% endraw %}
+  port: {% raw %}{{ database_port | default(5432) }}{% endraw %}
 
 # 実行時
 # ansible-playbook -i inventory site.yml --ask-vault-pass
@@ -1577,7 +1577,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: `${{ env.TF_VERSION }}`
+          terraform_version: {% raw %}${{ env.TF_VERSION }}{% endraw %}
           
       - name: Terraform Format Check
         run: |
@@ -1610,7 +1610,7 @@ jobs:
           
       - name: Install Ansible and ansible-lint
         run: |
-          pip install ansible=`${{ env.ANSIBLE_VERSION }}` ansible-lint
+          pip install ansible=={% raw %}${{ env.ANSIBLE_VERSION }}{% endraw %} ansible-lint
           
       - name: Ansible Lint
         run: |
@@ -1648,7 +1648,7 @@ jobs:
         uses: trufflesecurity/trufflehog@main
         with:
           path: ./
-          base: `${{ github.event.repository.default_branch }}`
+          base: {% raw %}${{ github.event.repository.default_branch }}{% endraw %}
           head: HEAD
 
   # 3. コスト見積もり
@@ -1664,7 +1664,7 @@ jobs:
       - name: Setup Infracost
         uses: infracost/setup-infracost@v2
         with:
-          api-key: `${{ secrets.INFRACOST_API_KEY }}`
+          api-key: {% raw %}${{ secrets.INFRACOST_API_KEY }}{% endraw %}
           
       - name: Generate Infracost JSON
         run: |
@@ -1698,48 +1698,57 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: `${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}`
-          aws-region: `${{ env.AWS_REGION }}`
+          role-to-assume: {% raw %}${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}{% endraw %}
+          aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
           
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: `${{ env.TF_VERSION }}`
+          terraform_version: {% raw %}${{ env.TF_VERSION }}{% endraw %}
           
       - name: Terraform Init
         run: |
-          cd terraform/environments/`${{ matrix.environment }}`
+          cd terraform/environments/{% raw %}${{ matrix.environment }}{% endraw %}
           terraform init
           
       - name: Terraform Plan
         id: plan
         run: |
-          cd terraform/environments/`${{ matrix.environment }}`
-          terraform plan -out=tfplan -no-color | tee plan_output.txt
+          cd terraform/environments/{% raw %}${{ matrix.environment }}{% endraw %}
+          terraform plan -out=tfplan
+          terraform show -no-color tfplan > plan_output.txt
           
       - name: Create Plan Summary
         uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
+        env:
+          ENVIRONMENT: {% raw %}${{ matrix.environment }}{% endraw %}
         with:
           script: |
-            const output = `#### Terraform Plan - `${{ matrix.environment }}` 📋
+            const envName = process.env.ENVIRONMENT;
+            const planPath = 'terraform/environments/' + envName + '/plan_output.txt';
+            const plan = require('fs').readFileSync(planPath, 'utf8');
+
+            const output = [
+              '#### Terraform Plan - ' + envName + ' 📋',
+              '',
+              '<details><summary>Show Plan</summary>',
+              '',
+              '~~~terraform',
+              plan,
+              '~~~',
+              '',
+              '</details>',
+              '',
+              '*Pushed by: @' + process.env.GITHUB_ACTOR + ', Action: ' + process.env.GITHUB_EVENT_NAME + '*',
+            ].join('\\n');
             
-            <details><summary>Show Plan</summary>
-            
-            \`\`\`terraform
-            ${require('fs').readFileSync('terraform/environments/`${{ matrix.environment }}`/plan_output.txt', 'utf8')}
-            \`\`\`
-            
-            </details>
-            
-            *Pushed by: @`${{ github.actor }}{% endraw %}, Action: \`{% raw %}${{ github.event_name }}`\`*`;
-            
-            github.rest.issues.createComment({
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: output
-            })
+            });
 
   # 5. 統合テスト環境の構築
   integration-test:
@@ -1752,8 +1761,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: `${{ secrets.AWS_TEST_ROLE }}`
-          aws-region: `${{ env.AWS_REGION }}`
+          role-to-assume: {% raw %}${{ secrets.AWS_TEST_ROLE }}{% endraw %}
+          aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
           
       - name: Create Test Environment
         id: test-env
@@ -1761,7 +1770,7 @@ jobs:
           cd terraform/environments/test
           terraform init
           terraform apply -auto-approve \
-            -var="pr_number=`${{ github.event.pull_request.number }}`"
+            -var="pr_number={% raw %}${{ github.event.pull_request.number }}{% endraw %}"
           
           # 出力値を環境変数に設定
           echo "test_url=$(terraform output -raw test_environment_url)" >> $GITHUB_OUTPUT
@@ -1771,12 +1780,12 @@ jobs:
           cd tests/integration
           npm install
           npm run test:integration -- \
-            --url "`${{ steps.test-env.outputs.test_url }}`"
+            --url "{% raw %}${{ steps.test-env.outputs.test_url }}{% endraw %}"
             
       - name: Run E2E Tests
         uses: cypress-io/github-action@v5
         with:
-          config: baseUrl=`${{ steps.test-env.outputs.test_url }}`
+          config: baseUrl={% raw %}${{ steps.test-env.outputs.test_url }}{% endraw %}
           spec: tests/e2e/**/*.cy.js
           
       - name: Cleanup Test Environment
@@ -1784,7 +1793,7 @@ jobs:
         run: |
           cd terraform/environments/test
           terraform destroy -auto-approve \
-            -var="pr_number=`${{ github.event.pull_request.number }}`"
+            -var="pr_number={% raw %}${{ github.event.pull_request.number }}{% endraw %}"
 
   # 6. プロダクションデプロイ
   deploy-infrastructure:
@@ -1795,7 +1804,7 @@ jobs:
       matrix:
         environment: [dev, staging, prod]
       max-parallel: 1  # 環境を順番にデプロイ
-    environment: `${{ matrix.environment }}`
+    environment: {% raw %}${{ matrix.environment }}{% endraw %}
     
     steps:
       - uses: actions/checkout@v4
@@ -1803,29 +1812,29 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: `${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}`
-          aws-region: `${{ env.AWS_REGION }}`
+          role-to-assume: {% raw %}${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}{% endraw %}
+          aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
           
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: `${{ env.TF_VERSION }}`
+          terraform_version: {% raw %}${{ env.TF_VERSION }}{% endraw %}
           
       - name: Terraform Apply
         run: |
-          cd terraform/environments/`${{ matrix.environment }}`
+          cd terraform/environments/{% raw %}${{ matrix.environment }}{% endraw %}
           terraform init
           terraform apply -auto-approve
           
       - name: Run Smoke Tests
         run: |
           cd tests/smoke
-          ./run_smoke_tests.sh `${{ matrix.environment }}`
+          ./run_smoke_tests.sh {% raw %}${{ matrix.environment }}{% endraw %}
           
       - name: Update Documentation
         if: matrix.environment == 'prod'
         run: |
-          cd terraform/environments/`${{ matrix.environment }}`
+          cd terraform/environments/{% raw %}${{ matrix.environment }}{% endraw %}
           terraform show -json > ../../../docs/infrastructure-state.json
           terraform graph | dot -Tpng > ../../../docs/infrastructure-diagram.png
 
@@ -1849,19 +1858,19 @@ jobs:
           
       - name: Install Ansible
         run: |
-          pip install ansible=`${{ env.ANSIBLE_VERSION }}`
+          pip install ansible=={% raw %}${{ env.ANSIBLE_VERSION }}{% endraw %}
           pip install boto3  # AWS動的インベントリ用
           
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: `${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}`
-          aws-region: `${{ env.AWS_REGION }}`
+          role-to-assume: {% raw %}${{ secrets[format('AWS_{0}_ROLE', matrix.environment)] }}{% endraw %}
+          aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
           
       - name: Run Ansible Playbook
         env:
-          ANSIBLE_HOST_KEY_CHECKING: False
-          ANSIBLE_VAULT_PASSWORD: `${{ secrets.ANSIBLE_VAULT_PASSWORD }}`
+          ANSIBLE_HOST_KEY_CHECKING: True  # ホスト鍵は known_hosts で管理する
+          ANSIBLE_VAULT_PASSWORD: {% raw %}${{ secrets.ANSIBLE_VAULT_PASSWORD }}{% endraw %}
         run: |
           cd ansible
           
@@ -1871,7 +1880,7 @@ jobs:
           # 動的インベントリを使用してPlaybook実行
           ansible-playbook -i inventory/aws_ec2.yml \
             site.yml \
-            --limit "`${{ matrix.environment }}`" \
+            --limit "{% raw %}${{ matrix.environment }}{% endraw %}" \
             --vault-password-file .vault_pass
             
           # クリーンアップ
@@ -1888,15 +1897,15 @@ jobs:
       
       - name: Configure Datadog
         env:
-          DD_API_KEY: `${{ secrets.DATADOG_API_KEY }}`
-          DD_APP_KEY: `${{ secrets.DATADOG_APP_KEY }}`
+          DD_API_KEY: {% raw %}${{ secrets.DATADOG_API_KEY }}{% endraw %}
+          DD_APP_KEY: {% raw %}${{ secrets.DATADOG_APP_KEY }}{% endraw %}
         run: |
           cd monitoring/datadog
           ./setup_monitors.sh
           
       - name: Configure PagerDuty
         env:
-          PAGERDUTY_TOKEN: `${{ secrets.PAGERDUTY_TOKEN }}`
+          PAGERDUTY_TOKEN: {% raw %}${{ secrets.PAGERDUTY_TOKEN }}{% endraw %}
         run: |
           cd monitoring/pagerduty
           ./setup_escalation_policies.sh

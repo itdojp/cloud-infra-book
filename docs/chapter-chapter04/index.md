@@ -1753,6 +1753,7 @@ df -h | grep {mount_point}
 
 Windows環境での標準プロトコル：
 
+{% raw %}
 ```python
 class SMBImplementation:
     """
@@ -1784,15 +1785,15 @@ class SMBImplementation:
         windows_mount_script = f"""
 # PowerShell script for mounting Azure Files
 $connectTestResult = Test-NetConnection -ComputerName <storage-account>.file.core.windows.net -Port 445
-{% raw %}if ($connectTestResult.TcpTestSucceeded) {
+if ($connectTestResult.TcpTestSucceeded) {{
     # 資格情報の保存
     cmdkey /add:"<storage-account>.file.core.windows.net" /user:"Azure\\<storage-account>" /pass:"<storage-account-key>"
     
     # ドライブのマウント
-    New-PSDrive -Name Z -PSProvider FileSystem -Root "\\<storage-account>.file.core.windows.net\{share_name}" -Persist
-} else {
+    New-PSDrive -Name Z -PSProvider FileSystem -Root "\\\\<storage-account>.file.core.windows.net\\{share_name}" -Persist
+}} else {{
     Write-Error -Message "Unable to reach the Azure storage account via port 445."
-}{% endraw %}
+}}
 """
         
         # SMBマウントスクリプト（Linux）
@@ -1831,6 +1832,7 @@ sudo mount -a
         }
 
 ```
+{% endraw %}
 
 ### パフォーマンスとスケーラビリティ
 
