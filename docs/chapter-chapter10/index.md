@@ -1749,12 +1749,12 @@ jobs:
               '*Pushed by: @' + process.env.GITHUB_ACTOR + ', Action: ' + process.env.GITHUB_EVENT_NAME + '*',
             ].join('\\n');
             
-            github.rest.issues.createComment({
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: output
-            })
+            });
 
   # 5. 統合テスト環境の構築
   integration-test:
@@ -1875,7 +1875,7 @@ jobs:
           
       - name: Run Ansible Playbook
         env:
-          ANSIBLE_HOST_KEY_CHECKING: False
+          ANSIBLE_HOST_KEY_CHECKING: True  # ホスト鍵は known_hosts で管理する
           ANSIBLE_VAULT_PASSWORD: {% raw %}${{ secrets.ANSIBLE_VAULT_PASSWORD }}{% endraw %}
         run: |
           cd ansible
