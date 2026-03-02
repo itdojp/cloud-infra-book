@@ -1779,15 +1779,15 @@ class SMBImplementation:
         windows_mount_script = f"""
 # PowerShell script for mounting Azure Files
 $connectTestResult = Test-NetConnection -ComputerName <storage-account>.file.core.windows.net -Port 445
-if ($connectTestResult.TcpTestSucceeded) {{
+{% raw %}if ($connectTestResult.TcpTestSucceeded) {
     # 資格情報の保存
-    cmd.exe /C "cmdkey /add:`"<storage-account>.file.core.windows.net`" /user:`"Azure\<storage-account>`" /pass:`"<storage-account-key>`""
+    cmdkey /add:"<storage-account>.file.core.windows.net" /user:"Azure\\<storage-account>" /pass:"<storage-account-key>"
     
     # ドライブのマウント
     New-PSDrive -Name Z -PSProvider FileSystem -Root "\\<storage-account>.file.core.windows.net\{share_name}" -Persist
-}} else {{
+} else {
     Write-Error -Message "Unable to reach the Azure storage account via port 445."
-}}
+}{% endraw %}
 """
         
         # SMBマウントスクリプト（Linux）
@@ -1809,7 +1809,11 @@ sudo chmod 600 /etc/smbcredentials/<storage-account>.cred
 sudo mkdir -p /mnt/azurefiles
 
 # fstab への追加
-echo "//<storage-account>.file.core.windows.net/{share_name} /mnt/azurefiles cifs nofail,vers=3.0,credentials=/etc/smbcredentials/<storage-account>.cred,dir_mode=0777,file_mode=0777,serverino" | sudo tee -a /etc/fstab
+SERVER="//<storage-account>.file.core.windows.net/{share_name}"
+MOUNTPOINT="/mnt/azurefiles"
+CRED="/etc/smbcredentials/<storage-account>.cred"
+OPTS="nofail,vers=3.0,credentials=$CRED,dir_mode=0777,file_mode=0777,serverino"
+echo "$SERVER $MOUNTPOINT cifs $OPTS" | sudo tee -a /etc/fstab
 
 # マウント実行
 sudo mount -a
@@ -1820,6 +1824,7 @@ sudo mount -a
             'windows_mount': windows_mount_script,
             'linux_mount': linux_mount_script
         }
+
 ```
 
 ### パフォーマンスとスケーラビリティ
