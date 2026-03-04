@@ -151,7 +151,7 @@ flowchart TD
         CostComparison --> HybridCost
         CostComparison --> PrivateCost
         CostComparison -.-> Decision
-        end
+    end
     
     style Public fill:#e3f2fd
     style Private fill:#fff3e0
