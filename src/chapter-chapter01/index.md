@@ -121,25 +121,37 @@ flowchart TD
         end
         
         subgraph "選択フレームワーク"
-            Decision["🤔 意思決定フレームワーク<br/><br/>🔴 セキュリティ要件<br/>高 → プライベート<br/>中 → ハイブリッド<br/>低 → パブリック<br/><br/>🟡 コスト要件<br/>低コスト優先 → パブリック<br/>バランス重視 → ハイブリッド<br/><br/>🟢 柔軟性要件<br/>最大柔軟性 → マルチクラウド<br/>制御性重視 → プライベート"]
+            Decision["🤔 意思決定フレームワーク"]
+            SecurityReq["🔴 セキュリティ要件<br/>高 → プライベート<br/>中 → ハイブリッド<br/>低 → パブリック"]
+            CostReq["🟡 コスト要件<br/>低コスト優先 → パブリック<br/>バランス重視 → ハイブリッド"]
+            FlexReq["🟢 柔軟性要件<br/>最大柔軟性 → マルチクラウド<br/>制御性重視 → プライベート"]
         end
         
         subgraph "コスト構造比較"
-            CostComparison["💰 コスト構造比較<br/><br/>パブリック: ⭐⭐⭐⭐⭐<br/>・初期コスト最小<br/>・従量課金<br/>・管理コスト最小<br/><br/>ハイブリッド: ⭐⭐⭐<br/>・中程度の初期投資<br/>・最適化による効率<br/>・管理複雑性<br/><br/>プライベート: ⭐⭐<br/>・高い初期投資<br/>・運用コスト高<br/>・専門人材必要"]
+            CostComparison["💰 コスト構造比較"]
+            PublicCost["パブリック: ⭐⭐⭐⭐⭐<br/>・初期コスト最小<br/>・従量課金<br/>・管理コスト最小"]
+            HybridCost["ハイブリッド: ⭐⭐⭐<br/>・中程度の初期投資<br/>・最適化による効率<br/>・管理複雑性"]
+            PrivateCost["プライベート: ⭐⭐<br/>・高い初期投資<br/>・運用コスト高<br/>・専門人材必要"]
         end
         
         Decision --> Public
         Decision --> Private
         Decision --> Hybrid
         Decision --> Multi
+        Decision --> SecurityReq
+        Decision --> CostReq
+        Decision --> FlexReq
         
         Public --> PublicUse
         Private --> PrivateUse
         Hybrid --> HybridUse
         Multi --> MultiUse
         
+        CostComparison --> PublicCost
+        CostComparison --> HybridCost
+        CostComparison --> PrivateCost
         CostComparison -.-> Decision
-    end
+        end
     
     style Public fill:#e3f2fd
     style Private fill:#fff3e0
