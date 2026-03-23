@@ -94,7 +94,6 @@ elif current_count > desired_count:
 注記: `get_approved_ami_id(environment)` と `get_next_subnet()` は、承認済み AMI と配置先サブネットを返す説明用のプレースホルダです。実装では SSM Parameter Store や allowlist、タグ検索などの仕組みに置き換えてください。
 
 注記: この例は API の振る舞いを説明するための最小例です。本番環境では、承認済み AMI の解決、変更差分の確認、Auto Scaling Group や rolling update を前提にしてください。
-
 ### IaCがもたらす本質的価値
 
 **1. 冪等性（Idempotency）の保証**
