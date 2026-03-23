@@ -95,6 +95,8 @@ elif current_count > desired_count:
         print(f"Terminated sandbox instance: {instance.id}")
 ```
 
+注記: `get_approved_ami_id(environment)` と `get_next_subnet()` は、承認済み AMI と配置先サブネットを返す説明用のプレースホルダです。実装では SSM Parameter Store や allowlist、タグ検索などの仕組みに置き換えてください。
+
 注記: この例は API の振る舞いを説明するための最小例です。本番環境では、承認済み AMI の解決、変更差分の確認、Auto Scaling Group や rolling update を前提にしてください。
 
 ### IaCがもたらす本質的価値
@@ -278,16 +280,16 @@ data "aws_iam_policy_document" "prevent_manual_changes" {
     resources = ["*"]
     
     condition {
-      test     = "StringNotEquals"
-      variable = "aws:userid"
-      values   = [data.aws_caller_identity.terraform.user_id]
+      test     = "StringNotLike"
+      variable = "aws:PrincipalArn"
+      values   = ["arn:aws:iam::*:role/terraform-executor"]
     }
     
     # Terraform実行ユーザー以外の変更を拒否
   }
 }
 
-注記: 実運用では、対象リソースの ARN / タグ条件 / 例外ロールを組み合わせ、拒否対象を「手動変更で問題になる操作」に限定して設計する。
+注記: 実運用では、対象リソースの ARN / タグ条件 / 例外ロールを組み合わせ、拒否対象を「手動変更で問題になる操作」に限定して設計する。`aws:PrincipalArn` のような安定した識別子を使うと、Assumed Role のセッション差分に影響されにくい。
 ```
 
 **2. 状態ファイルの不適切な管理**
