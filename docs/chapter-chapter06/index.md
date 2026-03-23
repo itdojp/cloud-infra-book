@@ -112,9 +112,16 @@ class RoleDesignPrinciples:
                         {
                             'Effect': 'Allow',
                             'Action': [
-                                'ec2:*',
-                                'rds:*',
-                                'lambda:*'
+                                'ec2:Describe*',
+                                'ec2:StartInstances',
+                                'ec2:StopInstances',
+                                'ec2:RebootInstances',
+                                'rds:Describe*',
+                                'rds:StartDBInstance',
+                                'rds:StopDBInstance',
+                                'lambda:GetFunction',
+                                'lambda:ListFunctions',
+                                'lambda:InvokeFunction'
                             ],
                             'Resource': '*',
                             'Condition': {
@@ -136,6 +143,10 @@ class RoleDesignPrinciples:
                 }
             }]
         }
+
+        # 注記:
+        # 実運用では Resource の絞り込み、タグ条件、セッション制約を追加し、
+        # 読み取り系と変更系を可能な限り分離する。
         
         # 運用エンジニアロール
         operations_role = {
