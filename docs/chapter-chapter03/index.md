@@ -460,7 +460,7 @@ def calculate_instance_cost(instance_type, hours_per_month=730):
         "c6i.large": 0.085,
         "r6i.large": 0.126
     }
-    
+
     monthly_cost = prices[instance_type] * hours_per_month
     return monthly_cost
 
@@ -662,10 +662,10 @@ def calculate_capacity_requirements(business_metrics):
     daily_users = business_metrics['daily_active_users']
     peak_concurrency_ratio = business_metrics['peak_concurrency_ratio']
     growth_rate = business_metrics['annual_growth_rate']
-    
+
     # 現在の要件計算
     current_peak_users = daily_users * peak_concurrency_ratio
-    
+
     # 成長を考慮した将来要件
     planning_horizon = 2  # 2年間
     future_peak_users = current_peak_users * (1 + growth_rate) ** planning_horizon
@@ -767,6 +767,7 @@ variable "instance_type" {
 # NOTE:
 # - SSM Public Parameter の "-latest" は更新されるため、差分が出て意図しないロールアウトにつながる場合があります。
 # - 運用では AMI ID を変数で固定し、計画的に更新してください。
+# - moving alias から解決した AMI ID は、そのまま apply せず tfvars / Launch Template version などに固定し、review 後に段階展開してください。
 variable "amazon_linux_2023_ami_id" {
   description = "Pinned Amazon Linux 2023 AMI ID (optional)"
   type        = string
@@ -841,6 +842,8 @@ resource "aws_security_group" "web_server" {
   }
 }
 
+注記: ここでの HTTP / HTTPS 公開は internet-facing Web 層の最小例です。SSH を `data.aws_vpc.default.cidr_block` 全体へ開けるのも shared VPC では広すぎるため、実運用では bastion / SSM Session Manager / 管理用 prefix list などへ絞り、管理ポートをアプリ公開ポートと同じ考え方で扱わないでください。
+
 # Launch Template
 resource "aws_launch_template" "web_server" {
   name_prefix   = "${var.environment}-web-"
@@ -909,6 +912,8 @@ resource "aws_autoscaling_group" "web_server" {
   }
 }
 ```
+
+注記: Auto Scaling Group の Launch Template version に `"$Latest"` を使うと、review 後に追加された version も次回 refresh や instance replacement で拾う場合があります。実運用では default version か承認済み version 番号を parameter 化し、`terraform plan` が意図しない AMI / user data 差分を含まないことを確認してください。
 
 **User Data による初期設定**
 
@@ -1091,7 +1096,10 @@ firewall-cmd --reload
 # アプリケーションのデプロイ
 log "Deploying application"
 cd /var/www/html
-git clone https://github.com/your-org/your-app.git app
+APP_RELEASE_REF="v2026.03.27"  # immutable tag か commit SHA を使用
+APP_ARCHIVE_URL="https://github.com/your-org/your-app/archive/refs/tags/${APP_RELEASE_REF}.tar.gz"
+mkdir -p app
+curl -fsSL "${APP_ARCHIVE_URL}" | tar -xz --strip-components=1 -C app
 chown -R apache:apache app/
 systemctl restart httpd
 
@@ -1323,6 +1331,8 @@ if __name__ == "__main__":
 
 **自動化されたパッチ管理**
 
+注記: Auto Scaling Group や managed instance group のように同種ノードを束ねて運用する環境では、in-place patch だけでなく、パッチ済み AMI / イメージを作成して rolling replacement や Instance Refresh で置き換える運用も基本選択肢です。変更前に rollback 用の旧イメージと切り戻し条件を明確にしてください。
+
 ```bash
 #!/bin/bash
 # patch_management.sh
@@ -1392,7 +1402,8 @@ create_backup() {
     log "Creating system backup"
     
     # 重要な設定ファイルのバックアップ
-    BACKUP_DIR="/opt/backups/$(date +%Y%m%d_%H%M%S)"
+    BACKUP_TS="$(date +%Y%m%d_%H%M%S)"
+    BACKUP_DIR="/opt/backups/${BACKUP_TS}"
     mkdir -p $BACKUP_DIR
     
     # 設定ファイル
@@ -1416,15 +1427,55 @@ create_backup() {
     fi
     
     # S3へのバックアップ
-    aws s3 cp $BACKUP_DIR/ s3://your-backup-bucket/instances/${INSTANCE_ID}/$(date +%Y%m%d_%H%M%S)/ --recursive
+    BACKUP_PREFIX="instances/${INSTANCE_ID}/${BACKUP_TS}/"
+    aws s3 cp $BACKUP_DIR/ "s3://your-backup-bucket/${BACKUP_PREFIX}" --recursive
     
     log "Backup created successfully at $BACKUP_DIR"
+}
+
+verify_backup() {
+    log "Verifying backup integrity"
+
+    test -s "$BACKUP_DIR/system_config.tar.gz" || {
+        log "ERROR: system configuration backup is missing or empty."
+        return 1
+    }
+    tar -tzf "$BACKUP_DIR/system_config.tar.gz" >/dev/null || {
+        log "ERROR: system configuration backup is not readable."
+        return 1
+    }
+
+    test -s "$BACKUP_DIR/application.tar.gz" || {
+        log "ERROR: application backup is missing or empty."
+        return 1
+    }
+    tar -tzf "$BACKUP_DIR/application.tar.gz" >/dev/null || {
+        log "ERROR: application backup is not readable."
+        return 1
+    }
+
+    if [ -f "$BACKUP_DIR/mysql_backup.sql" ] && ! test -s "$BACKUP_DIR/mysql_backup.sql"; then
+        log "ERROR: mysql backup file exists but is empty."
+        return 1
+    fi
+
+    aws s3 ls "s3://your-backup-bucket/${BACKUP_PREFIX}" >/dev/null || {
+        log "ERROR: uploaded backup objects are not visible in S3."
+        return 1
+    }
+
+    log "Backup verification completed successfully"
 }
 
 # パッチ適用
 apply_patches() {
     log "Starting patch installation"
     
+    # 注記:
+    # - この例は Amazon Linux / RHEL 系を前提とする
+    # - Debian / Ubuntu 系では apt 系コマンドへ読み替える
+    # - kernel / glibc 更新後は再起動要否の確認と rollback 起点の確保が必要
+    #   （事前の create_backup() を復旧起点として扱う）
     # パッケージリストの更新
     yum update -y --security
     
@@ -1439,6 +1490,13 @@ apply_patches() {
     
     log "Patch installation completed"
 }
+
+# Verify / rollback の目安:
+# - kernel や glibc を更新した場合は、RHEL / Amazon Linux 系なら `needs-restarting -r`、Debian / Ubuntu 系なら `/var/run/reboot-required` の有無で再起動要否を確認する
+# - 再起動前に `uname -r`、主要サービス状態、アプリの health endpoint を記録する
+# - in-place patch を本番相当で行う場合は、事前に target group / Auto Scaling Group から drain し、`draining` / `unused` などの状態を確認してから更新する
+# - patch 後の health check に失敗したノードは直ちに再登録せず、quarantine して原因を切り分ける
+# - 問題が出た場合は create_backup() で採取した設定・データ・AMI 相当の退避を起点に戻せるようにする
 
 # 事後チェック
 post_patch_checks() {
@@ -1494,13 +1552,16 @@ cleanup_old_backups() {
     # ローカルバックアップの削除
     find /opt/backups -mindepth 1 -maxdepth 1 -type d -mtime +"$BACKUP_RETENTION_DAYS" -exec rm -rf -- {} \;
     
-    # S3バックアップの削除（S3 Lifecycle Policy推奨）
-    aws s3api put-bucket-lifecycle-configuration \
-        --bucket your-backup-bucket \
-        --lifecycle-configuration file://backup-lifecycle.json
+    # S3 Lifecycle は IaC 管理を前提に、期待どおりの設定が存在することを確認
+    aws s3api get-bucket-lifecycle-configuration \
+        --bucket your-backup-bucket >/dev/null
+    aws s3api get-bucket-versioning \
+        --bucket your-backup-bucket
     
     log "Old backups cleanup completed"
 }
+
+注記: S3 Lifecycle の設定は patch スクリプトで都度更新せず、IaC で一度だけ管理して drift を監視する方が安全です。bucket で versioning や object lock、法務保持設定を使っている場合は、cleanup 前に `get-bucket-lifecycle-configuration`、`get-bucket-versioning`、必要なら object lock の設定を確認し、想定とずれていれば patch job ではなく IaC 側を修正してください。
 
 # メイン処理
 main() {
@@ -1512,6 +1573,7 @@ main() {
     # 処理実行
     pre_patch_checks
     create_backup
+    verify_backup
     apply_patches
     post_patch_checks
     cleanup_old_backups
@@ -1525,6 +1587,12 @@ main() {
 # 実行
 main "$@"
 ```
+
+Verify / Risk / Cleanup の目安:
+
+- Verify: `BACKUP_DIR` 配下の tar / dump が `test -s` を満たすことに加え、`tar -tf` や DB restore dry-run で復元可能性を確認し、`aws s3 ls` で upload 済み object の存在とサイズを patch 適用前に確認します。存在確認だけで破損 backup を rollback 起点と誤認しないようにしてください。
+- Risk: `tar ... || true` のまま backup 失敗を握りつぶすと、rollback 起点が揃わない状態で `apply_patches()` へ進む危険があります。最低限の退避物が確認できない場合は patch を中断してください。
+- Cleanup: 失敗した backup や中途半端な退避物を残したまま次回 patch を始めないよう、`cleanup_old_backups()` とは別に、異常終了時の `BACKUP_DIR` と S3 退避先を棚卸しする runbook を持ちます。
 
 #### 6. 最適化・スケーリングフェーズ
 

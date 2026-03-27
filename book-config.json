@@ -3,6 +3,12 @@
   "description": "クラウドインフラエンジニアが実際の設計・構築業務で必要な知識を体系的に学べる実践書。設計の背景にある原理原則と実装判断の根拠を丁寧に解説し、単なる操作手順ではなく考え方を身につけることを重視しています。",
   "author": "株式会社アイティードゥ",
   "version": "1.0.1",
+  "language": "ja",
+  "license": "CC-BY-NC-SA-4.0",
+  "repository": {
+    "url": "https://github.com/itdojp/cloud-infra-book.git",
+    "branch": "main"
+  },
   "structure": {
     "chapters": [
       {
@@ -47,8 +53,8 @@
       },
       {
         "id": "chapter08",
-        "title": "第8章：コスト管理と最適化",
-        "description": "課金モデル理解、コスト可視化、最適化戦略、予算管理"
+        "title": "第8章：バックアップ・災害復旧戦略",
+        "description": "バックアップ設計、RTO/RPO、災害復旧と継続性の考え方"
       },
       {
         "id": "chapter09",
@@ -68,29 +74,22 @@
     ],
     "appendices": [
       {
-        "id": "appendix-a",
-        "title": "付録A：クラウドサービス比較表"
-      },
-      {
-        "id": "appendix-b",
-        "title": "付録B：参考文献とリソース"
-      },
-      {
-        "id": "afterword",
-        "title": "あとがき"
+        "id": "appendices",
+        "title": "付録：参考資料",
+        "description": "比較表、参考文献、外部リソースへの導線"
       }
     ]
   },
   "ux": {
-    "profile": "B",
+    "profile": "C",
     "modules": {
       "quickStart": false,
-      "readingGuide": false,
-      "checklistPack": true,
-      "troubleshootingFlow": true,
+      "readingGuide": true,
+      "checklistPack": false,
+      "troubleshootingFlow": false,
       "conceptMap": false,
-      "figureIndex": true,
-      "legalNotice": false,
+      "figureIndex": false,
+      "legalNotice": true,
       "glossary": false
     }
   },

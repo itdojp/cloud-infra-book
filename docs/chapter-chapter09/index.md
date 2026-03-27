@@ -1,8 +1,8 @@
 ---
-layout: book
-order: 11
 title: "第9章：サーバーレスとコンテナサービス"
+chapter: chapter09
 ---
+
 # 第9章：サーバーレスとコンテナサービス
 
 ## 9.1 サーバーレスコンピューティングの概念とメリット
@@ -24,13 +24,13 @@ title: "第9章：サーバーレスとコンテナサービス"
     - OSのパッチ適用
     - セキュリティアップデート
     - キャパシティプランニング
-    
+
   スケーリング層:
     - 負荷分散の設計
     - オートスケーリングの設定
     - 可用性の確保
     - 障害時のフェイルオーバー
-    
+
   運用層:
     - 監視システムの構築
     - ログ収集と分析
@@ -63,22 +63,22 @@ def lambda_handler(event, context):
     for record in event['Records']:
         bucket = record['s3']['bucket']['name']
         key = record['s3']['object']['key']
-        
+
         # 元画像をダウンロード
         response = s3_client.get_object(Bucket=bucket, Key=key)
         image_content = response['Body'].read()
-        
+
         # 画像処理
         with Image.open(io.BytesIO(image_content)) as img:
             # サムネイル作成（150x150）
             thumbnail = img.copy()
             thumbnail.thumbnail((150, 150))
-            
+
             # WebP形式で保存（高圧縮）
             output_buffer = io.BytesIO()
             thumbnail.save(output_buffer, format='WEBP', quality=85)
             output_buffer.seek(0)
-            
+
             # 処理済み画像をS3に保存
             thumbnail_key = f"thumbnails/{key}"
             s3_client.put_object(
@@ -87,12 +87,18 @@ def lambda_handler(event, context):
                 Body=output_buffer,
                 ContentType='image/webp'
             )
-    
+
     return {
         'statusCode': 200,
         'body': json.dumps('Image processing completed')
     }
 ```
+
+Verify: S3 イベント通知の prefix / suffix に `thumbnails/` の出力先が含まれていないことを確認してください。変換後オブジェクトが同じ通知条件に一致すると、`put_object` が再帰トリガーされ、不要な同時実行と課金につながります。
+
+Risk: 検証用の `thumbnails/` prefix や bucket notification を本番 bucket と共用すると、誤検知や不要課金の切り分けが難しくなります。少なくとも検証用 prefix を分離し、不要になった notification 設定は手元の runbook で戻せるようにしてください。
+
+Cleanup: ハンズオン後は `thumbnails/` 配下の生成物を削除し、継続利用しない bucket notification は `put-bucket-notification-configuration` で無効化します。検証専用 bucket を使った場合は、lifecycle ルールや expiration が意図どおり残っているかまで確認してください。
 
 **多様なイベントソース**
 
@@ -102,22 +108,22 @@ def lambda_handler(event, context):
     - API Gateway（REST/GraphQL）
     - Application Load Balancer
     - CloudFront（Lambda@Edge）
-    
+
   メッセージングサービス:
     - SQS（Simple Queue Service）
     - SNS（Simple Notification Service）
     - EventBridge（カスタムイベント）
     - Kinesis（ストリーミングデータ）
-    
+
   ストレージイベント:
     - S3（オブジェクト作成/削除）
     - DynamoDB Streams（データ変更）
     - EFS（ファイルシステムイベント）
-    
+
   スケジュールイベント:
     - CloudWatch Events（cron式）
     - EventBridge Scheduler
-    
+
   その他:
     - IoT Core（デバイスメッセージ）
     - Cognito（認証イベント）
@@ -152,10 +158,10 @@ def get_db_connection():
 def lambda_handler(event, context):
     # ウォームスタート時は既存の接続を再利用
     db = get_db_connection()
-    
+
     # ビジネスロジック
     result = db.mydb.mycollection.find_one({"_id": event['id']})
-    
+
     return {
         'statusCode': 200,
         'body': json.dumps(result, default=str)
@@ -171,19 +177,19 @@ def lambda_handler(event, context):
 **実行時間とメモリの最適化**
 
 ```yaml
-Lambda設定の最適化戦略（AWS Lambdaの例）:
+Lambda設定の最適化戦略:
   メモリ割り当て:
     - 128MB〜10,240MB（10GB）の範囲
     - メモリに比例してCPU性能も向上
     - コスト vs パフォーマンスのバランス
-    
+
   タイムアウト設定:
-    - 最大15分（900秒）（上限はクラウド/サービスにより異なる）
+    - 最大15分（900秒）
     - 適切なタイムアウトで無駄なコストを防止
     - 非同期処理への分割を検討
-    
+
   同時実行数:
-    - デフォルト: 1,000（アカウント/リージョンで変動。必要に応じて引き上げ申請）
+    - デフォルト: 1,000
     - 予約同時実行数の設定
     - スロットリング対策
 ```
@@ -203,19 +209,19 @@ def calculate_lambda_cost(memory_mb, duration_ms, requests):
     price_per_request = 0.0000002
     free_tier_gb_seconds = 400000
     free_tier_requests = 1000000
-    
+
     # GB-秒の計算
     gb_seconds = (memory_mb / 1024) * (duration_ms / 1000) * requests
     billable_gb_seconds = max(0, gb_seconds - free_tier_gb_seconds)
-    
+
     # リクエスト数の計算
     billable_requests = max(0, requests - free_tier_requests)
-    
+
     # 総コスト
     compute_cost = billable_gb_seconds * price_per_gb_second
     request_cost = billable_requests * price_per_request
     total_cost = compute_cost + request_cost
-    
+
     return {
         'compute_cost': compute_cost,
         'request_cost': request_cost,
@@ -242,12 +248,12 @@ print(f"月間コスト: ${monthly_cost['total_cost']:.2f}")
      trigger: S3アップロード
      process: リサイズ、フォーマット変換、メタデータ抽出
      output: 処理済みファイルをS3に保存
-     
+
    データ変換ETL:
      trigger: 新規ファイル到着
      process: 検証、変換、集計
      output: データウェアハウスへロード
-     
+
    通知システム:
      trigger: アプリケーションイベント
      process: 通知内容の生成
@@ -258,7 +264,7 @@ print(f"月間コスト: ${monthly_cost['total_cost']:.2f}")
      - CRUD操作
      - 認証・認可
      - レート制限
-     
+
    GraphQL:
      - スキーマ駆動開発
      - リゾルバーの実装
@@ -268,7 +274,7 @@ print(f"月間コスト: ${monthly_cost['total_cost']:.2f}")
    バックアップ:
      schedule: "0 2 * * *"  # 毎日AM2:00
      process: DBスナップショット作成
-     
+
    レポート生成:
      schedule: "0 9 * * MON"  # 毎週月曜AM9:00
      process: 週次レポート作成・配信
@@ -277,25 +283,22 @@ print(f"月間コスト: ${monthly_cost['total_cost']:.2f}")
 **アンチパターンの認識**
 
 ```yaml
-サーバーレスで注意が必要なケース:
+サーバーレスに適さないケース:
   長時間実行:
-    # 例: AWS Lambda は最大15分（他クラウド/サービスは上限が異なる）
-    - 長時間のバッチ処理（上限はサービス仕様に依存）
+    - 15分を超える処理
     - 解決策: Step Functions、Batch、ECS
-    
+
   高頻度・常時実行:
-    # 「高トラフィック=不向き」ではなく、コスト/同時実行上限/依存先ボトルネック等で判断する
-    - 高トラフィックAPI（コスト、同時実行上限、依存先のスループットが支配要因）
-    - 解決策: コンテナ、EC2（またはProvisioned Concurrency等で緩和）
-    
+    - 秒間数千リクエスト以上
+    - 解決策: コンテナ、EC2
+
   ステートフル処理:
-    - 長時間接続（WebSocket等）や接続数に比例して状態を保持する処理
+    - WebSocketの長時間接続
     - 解決策: ECS、App Runner
-    
+
   超低レイテンシ要求:
-    # 10ms は「E2E/処理時間/ネットワーク含む」など計測範囲で意味が変わる
-    - 超低レイテンシ（前提と計測範囲を明確化）
-    - 解決策: キャッシュ/エッジ（CloudFront Functions/Lambda@Edge等）や近接リージョンを検討
+    - 10ms以下の応答時間
+    - 解決策: EC2、Lambda@Edge
 ```
 
 ### サーバーレスアーキテクチャの設計パターン
@@ -311,10 +314,10 @@ provider:
   name: aws
   runtime: python3.12
   region: ap-northeast-1
-  
+
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
-    
+
   iam:
     role:
       statements:
@@ -338,7 +341,7 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
-          
+
   getProduct:
     handler: products.get
     events:
@@ -346,7 +349,7 @@ functions:
           path: products/{id}
           method: get
           cors: true
-          
+
   listProducts:
     handler: products.list
     events:
@@ -354,7 +357,7 @@ functions:
           path: products
           method: get
           cors: true
-          
+
   # 注文管理API
   createOrder:
     handler: orders.create
@@ -364,7 +367,7 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
-          
+
   processPayment:
     handler: payments.process
     events:
@@ -374,7 +377,7 @@ functions:
               - PaymentQueue
               - Arn
           batchSize: 10
-          
+
 resources:
   Resources:
     ProductsTable:
@@ -390,7 +393,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
-          
+
     PaymentQueue:
       Type: AWS::SQS::Queue
       Properties:
@@ -501,7 +504,7 @@ COPY --from=builder --chown=nodejs:nodejs /app/package*.json ./
 # セキュリティ設定
 USER nodejs
 
-# node_modules は builder ステージ側で npm prune --omit=dev 済みのものをコピーする
+# node_modules は builder ステージ側で `npm prune --omit=dev` 済みのものをコピーする
 EXPOSE 3000
 
 # ヘルスチェックの定義
@@ -538,6 +541,9 @@ WORKDIR /app
 CMD ["python", "app.py"]
 ```
 
+注記: `requirements.txt` は少なくとも version pin を行い、再現性を厳密に求める環境では hash 固定も検討してください。`COPY . /app` を使う場合は `.dockerignore` で `.git`、`.env`、ローカル credential、不要なテストデータを除外しないと、秘匿情報や不要ファイルが image に混入する場合があります。
+注記: ベースイメージは tag だけでなく digest まで固定すると、日付による差分をさらに減らせます。`apt-get update` で入る OS package も mirror の更新で変わるため、再現性を厳密に求める環境では package version pin や snapshot repository を併用してください。
+
 ### コンテナネットワーキングの詳細
 
 **ネットワークドライバーの選択と設計**
@@ -552,14 +558,14 @@ networks:
     ipam:
       config:
         - subnet: 172.20.0.0/24
-        
+
   backend:
     driver: bridge
     internal: true  # 外部アクセス不可
     ipam:
       config:
         - subnet: 172.21.0.0/24
-        
+
   monitoring:
     driver: bridge
     ipam:
@@ -576,7 +582,7 @@ services:
       - "443:443"
     depends_on:
       - app
-      
+
   app:
     build: ./app
     networks:
@@ -587,7 +593,11 @@ services:
       - REDIS_HOST=redis
     deploy:
       replicas: 3
-      
+
+注記: `deploy.replicas` は Docker Swarm や対応プラットフォーム向けの設定です。ローカルの `docker compose up` では、そのままでは replica 数に反映されない場合があるため、手元で確認する際は `docker compose up --scale app=3` のように実行条件を明示してください。
+
+注記: `depends_on` は起動順序を揃えるだけで、依存先の readiness までは保証しません。ローカル検証で PostgreSQL や Redis の起動待ちに失敗する場合は、`healthcheck` と `condition: service_healthy`、または接続確認スクリプトを併用してください。
+
   postgres:
     image: postgres:13
     networks:
@@ -598,13 +608,15 @@ services:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
     secrets:
       - db_password
-      
+
   redis:
     image: redis:6-alpine
     networks:
       - backend
     command: redis-server --requirepass ${REDIS_PASSWORD}
-    
+
+注記: この Redis 例は最小構成です。本番相当では `REDIS_PASSWORD` を平文 environment variable で渡すのではなく、Compose の `secrets:` や外部 secret store を使って注入してください。Verify として、`docker inspect` の `Config.Env` に secret 値が露出していないことも確認します。
+
   prometheus:
     image: prom/prometheus
     networks:
@@ -612,15 +624,19 @@ services:
       - frontend  # アプリケーションメトリクス収集用
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      
+
 volumes:
   postgres_data:
     driver: local
-    
+
 secrets:
   db_password:
     file: ./secrets/db_password.txt
 ```
+
+Risk: `./secrets/db_password.txt` のような local secret file は、`.gitignore` 対象にした上で `chmod 600` など最小権限に寄せてください。検証用の secret を repository 配下へ平文のまま残すと、誤 commit や共有端末での漏えいを招きます。
+
+Cleanup: ハンズオン後に local secret file が不要になったら削除し、継続運用では external secret store や Compose `secrets:` の配布元を CI/CD 側で管理する形へ移してください。
 
 ### 本番環境でのコンテナ運用
 
@@ -695,6 +711,9 @@ stages:
 variables:
   DOCKER_DRIVER: overlay2
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  TRIVY_IMAGE: aquasec/trivy:<固定タグまたはdigest>
+  HADOLINT_IMAGE: hadolint/hadolint:<固定タグまたはdigest>
+  TRUFFLEHOG_IMAGE: trufflesecurity/trufflehog:<固定タグまたはdigest>
 
 build:
   stage: build
@@ -704,7 +723,7 @@ build:
 
 security_scan:
   stage: scan
-  image: aquasec/trivy:latest
+  image: $TRIVY_IMAGE
   script:
     # 脆弱性スキャン
     - trivy image --severity HIGH,CRITICAL --exit-code 1 $IMAGE_TAG
@@ -714,16 +733,19 @@ security_scan:
 
 dockerfile_lint:
   stage: scan
-  image: hadolint/hadolint:latest
+  image: $HADOLINT_IMAGE
   script:
     - hadolint Dockerfile
 
 secrets_scan:
   stage: scan
-  image: trufflesecurity/trufflehog:latest
+  image: $TRUFFLEHOG_IMAGE
   script:
     - trufflehog docker --image=$IMAGE_TAG
 ```
+
+> 注意
+> `latest` のような可変タグは、日付によって診断結果や挙動が変わります。実務では固定タグまたは digest を使い、更新時は脆弱性スキャン結果の差分も確認してください。
 
 ## 9.3 コンテナオーケストレーション（ECS, EKS, GKE, AKS）
 
@@ -739,23 +761,23 @@ secrets_scan:
     - 適切なホストの選択
     - リソース制約の考慮
     - アフィニティ/アンチアフィニティ
-    
+
   可用性の確保:
     - 自動的な再起動
     - ヘルスチェック
     - ローリングアップデート
     - ロールバック
-    
+
   スケーリング:
     - 水平スケーリング
     - 垂直スケーリング
     - オートスケーリング
-    
+
   ネットワーキング:
     - サービスディスカバリ
     - ロードバランシング
     - サービスメッシュ
-    
+
   状態管理:
     - 永続ボリューム
     - ConfigMap/Secrets
@@ -940,6 +962,8 @@ spec:
 
 **Amazon EKS（Elastic Kubernetes Service）**
 
+注記: ここで示す名称や連携方法は時点依存です。現行の EKS では AWS Load Balancer Controller、EKS Auto Mode、EKS Pod Identity などの選択肢もあるため、実装時は一次情報で現行構成を確認してください。確認先として、[EKS Auto Mode](https://docs.aws.amazon.com/eks/latest/userguide/automode.html) と [EKS Pod Identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-id-how-it-works.html) を参照してください。少なくとも、Kubernetes の minor version、採用する Ingress/Load Balancer 統合方式、サービスアカウントの認証方式（IRSA と Pod Identity のどちらを使うか）を環境ごとに固定してから manifest を作成してください。
+
 ```yaml
 # EKS特有の機能活用
 # ALB Ingress Controller
@@ -984,6 +1008,12 @@ metadata:
     eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/WebAppRole
 ```
 
+Verify / Rollback:
+
+- `kubectl rollout status deployment/web-app -n production --timeout=300s` で rollout 完了を確認し、`kubectl get deploy,rs,pods,hpa -n production` で desired / available replica と autoscaling 状態を確認します。
+- Ingress を変更した場合は `kubectl describe ingress web-app-ingress -n production` と `kubectl get events -n production --sort-by=.lastTimestamp | tail -20` で ALB / controller 側の反映失敗がないか確認してください。`/health` や `/ready` が 200 を返していても、annotation や certificate の不整合で公開経路だけ失敗することがあります。
+- manifest 更新直後に障害が出た場合は、`kubectl rollout undo deployment/web-app -n production` と `kubectl rollout status deployment/web-app -n production --timeout=300s` を使い、戻し後も service / ingress の到達性を再確認してください。
+
 **Google GKE（Google Kubernetes Engine）**
 
 ```yaml
@@ -998,7 +1028,7 @@ spec:
     requests.cpu: "1000"
     requests.memory: 1000Gi
     persistentvolumeclaims: "10"
-    
+
 ---
 # Workload Identity
 apiVersion: v1
@@ -1008,7 +1038,7 @@ metadata:
   namespace: production
   annotations:
     iam.gke.io/gcp-service-account: web-app@project-id.iam.gserviceaccount.com
-    
+
 ---
 # GKE Ingress with Cloud Load Balancer
 apiVersion: networking.k8s.io/v1
@@ -1044,7 +1074,7 @@ spec:
   "containerDefinitions": [
     {
       "name": "web-app",
-      "image": "123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/web-app:latest",
+      "image": "123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/web-app:approved-release-tag",
       "portMappings": [
         {
           "containerPort": 8080,
@@ -1084,6 +1114,8 @@ spec:
 }
 ```
 
+注記: `deploy.replicas` は Docker Swarm や対応プラットフォーム向けの設定です。ローカルの `docker compose up` では、そのままでは replica 数に反映されない場合があるため、手元で確認する際は `docker compose up --scale app=3` のように実行条件を明示してください。
+
 **ECSサービスの設定**
 
 ```python
@@ -1100,31 +1132,33 @@ from aws_cdk import (
 class EcsServiceStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
-        
+
         # VPCの作成
         vpc = ec2.Vpc(
             self, "ServiceVpc",
             max_azs=2,
             nat_gateways=2
         )
-        
+
         # ECSクラスター
         cluster = ecs.Cluster(
             self, "Cluster",
             vpc=vpc,
             container_insights=True
         )
-        
+
         # Fargateサービス
         task_definition = ecs.FargateTaskDefinition(
             self, "TaskDef",
             memory_limit_mib=1024,
             cpu=512
         )
-        
+
         container = task_definition.add_container(
             "WebContainer",
-            image=ecs.ContainerImage.from_registry("myapp:latest"),
+            image=ecs.ContainerImage.from_registry(
+                "123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/web-app:approved-release-tag"
+            ),
             logging=ecs.LogDrivers.aws_logs(
                 stream_prefix="ecs",
                 log_retention=logs.RetentionDays.ONE_WEEK
@@ -1133,21 +1167,21 @@ class EcsServiceStack(core.Stack):
                 "ENVIRONMENT": "production"
             }
         )
-        
+
         container.add_port_mappings(
             ecs.PortMapping(
                 container_port=8080,
                 protocol=ecs.Protocol.TCP
             )
         )
-        
+
         # ALB
         lb = elbv2.ApplicationLoadBalancer(
             self, "ALB",
             vpc=vpc,
             internet_facing=True
         )
-        
+
         # Fargateサービス
         service = ecs.FargateService(
             self, "Service",
@@ -1157,18 +1191,18 @@ class EcsServiceStack(core.Stack):
             assign_public_ip=False,
             service_name="web-app"
         )
-        
+
         # オートスケーリング
         scaling = service.auto_scale_task_count(
             min_capacity=3,
             max_capacity=10
         )
-        
+
         scaling.scale_on_cpu_utilization(
             "CpuScaling",
             target_utilization_percent=70
         )
-        
+
         scaling.scale_on_request_count(
             "RequestScaling",
             requests_per_target=1000,
@@ -1191,13 +1225,13 @@ registries:
     url: dev-registry.company.com
     retention: 7days
     scan: on-push
-    
+
   staging:
     url: staging-registry.company.com
     retention: 30days
     scan: daily
     approval: automated
-    
+
   production:
     url: prod-registry.company.com
     retention: 1year
@@ -1256,6 +1290,18 @@ registries:
 }
 ```
 
+Verify:
+
+- `aws ecr describe-images --repository-name ... --image-ids imageTag=prod-...` などで、現在 ECS task definition や Kubernetes manifest が参照している digest を先に把握し、lifecycle policy の対象と衝突しないことを確認します。
+
+Risk:
+
+- untagged を 1 日で削除すると、rollback 用 image や再スキャンの根拠が早く消える場合があります。rollback SLA と retention は同じ表で管理し、`prod` / `dev` / `untagged` を別々に評価する方が安全です。
+
+Cleanup:
+
+- lifecycle policy を変更した後は、`describe-images` で残すべき世代数が期待どおりかを確認し、rollback に不要な tag だけを手動削除する runbook を残してください。
+
 **脆弱性スキャンの自動化**
 
 ```python
@@ -1273,22 +1319,22 @@ def lambda_handler(event, context):
     detail = event['detail']
     repository_name = detail['repository-name']
     image_digest = detail['image-digest']
-    
+
     # スキャン結果を取得
     response = ecr.describe_image_scan_findings(
         repositoryName=repository_name,
         imageId={'imageDigest': image_digest}
     )
-    
+
     findings = response['imageScanFindings']
     severity_counts = findings.get('findingSeverityCounts', {})
-    
+
     # 重大度別の脆弱性数
     critical = severity_counts.get('CRITICAL', 0)
     high = severity_counts.get('HIGH', 0)
     medium = severity_counts.get('MEDIUM', 0)
     low = severity_counts.get('LOW', 0)
-    
+
     # ポリシーチェック
     if critical > 0:
         # 本番環境へのデプロイをブロック
@@ -1297,17 +1343,17 @@ def lambda_handler(event, context):
             severity="critical"
         )
         tag_image_as_unsafe(repository_name, image_digest)
-        
+
     elif high > 5:
         # 警告を発行
         send_alert(
             f"WARNING: {repository_name} has {high} high vulnerabilities",
             severity="warning"
         )
-        
+
     # 詳細レポートの生成
     generate_vulnerability_report(repository_name, findings)
-    
+
     return {
         'statusCode': 200,
         'body': json.dumps({
@@ -1323,6 +1369,9 @@ def lambda_handler(event, context):
 ### 包括的なCI/CDパイプライン
 
 **GitHub Actions による完全自動化**
+
+> **Verify**
+> この例のように build ジョブで作成したコンテナイメージを後続ジョブで利用する場合、GitHub Actions ではジョブ間でローカルファイルが共有されません。実運用では、イメージを artifact として受け渡すか、先に ECR へ commit SHA / digest 付きで push してから deploy ジョブで参照してください。deploy 側は可変 tag ではなく、digest または commit SHA を固定して確認するのが安全です。
 
 ```yaml
 # .github/workflows/container-pipeline.yml
@@ -1341,56 +1390,64 @@ env:
 jobs:
   # コード品質チェック
   code-quality:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@v7
         env:
-          GITHUB_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
-          SONAR_TOKEN: {% raw %}${{ secrets.SONAR_TOKEN }}{% endraw %}
-          
+          GITHUB_TOKEN: {% raw %}`${{ secrets.GITHUB_TOKEN }}`{% endraw %}
+          SONAR_TOKEN: {% raw %}`${{ secrets.SONAR_TOKEN }}`{% endraw %}
+
       - name: Check Quality Gate
         uses: sonarsource/sonarqube-quality-gate-action@v1
         timeout-minutes: 5
         env:
-          SONAR_TOKEN: {% raw %}${{ secrets.SONAR_TOKEN }}{% endraw %}
+          SONAR_TOKEN: {% raw %}`${{ secrets.SONAR_TOKEN }}`{% endraw %}
 
   # コンテナビルドとスキャン
   build-and-scan:
     needs: code-quality
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       id-token: write
       contents: read
-      
+      security-events: write
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: {% raw %}${{ secrets.AWS_ROLE_ARN }}{% endraw %}
+          role-to-assume: {% raw %}`${{ secrets.AWS_ROLE_ARN }}`{% endraw %}
           aws-region: ap-northeast-1
-          
+
       - name: Login to ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-        
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        
+
       - name: Build Image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: false
-          tags: {% raw %}${{ env.REGISTRY }}{% endraw %}/{% raw %}${{ env.REPOSITORY }}{% endraw %}:{% raw %}${{ github.sha }}{% endraw %}
+          tags: {% raw %}`${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}`{% endraw %}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           outputs: type=docker,dest=/tmp/image.tar
-          
+
+      - name: Upload Image Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-app-image-{% raw %}${{ github.sha }}{% endraw %}
+          path: /tmp/image.tar
+          if-no-files-found: error
+
       - name: Run Trivy Scanner
         uses: aquasecurity/trivy-action@0.33.1
         with:
@@ -1398,31 +1455,31 @@ jobs:
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
-          
+
       - name: Upload Trivy Results
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: 'trivy-results.sarif'
-          
+
       - name: Run Snyk Container Test
         run: |
           docker load -i /tmp/image.tar
-          snyk container test {% raw %}${{ env.REGISTRY }}{% endraw %}/{% raw %}${{ env.REPOSITORY }}{% endraw %}:{% raw %}${{ github.sha }}{% endraw %} \
+          snyk container test {% raw %}`${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}`{% endraw %} \
             --severity-threshold=high \
             --file=Dockerfile
 
   # パフォーマンステスト
   performance-test:
     needs: build-and-scan
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Run Load Tests
         uses: grafana/k6-action@v0.3.0
         with:
           filename: tests/load-test.js
-          
+
       - name: Upload Results
         uses: actions/upload-artifact@v4
         with:
@@ -1433,47 +1490,103 @@ jobs:
   deploy-production:
     needs: [build-and-scan, performance-test]
     if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: production
-    
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: {% raw %}${{ secrets.AWS_PROD_ROLE_ARN }}{% endraw %}
+          role-to-assume: {% raw %}`${{ secrets.AWS_PROD_ROLE_ARN }}`{% endraw %}
           aws-region: ap-northeast-1
-          
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Download Image Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: web-app-image-{% raw %}${{ github.sha }}{% endraw %}
+          path: /tmp
+
       - name: Push to ECR
         run: |
           docker load -i /tmp/image.tar
-          docker tag {% raw %}${{ env.REGISTRY }}{% endraw %}/{% raw %}${{ env.REPOSITORY }}{% endraw %}:{% raw %}${{ github.sha }}{% endraw %} \
-                     {% raw %}${{ env.REGISTRY }}{% endraw %}/{% raw %}${{ env.REPOSITORY }}{% endraw %}:production
-          docker push {% raw %}${{ env.REGISTRY }}{% endraw %}/{% raw %}${{ env.REPOSITORY }}{% endraw %}:production
-          
+          docker push {% raw %}`${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}`{% endraw %}
+          docker tag {% raw %}`${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}`{% endraw %} \
+                     {% raw %}`${{ env.REGISTRY }}/${{ env.REPOSITORY }}`{% endraw %}:production
+          docker push {% raw %}`${{ env.REGISTRY }}/${{ env.REPOSITORY }}`{% endraw %}:production
+
+      - name: Prepare Task Definition Revision
+        run: |
+          IMAGE="{% raw %}${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}{% endraw %}"
+          PREVIOUS_TASK_DEF=$(aws ecs describe-services \
+            --cluster production \
+            --services web-app \
+            --query 'services[0].taskDefinition' \
+            --output text)
+          echo "PREVIOUS_TASK_DEF=$PREVIOUS_TASK_DEF" >> "$GITHUB_ENV"
+          aws ecs describe-task-definition \
+            --task-definition "$PREVIOUS_TASK_DEF" \
+            --query 'taskDefinition' > task-definition.json
+          jq --arg IMAGE "$IMAGE" '
+            del(.taskDefinitionArn, .revision, .status, .requiresAttributes,
+                .compatibilities, .registeredAt, .registeredBy)
+            | .containerDefinitions |= map(
+                if .name == "web-app" then .image = $IMAGE else . end
+              )
+          ' task-definition.json > task-definition-rendered.json
+          NEW_TASK_DEF=$(aws ecs register-task-definition \
+            --cli-input-json file://task-definition-rendered.json \
+            --query 'taskDefinition.taskDefinitionArn' \
+            --output text)
+          echo "NEW_TASK_DEF=$NEW_TASK_DEF" >> "$GITHUB_ENV"
+
       - name: Update ECS Service
         run: |
           aws ecs update-service \
             --cluster production \
             --service web-app \
-            --force-new-deployment
-            
+            --task-definition "$NEW_TASK_DEF"
+
       - name: Wait for Deployment
         run: |
           aws ecs wait services-stable \
             --cluster production \
             --services web-app
-            
+
       - name: Run Smoke Tests
         run: |
-          npm install
+          npm ci
           npm run test:smoke -- --env=production
 ```
+
+注記: `npm ci` は lockfile 前提です。サンプル用 test プロジェクトに lockfile がない場合は、依存関係を固定した上で `npm install` を使うか、先に lockfile を作成してから CI へ載せてください。
+
+> Verify
+> `aws ecs wait services-stable` は ECS サービスの安定化確認であり、ALB / NLB の target health やアプリケーションの readiness までは保証しません。スモークテストの前に、ロードバランサ側の target health が `healthy` であること、または `/health` などのエンドポイントが 200 を返すことを retry 付きで確認してください。
+
+注記: このサンプルは、現在の service が参照している task definition を取得し、`web-app` コンテナだけを commit SHA 付きイメージへ差し替えた新 revision を登録してから、`aws ecs update-service --task-definition ...` で明示的に切り替えます。mutable tag と `--force-new-deployment` の組み合わせだけに依存しない方が、review 対象と実デプロイ対象を一致させやすくなります。
+
+注記: `image.tar` を artifact として受け渡す方法は、ジョブ分離を避けるための最小例です。大きなイメージや複数アーキテクチャを扱う実運用では、build job で ECR へ push し、deploy job は commit SHA や digest で同じイメージを参照する方が扱いやすくなります。可変な `production` tag は人間向けの別名として残してもよいですが、ECS task definition は SHA tag または digest を参照する方が再現しやすくなります。
+
+> Verify
+> build job で push した後に `aws ecr describe-images --repository-name ... --image-ids imageTag=${GITHUB_SHA}` などで `imageDigest` を取得し、deploy 時に登録する task definition が同じ SHA tag または `@sha256:` 参照を使っていることを確認してください。ECS は tag 解決時に digest を内部利用できますが、レビュー対象と実際の deploy 対象が一致したことを監査ログから追える形にしておく方が安全です。
+> あわせて、`aws ecs describe-services --cluster production --services web-app --query 'services[0].taskDefinition' --output text` で現在の task definition ARN を取得し、`aws ecs describe-task-definition --task-definition ... --query 'taskDefinition.containerDefinitions[*].image'` で期待する SHA tag / digest が実際に参照されていることまで確認してください。
+
+> Rollback
+> スモークテストや target health の確認に失敗した場合は、`aws ecs update-service --cluster production --service web-app --task-definition "$PREVIOUS_TASK_DEF"` を実行し、`aws ecs wait services-stable --cluster production --services web-app` と target health の再確認を行ってください。このサンプルでは `PREVIOUS_TASK_DEF` を `GITHUB_ENV` に保存しているため、後続 step から直前 revision へ戻せます。
 
 ### イメージ管理のベストプラクティス
 
 **セマンティックバージョニングとタグ戦略**
+
+注記: デプロイ設定で参照するイメージは、`latest` ではなく承認済みの固定タグまたは digest を使ってください。`latest` は人間向けの移動ラベルとして残してもよいですが、ECS / Kubernetes / CDK などの実運用設定では不変参照を優先します。
 
 ```python
 # 自動タグ生成スクリプト
@@ -1486,17 +1599,19 @@ def generate_tags(branch, commit_sha, existing_tags):
     ブランチとコミット情報から適切なタグを生成
     """
     tags = []
-    
+
     # 基本タグ
     tags.append(commit_sha[:8])
     tags.append(f"{branch}-{commit_sha[:8]}")
-    
+
     # ブランチ別タグ戦略
     if branch == "main":
         # セマンティックバージョン
         version = get_next_version(existing_tags)
         tags.extend([
             version,
+            # `latest` は人間向けの移動ラベルとしてだけ付ける。
+            # ECS / Kubernetes / IaC では version tag や digest を参照する。
             "latest",
             f"v{version}"
         ])
@@ -1514,7 +1629,7 @@ def generate_tags(branch, commit_sha, existing_tags):
             f"rc-{version}",
             f"rc-{version}-{commit_sha[:8]}"
         ])
-    
+
     return tags
 
 def get_next_version(existing_tags):
@@ -1530,13 +1645,13 @@ def get_next_version(existing_tags):
                 int(match.group(2)),
                 int(match.group(3))
             ))
-    
+
     if not versions:
         return "1.0.0"
-    
+
     # 最新バージョンを取得
     latest = max(versions)
-    
+
     # パッチバージョンをインクリメント
     return f"{latest[0]}.{latest[1]}.{latest[2] + 1}"
 ```
@@ -1557,12 +1672,12 @@ services:
       - NOTARY_SERVER_DB_URL=mysql://notary@mysql:3306/notaryserver
     depends_on:
       - mysql
-      
+
   notary-signer:
     image: notary:signer
     environment:
       - NOTARY_SIGNER_DB_URL=mysql://notary@mysql:3306/notarysigner
-      
+
   mysql:
     image: mysql:5.7
     environment:
@@ -1583,6 +1698,19 @@ admission-policy:
                   issuer: https://token.actions.githubusercontent.com
                   subject: repo:myorg/myrepo:ref:refs/heads/main
 ```
+
+Verify:
+
+- `DOCKER_CONTENT_TRUST=1 docker trust inspect --pretty registry.example.com/myapp:signed-tag` のように署名済み tag の signer と digest を確認し、unsigned tag では失敗することも合わせて検証します。
+- admission policy を使う場合は、検証 namespace で unsigned image が拒否され、署名済み image だけが許可されることを先に確認します。
+
+Risk:
+
+- この compose 例は `MYSQL_ALLOW_EMPTY_PASSWORD=yes` を含むため、学習用の隔離環境を前提にした最小例です。本番では DB 認証、TLS、署名鍵のバックアップ方針、利用する署名方式の現行サポート状況を別途確認してください。
+
+Cleanup:
+
+- 検証後は `docker compose down -v` で `notary-data` を含む lab 用 volume を削除し、検証用に作成した Content Trust key は `~/.docker/trust/private` から安全に退避または廃棄します。既存の署名運用と共有している鍵は誤って削除しないよう、検証専用ディレクトリで分離する方が安全です。
 
 サーバーレスとコンテナは、それぞれ異なる強みを持つクラウドネイティブ技術です。サーバーレスはイベント駆動で断続的なワークロードに最適であり、コンテナは複雑なアプリケーションや継続的な処理に適しています。重要なのは、それぞれの特性を理解し、適切なワークロードに適切な技術を選択することです。両者を組み合わせることで、スケーラブルで効率的、かつ管理しやすいクラウドネイティブアーキテクチャを実現できます。
 ---
