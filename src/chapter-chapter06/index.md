@@ -90,7 +90,7 @@ class RoleDesignPrinciples:
                 'Version': '2012-10-17',
                 'Statement': [{
                     'Effect': 'Allow',
-                    'Principal': {'AWS': 'arn:aws:iam::123456789012:root'},
+                    'Principal': {'AWS': 'arn:aws:iam::123456789012:role/WorkforceDeveloperEntryRole'},
                     'Action': 'sts:AssumeRole',
                     'Condition': {
                         'Bool': {'aws:MultiFactorAuthPresent': 'true'}
@@ -138,8 +138,19 @@ class RoleDesignPrinciples:
         }
 
         # 注記:
+        # `aws:SourceIp` は社内 egress の public CIDR を置く簡略例。
+        # Private access や VPC endpoint 前提の workforce access では、
+        # network 条件の代わりに device trust / session tag / source VPC など
+        # 実際の到達経路に合う条件へ読み替える。
+
+        # 注記:
         # 実運用では Resource の絞り込み、タグ条件、セッション制約を追加し、
         # 読み取り系と変更系を可能な限り分離する。
+        # 確認先:
+        # - AWS IAM best practices:
+        #   https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+        # - AWS managed policies から least privilege へ寄せる考え方:
+        #   https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started-reduce-permissions.html
         
         # 運用エンジニアロール
         operations_role = {
@@ -148,10 +159,10 @@ class RoleDesignPrinciples:
                 'Version': '2012-10-17',
                 'Statement': [{
                     'Effect': 'Allow',
-                    'Principal': {'AWS': 'arn:aws:iam::123456789012:root'},
+                    'Principal': {'AWS': 'arn:aws:iam::123456789012:role/WorkforceOperationsEntryRole'},
                     'Action': 'sts:AssumeRole',
                     'Condition': {
-                        'IpAddress': {'aws:SourceIp': ['10.0.0.0/8']},
+                        'IpAddress': {'aws:SourceIp': ['203.0.113.0/24']},
                         'Bool': {'aws:MultiFactorAuthPresent': 'true'}
                     }
                 }]
@@ -164,12 +175,19 @@ class RoleDesignPrinciples:
                         {
                             'Effect': 'Allow',
                             'Action': [
-                                'cloudwatch:*',
-                                'logs:*',
+                                'cloudwatch:Describe*',
+                                'cloudwatch:Get*',
+                                'cloudwatch:List*',
+                                'logs:Describe*',
+                                'logs:Get*',
+                                'logs:List*',
+                                'logs:StartQuery',
+                                'logs:StopQuery',
+                                'logs:GetQueryResults',
                                 'ec2:Describe*',
                                 'ec2:StartInstances',
                                 'ec2:StopInstances',
-                                'autoscaling:*'
+                                'autoscaling:Describe*'
                             ],
                             'Resource': '*'
                         },
@@ -194,7 +212,7 @@ class RoleDesignPrinciples:
                 'Version': '2012-10-17',
                 'Statement': [{
                     'Effect': 'Allow',
-                    'Principal': {'AWS': 'arn:aws:iam::123456789012:root'},
+                    'Principal': {'AWS': 'arn:aws:iam::123456789012:role/WorkforceSecurityAuditEntryRole'},
                     'Action': 'sts:AssumeRole'
                 }]
             },
@@ -224,6 +242,8 @@ class RoleDesignPrinciples:
             'auditor': security_auditor_role
         }
 ```
+
+注記: 運用補助ロールの既定値は、閲覧系 API と明示的に許可した起動・停止操作へ絞る方が安全です。CloudWatch アラーム変更、ログ保持期間変更、Auto Scaling 設定変更のような変更系 API は、別ロールまたは JIT 昇格へ分離してください。
 
 **階層的ロール構造**
 
@@ -437,7 +457,7 @@ class JustInTimeAccess:
             # CloudWatch Logsへの記録
             pass
         """
-        
+
         # JITアクセスワークフロー
         jit_workflow = {
             'request_phase': {
@@ -479,6 +499,21 @@ class JustInTimeAccess:
             'workflow': jit_workflow
         }
 ```
+
+注記: この例の inline session policy にある `Action: "*", Resource: "*"` は説明用プレースホルダです。STS の session policy は元ロール権限を追加せず、許可集合をさらに絞り込む用途に使います。実運用では `ec2:Describe*` や `logs:Get*` など必要最小限の action から始め、想定外 API が deny になることを IAM Policy Simulator で確認してください。
+
+Verify:
+
+- `AssumeRole` の CloudTrail 記録で `sourceIdentity` と session tags（例: `Requester`, `Approver`, `ChangeId`）が残ることを確認し、申請システム側のリクエスト ID と突合できるようにします。
+- 申請者、承認者、実行者を `RoleSessionName` だけでなく session tags でも追跡し、監査ログだけで昇格理由と実行内容を復元できることを確認します。
+
+Risk:
+
+- `RoleSessionName` だけに依存すると、role chaining や任意のセッション名で追跡性が落ちます。JIT 用 role に広い権限や長すぎる有効期限を与えると、実質的な常時昇格になります。
+
+Cleanup:
+
+- pre-approved role 一覧、trust policy の例外、許可済み session tag key は四半期ごとに棚卸しし、不要な昇格経路を削除します。
 
 **条件付きアクセス**
 
@@ -594,11 +629,21 @@ class ConditionalAccess:
         }
 ```
 
+注記: 条件付きアクセスの例でも `Action: "*"` は説明を短くするための簡略表現です。実運用では、読み取り、運用補助、破壊的操作を分け、`iam:PassRole` や `ec2:TerminateInstances` のような高リスク操作は別 statement か JIT role に切り出してください。条件式だけで広い `Allow` を正当化しない方が監査しやすくなります。
+
 ### RBACの実装パターン
 
 **グループベースの管理**
 
 個々のユーザーではなく、グループに権限を付与：
+
+注記: `PowerUserAccess` や `CloudWatchFullAccess` などの AWS managed policy は導入や検証には便利ですが、最小権限にはなりません。本番運用では customer managed policy、permissions boundary、IAM Access Analyzer などを使って段階的に絞り込んでください。permissions boundary は許可を追加する仕組みではなく、既に付与された権限の上限を制限する境界です。boundary だけを追加してもアクセスは増えないため、identity policy / session policy / SCP を含めた合成結果を IAM Policy Simulator と検証環境の両方で確認してください。確認先として、AWS IAM の best practices と「AWS managed policies から least privilege へ寄せる」公式ガイドを参照してください。権限を絞り込んだ後は、IAM Policy Simulator で主要 API の許可・拒否を確認し、最終的には検証環境で実リクエストを流して差分を確認する運用を前提にしてください。Policy Simulator も live 環境を完全には再現しないため、最終確認は本番相当の検証環境で実施してください。
+
+> Verify
+> 権限縮小後は、代表的な操作を 3〜5 本に絞って検証環境で実行し、`AccessDenied` の有無だけでなく、CloudTrail や IAM Access Advisor で未使用サービスと想定外 deny が増えていないことも確認してください。
+
+> Risk
+> AWS managed policy から customer managed policy へ切り替える前に、直前の policy JSON、policy version、permissions boundary の設定を rollback 用に退避してください。緊急時に元へ戻せないと、権限不足の切り分けより復旧の方が遅れます。
 
 ```python
 class GroupBasedManagement:
@@ -633,7 +678,7 @@ class GroupBasedManagement:
                     'additional_permissions': {
                         'SRE': ['IncidentResponseAccess'],
                         'Support': ['CustomerDataReadOnly'],
-                        'Monitoring': ['CloudWatchFullAccess']
+                        'Monitoring': ['CloudWatchReadOnlyAccess']
                     }
                 },
                 'Security': {
@@ -647,7 +692,10 @@ class GroupBasedManagement:
                 }
             }
         }
-        
+
+
+注記: `DeveloperAccess`、`DatabaseAccess`、`FullReadOnlyAccess` のような ARN ではない名前は、論理ロールや customer managed policy のプレースホルダです。実装時は AWS managed policy 名と混同せず、permission set または customer managed policy へ具体化し、必要なら `ReadOnlyAccess` のような既存 managed policy も customer managed policy へ置き換えて最小権限へ寄せてください。
+
         # SSO統合によるグループマッピング
         sso_group_mapping = {
             'identity_provider': 'Active Directory',
@@ -660,7 +708,7 @@ class GroupBasedManagement:
                 'DeveloperAccess': {
                     'session_duration': 'PT8H',
                     'managed_policies': [
-                        'arn:aws:iam::aws:policy/PowerUserAccess'
+                        'arn:aws:iam::123456789012:policy/DeveloperRestrictedAccess'
                     ],
                     'inline_policy': {
                         'Version': '2012-10-17',
@@ -739,9 +787,9 @@ class RoleComposition:
             'OperationsBase': {
                 'description': '運用の基本権限',
                 'policies': [
-                    'CloudWatchFullAccess',
-                    'AutoScalingFullAccess',
-                    'ElasticLoadBalancingFullAccess'
+                    'CloudWatchReadOnlyAccess',
+                    'AutoScalingReadOnlyAccess',
+                    'ElasticLoadBalancingReadOnly'
                 ]
             }
         }
@@ -837,11 +885,17 @@ class RoleComposition:
         }
 ```
 
+注記: `SeniorDevOps` のような複合ロールで `iam:PassRole`、`codepipeline:*`、`codebuild:*`、`codedeploy:*`、`ecr:*` をまとめて許可する場合も、実運用では対象ロール ARN、対象 repository、対象 pipeline を環境単位で絞り、強い変更権限は JIT 昇格や専用 CI ロールへ分離してください。
+
 ### クロスアカウント/サブスクリプションアクセス
 
 **信頼関係の確立**
 
 組織内の異なるアカウント間でセキュアなアクセスを実現：
+
+注記: OIDC / Web Identity Federation を併用する場合は、許可する `aud` / `sub` の確認だけでなく、想定外の branch / repository / Environment から `AssumeRoleWithWebIdentity` が拒否されることも検証してください。repository rename や Environment 廃止の後に古い trust relationship 条件を残すと、使われない例外経路が蓄積します。
+注記: `arn:aws:iam::<account-id>:root` はサンプル簡略化のための記法です。本番では role ARN へ絞るか、`aws:PrincipalArn` や organization 条件を併用し、想定外の role から `sts:AssumeRole` が失敗することまで確認してください。
+注記: `sts:ExternalId` は主に第三者の cross-account `AssumeRole` 向けの混同防止策です。`Principal: {'Service': ...}` のような AWS service principal では、`ExternalId` を流用するより `aws:SourceArn` や `aws:SourceAccount` など service-specific 条件で委任元を固定する方が実務的です。
 
 ```python
 class CrossAccountAccess:
@@ -867,8 +921,8 @@ class CrossAccountAccess:
                     'Effect': 'Allow',
                     'Principal': {
                         'AWS': [
-                            'arn:aws:iam::111111111111:root',  # 信頼するアカウント
-                            'arn:aws:iam::222222222222:root'
+                            'arn:aws:iam::111111111111:role/WorkforcePartnerAuditRole',
+                            'arn:aws:iam::222222222222:role/WorkforceSharedServicesRole'
                         ]
                     },
                     'Action': 'sts:AssumeRole',
@@ -889,8 +943,18 @@ class CrossAccountAccess:
                     'Statement': [{
                         'Effect': 'Allow',
                         'Action': [
-                            's3:ListBucket',
-                            's3:GetObject',
+                            's3:ListBucket'
+                        ],
+                        'Resource': 'arn:aws:s3:::shared-audit-bucket'
+                    }, {
+                        'Effect': 'Allow',
+                        'Action': [
+                            's3:GetObject'
+                        ],
+                        'Resource': 'arn:aws:s3:::shared-audit-bucket/reports/*'
+                    }, {
+                        'Effect': 'Allow',
+                        'Action': [
                             'ec2:DescribeInstances',
                             'rds:DescribeDBInstances'
                         ],
@@ -973,6 +1037,12 @@ class CrossAccountAccess:
         }
 ```
 
+注記: trust policy の `arn:aws:iam::<account-id>:root` は、そのアカウントの root ユーザーだけを意味するわけではなく、そのアカウント内の principal 全体を委任元として扱います。実運用では、必要な role ARN へ絞るか、`ExternalId`、`aws:PrincipalArn`、organization 条件などを組み合わせて対象をさらに限定してください。
+
+注記: 上の read-only policy では、`s3:ListBucket` と `s3:GetObject` は bucket / prefix ARN に絞り込み、`Describe*` 系のように resource-level 制御が限定される API だけ `Resource: '*'` を残しています。identity policy で Secrets Manager や KMS を許可する場合も同じ考え方で、secret ARN や key ARN へ分離してください。
+
+GitHub Actions の OIDC を trust policy に組み込む場合、`sub` claim は常に `ref:refs/heads/...` ではありません。GitHub Environment を経由する deploy や `pull_request` 起点では claim 形式が変わるため、想定する trigger ごとに実際の claim を確認し、Environment 保護ルールと trust policy の条件を同時に設計してください。
+
 **委任管理の実現**
 
 中央のIDプロバイダーから複数のアカウントへのアクセス：
@@ -1008,7 +1078,7 @@ class DelegatedAdministration:
                 'DeveloperAccess': {
                     'description': 'Developer access with restrictions',
                     'session_duration': 'PT8H',
-                    'managed_policies': ['arn:aws:iam::aws:policy/PowerUserAccess'],
+                    'managed_policies': ['arn:aws:iam::123456789012:policy/DeveloperRestrictedAccess'],
                     'inline_policy': {
                         'Version': '2012-10-17',
                         'Statement': [{
@@ -1071,6 +1141,27 @@ class DelegatedAdministration:
                 'thumbprints': ['1234567890abcdef1234567890abcdef12345678']
             }
         }
+
+        # 注記:
+        # OIDC / Web Identity Federation では、IdP 登録だけで終わらせず、
+        # AssumeRoleWithWebIdentity 側の trust policy で aud / sub などを絞る。
+        # 例:
+        # {
+        #   "Effect": "Allow",
+        #   "Principal": {
+        #     "Federated": "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com"
+        #   },
+        #   "Action": "sts:AssumeRoleWithWebIdentity",
+        #   "Condition": {
+        #     "StringEquals": {
+        #       "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+        #       "token.actions.githubusercontent.com:sub": "repo:myorg/myrepo:ref:refs/heads/main"
+        #     }
+        #   }
+        # }
+        # Verify:
+        # - CloudTrail で AssumeRoleWithWebIdentity の caller / subject / session name を確認する
+        # - 想定外の branch / environment / repository から STS を引けないことを検証する
         
         return {
             'sso_config': sso_configuration,
@@ -1176,6 +1267,8 @@ class MFAImplementation:
         return mfa_enforcement_policy
 ```
 
+注記: この deny ポリシーは human principal を前提にした bootstrap 例です。automation role、break-glass role、federated principal へそのまま適用せず、非本番で `CreateVirtualMFADevice`、`EnableMFADevice`、`sts:GetSessionToken` の enrollment 動線が通ることを先に確認してください。一時的に enrollment 例外を付けた場合は、MFA 登録完了後に例外条件を cleanup します。
+
 ### MFAの実装方式と選択基準
 
 **時間ベースワンタイムパスワード（TOTP）**
@@ -1271,6 +1364,11 @@ class TOTPImplementation:
         
         return totp_validation
 ```
+
+Verify / Cleanup:
+
+- `CreateVirtualMFADevice` の後に enrollment が中断されると、未割り当ての virtual MFA device が残ることがあります。`aws iam list-virtual-mfa-devices --assignment-status Unassigned` で孤立デバイスを確認し、利用予定がないものは `aws iam delete-virtual-mfa-device --serial-number ...` で整理してください。
+- すでに user に関連付いている device を交換する場合は、先に `aws iam list-mfa-devices --user-name <user>` で現行 serial を確認し、`aws iam deactivate-mfa-device --user-name <user> --serial-number ...` の後で delete する手順を runbook 化しておくと、orphaned credential を減らせます。
 
 **ハードウェアセキュリティキー**
 
@@ -1479,6 +1577,19 @@ class CredentialLifecycleManagement:
             'automation': auto_rotation_lambda
         }
 ```
+
+Verify:
+
+- 自動無効化の前に、代替キーが発行済みでアプリケーション側の secret / parameter store が新しい Access Key ID を参照していることを確認します。
+- `aws iam get-access-key-last-used --access-key-id ...` や利用ログで、直近使用中のキーをいきなり止めていないことも確認してください。
+
+Risk:
+
+- service account や CI/CD 用キーは、承認済みの例外管理が無いまま `Inactive` にすると即時停止事故になります。少なくとも置換完了確認・猶予期間・緊急 rollback 手順をセットで運用する方が安全です。
+
+Cleanup:
+
+- 新キーの切替確認後は、旧 access key の削除、旧 secret version の無効化、監査ログへの記録を同じ runbook にまとめてください。
 
 **最小権限での発行**
 
@@ -1691,6 +1802,8 @@ class SecretsManagement:
         }
         
         # Parameter Storeによる設定管理
+        # 注記: これは個別 secret に付与する resource policy の例です。Secrets Manager の resource policy は AWS 公式例でも `Resource: '*'` を取ることがありますが、適用先はその secret 自体に限定されます。identity policy 側で同等のアクセスを付与する場合は、secret ARN や使用する KMS key ARN に分離してください。
+
         parameter_store_config = {
             'hierarchy': {
                 '/production/database/': 'Database configurations',
@@ -1781,7 +1894,8 @@ class ConfigurationManagement:
             'family': 'web-app',
             'containerDefinitions': [{
                 'name': 'app',
-                'image': 'myapp:latest',
+                # 本番では mutable tag ではなく、承認済みの固定タグまたは digest を使う
+                'image': 'myapp:approved-release-tag',
                 'environment': [
                     {'name': 'APP_ENV', 'value': 'production'},
                     {'name': 'LOG_LEVEL', 'value': 'info'}
@@ -1843,7 +1957,7 @@ type: Opaque
               serviceAccountName: app-service-account
               containers:
               - name: app
-                image: myapp:latest
+                image: myapp:approved-release-tag
                 env:
                 - name: DATABASE_URL
                   valueFrom:
@@ -1854,6 +1968,11 @@ type: Opaque
                 - secretRef:
                     name: app-secrets
         """
+
+        # 注記:
+        # - Kubernetes Secret の data は base64 エンコードであり、暗号化そのものではない
+        # - 実運用では etcd encryption at rest や外部 secret store を前提にし、
+        #   Secret を読める ServiceAccount / RBAC も最小化する
         
         # 設定の階層化
         configuration_hierarchy = {
@@ -1899,6 +2018,7 @@ class BreakGlassAccess:
                 'password': 'Complex password in sealed envelope',
                 'storage': 'Physical safe with dual control'
             },
+            # 日常運用では使わず、時間制限付きの緊急対応だけに限定する
             'permissions': 'AdministratorAccess',
             'monitoring': {
                 'login_alert': 'Immediate notification to security team',
@@ -1982,6 +2102,22 @@ class BreakGlassAccess:
             'testing': testing_schedule
         }
 ```
+
+注記: Break Glass は常用アカウントの代替ではありません。`AdministratorAccess` を与える場合も、時間制限・承認記録・MFA・セッション記録・事後レビューを必須にし、インシデント収束後は credential rotation と権限棚卸しを実施してください。
+
+Verify:
+
+- 四半期訓練では、`SSO/IdP 停止`、主要リージョン障害、主要通知経路（Slack / PagerDuty）断を含むシナリオで、実際に break glass 手順を完走できることを確認します。
+- 緊急用端末、MFA、runbook 保管場所が、本番アカウントや同一リージョンへ単一依存していないことを確認します。
+
+Risk:
+
+- 認証基盤、通知基盤、手順書保管場所が同一アカウント / 同一リージョン依存だと、障害時に break glass 自体が同時に失効します。
+
+Cleanup:
+
+- 訓練後は封緘情報、予備 MFA、緊急連絡先、一時迂回手段の有効性を確認し、失効した情報を更新します。
+- root でしか実行できない回復手順は、通常の break glass 管理者手順と分離し、root access key を常設しないこと、複数 MFA と回復用連絡先が単一担当者依存になっていないことを定期確認します。
 
 ### ゼロスタンディング権限
 
@@ -2195,7 +2331,10 @@ class ServiceAccountManagement:
                             'Action': 'sts:AssumeRole',
                             'Condition': {
                                 'StringEquals': {
-                                    'sts:ExternalId': self.generate_external_id()
+                                    'aws:SourceAccount': account_spec['source_account']
+                                },
+                                'ArnLike': {
+                                    'aws:SourceArn': account_spec['source_arn']
                                 }
                             }
                         }]
@@ -2223,7 +2362,8 @@ class ServiceAccountManagement:
                 
                 return {
                     'role_arn': role['Role']['Arn'],
-                    'external_id': external_id
+                    'source_account': account_spec['source_account'],
+                    'source_arn': account_spec['source_arn']
                 }
                 
             def audit_service_accounts(self):
@@ -2268,6 +2408,8 @@ class ServiceAccountManagement:
             'automation': service_account_automation
         }
 ```
+
+注記: service principal を trust policy に置く場合、`sts:ExternalId` より `aws:SourceArn` / `aws:SourceAccount` の方が service-to-service 呼び出しの委任元制約として自然です。連携先サービスがどの ARN から呼ぶかを先に決め、`SourceArn` がずれた場合に `AssumeRole` が拒否されることまで検証してください。
 
 ## 6.3 監査ログとセキュリティイベントの監視
 
@@ -5354,7 +5496,7 @@ class AutomatedPatching:
             },
             'distribution': {
                 'amiDistributionConfiguration': {
-                    'name': 'golden-ami-{% raw %}{{ imagebuilder:buildDate }}{% endraw %}',    
+                    'name': 'golden-ami-{% raw %}{{ imagebuilder:buildDate }}{% endraw %}',
                     'description': 'Patched and hardened AMI',
                     'targetAccountIds': ['production-account', 'staging-account'],
                     'amiTags': {
@@ -5431,6 +5573,31 @@ class AutomatedPatching:
             'rollout': rollout_strategy
         }
 ```
+
+注記: `RejectedPatches: ['kernel*']` は「恒久的に kernel 更新を避ける既定値」ではなく、一時例外の例として扱ってください。kernel 系 CVE を除外する場合は owner、expiry、代替ロールアウト手段（更新済み AMI への切替や計画再起動）を必ずセットで管理します。
+
+注記: `ApproveAfterDays: 0` は、Critical / Important を即時承認する緊急 baseline や canary / pilot 向けの短期例です。本番の標準 baseline では、先行波での異常有無を確認できる待機期間を別に設ける方が安全です。
+
+Verify:
+
+- `aws imagebuilder list-image-pipelines` や `aws imagebuilder get-image-pipeline --image-pipeline-arn ...` で、想定したパイプラインと配布設定が有効かを確認します。
+- 新しい AMI を配布した後は、Auto Scaling Group の Launch Template version と Instance Refresh の進捗を確認し、旧 AMI のインスタンスが残っていないことまで確認します。
+- パッチ適用後は `aws ssm describe-instance-patch-states --instance-ids ...` で `MissingCount` と `InstalledPendingRebootCount` を確認し、再起動待ちや未適用が残っていないかを確認します。
+- `aws ssm describe-instance-information --filters Key=PingStatus,Values=Online` で対象ノードが Systems Manager 管理下かつオンラインであることを確認し、`OperationEndTime` が直近メンテナンス期間以降になっているかも併せて見ます。
+- `aws ssm describe-maintenance-window-executions --window-id ...` や `aws ssm list-command-invocations --details` で、直近のメンテナンスウィンドウ / Run Command が対象ノードまで成功したかを確認します。compliance が更新されていても、個別ノードで実行失敗が残っていないかは別途見直してください。
+- 詳細確認が必要なノードは `aws ssm describe-instance-patches --instance-id ...` で個別パッチの状態を確認し、長期例外として扱う項目が waiver と一致しているかを見直します。
+
+Risk:
+
+- EC2 Image Builder のパイプライン自体を削除しても、出力済みの AMI や関連 snapshot は自動では消えません。ロールバック用の保持期間を決めずに古いイメージを放置すると、不要コストと誤起動の原因になります。
+- Patch Baseline、Patch Group、Maintenance Window の紐付けが曖昧なまま運用すると、OS 混在環境や stale tag により未適用 / 誤適用が発生し、長期例外が「見かけ上 compliant」な状態を作ります。
+- `PatchGroup` タグが未設定、または想定外の値を持つノードは default baseline へフォールバックすることがあります。Quick Setup や patch policy を使う環境では patch group 前提がそのまま当てはまらないため、どの仕組みで baseline を決めているかを明示してください。
+- `AWS-RunPatchBaselineAssociation` の compliance は association 単位の成否であり、個別パッチの適用明細そのものではありません。compliant をもって「必要なパッチが全て入った」と短絡しないようにします。
+
+Cleanup:
+
+- rollback window を過ぎた古い AMI / snapshot / Launch Template version は、Image Builder の lifecycle policy または明示的な runbook で段階的に整理してください。削除前に、どの Auto Scaling Group や環境が参照しているかを棚卸ししてから廃止する方が安全です。
+- AMI / OS 切替後は古い Patch Baseline、Maintenance Window、Association、期限切れ waiver を整理し、例外パッチには owner と expiry を必ず持たせます。
 
 **段階的ロールアウト**
 
@@ -5513,8 +5680,13 @@ class PhasedRollout:
             'ApprovedPatches': [],
             'RejectedPatches': ['kernel*'],  # カーネルパッチは個別に管理
             'ApprovedPatchesComplianceLevel': 'HIGH',
-            'ApprovedPatchesEnableNonSecurity': True
+            'ApprovedPatchesEnableNonSecurity': False
         }
+
+        # `ApproveAfterDays: 0` は本番の既定値というより、緊急 baseline や canary / pilot 向けの短期例
+        # 本番 wave では検証待機期間を持たせ、先行波での異常有無を確認してから承認範囲を広げる
+        # 標準 baseline は `ApprovedPatchesEnableNonSecurity: False` を基本とし、security / bugfix を中心に進める
+        # 非セキュリティ更新を急いで入れる場合は canary / emergency baseline を別に切る方が追跡しやすい
         
         # メンテナンスウィンドウ
         maintenance_windows = {
@@ -5645,7 +5817,7 @@ class ContainerSecurity:
         image_policies = {
             'base_image_policy': {
                 'allowed_base_images': [
-                    'alpine:latest',
+                    'alpine:3.18',
                     'ubuntu:22.04',
                     'ubuntu:24.04',
                     'amazonlinux:2023'

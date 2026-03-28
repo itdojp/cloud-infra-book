@@ -1689,13 +1689,21 @@ sudo yum install -y amazon-efs-utils
 # マウントポイントの作成
 sudo mkdir -p {mount_point}
 
-# /etc/fstab への追加（永続化）
-echo "{file_system_id}:/ {mount_point} efs _netdev,tls 0 0" | sudo tee -a /etc/fstab
+# /etc/fstab へ追記する前に退避と重複確認を行う
+FSTAB_LINE="{file_system_id}:/ {mount_point} efs _netdev,tls 0 0"
+sudo cp /etc/fstab /etc/fstab.bak.$(date +%Y%m%d%H%M%S)
+if ! grep -Fq "$FSTAB_LINE" /etc/fstab; then
+    echo "$FSTAB_LINE" | sudo tee -a /etc/fstab
+fi
+
+# 本番反映前に fstab の整合を確認する
+sudo findmnt --verify --tab-file /etc/fstab
 
 # マウント実行
 sudo mount -a
 
 # マウント確認
+findmnt {mount_point}
 df -h | grep {mount_point}
 """
         
@@ -1814,15 +1822,23 @@ sudo chmod 600 /etc/smbcredentials/<storage-account>.cred
 # マウントポイントの作成
 sudo mkdir -p /mnt/azurefiles
 
-# fstab への追加
+# fstab へ追記する前に退避と重複確認を行う
 SERVER="//<storage-account>.file.core.windows.net/{share_name}"
 MOUNTPOINT="/mnt/azurefiles"
 CRED="/etc/smbcredentials/<storage-account>.cred"
-OPTS="nofail,vers=3.0,credentials=$CRED,dir_mode=0777,file_mode=0777,serverino"
-echo "$SERVER $MOUNTPOINT cifs $OPTS" | sudo tee -a /etc/fstab
+OPTS="nofail,vers=3.0,credentials=$CRED,dir_mode=0770,file_mode=0660,serverino"
+FSTAB_LINE="$SERVER $MOUNTPOINT cifs $OPTS"
+sudo cp /etc/fstab /etc/fstab.bak.$(date +%Y%m%d%H%M%S)
+if ! grep -Fq "$FSTAB_LINE" /etc/fstab; then
+    echo "$FSTAB_LINE" | sudo tee -a /etc/fstab
+fi
+
+# 本番反映前に fstab の整合を確認する
+sudo findmnt --verify --tab-file /etc/fstab
 
 # マウント実行
 sudo mount -a
+findmnt "$MOUNTPOINT"
 """
         
         return {

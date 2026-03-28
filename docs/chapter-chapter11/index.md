@@ -204,6 +204,10 @@ resource "aws_autoscaling_group" "app" {
     id      = aws_launch_template.app.id
     version = "$Latest"
   }
+
+  # 注記: `"$Latest"` は review 外で追加された Launch Template version も拾います。
+  # 本番では default version か承認済みの明示 version を使い、version 更新は
+  # 別 change として review してから instance refresh へ進める方が安全です。
   
   # インスタンスの更新戦略
   instance_refresh {
@@ -334,6 +338,8 @@ resource "aws_rds_cluster_instance" "aurora" {
 }
 ```
 
+注記: `random_password.db_password.result` のような値は、Terraform state や `terraform show -json` に残る可能性があります。state backend は暗号化とアクセス制御を前提にし、共有 review へ平文を流さないでください。可能なら DB 認証情報は外部 secret store や managed rotation と組み合わせ、state に機微情報を長期間残さない構成を優先します。
+
 ### ディザスタリカバリ戦略
 
 **RPOとRTOに基づく戦略選択**
@@ -385,6 +391,8 @@ disaster_recovery_strategies:
       - グローバルロードバランシング
       - 自動フェイルオーバー
 ```
+
+Pilot Light や Warm Standby でデータベースの read replica を昇格させる場合は、切り替え前に最新バックアップ取得状況と replication lag の許容範囲を確認してください。`promote_read_replica` 実行後は元の複製関係が切れるため、フェイルバックは別手順として用意し、RTO/RPO は定期訓練で実測して更新する前提が必要です。
 
 **Pilot Light DR実装例**
 
@@ -637,6 +645,8 @@ if __name__ == "__main__":
         print(f"Primary site unhealthy: {message}")
         dr_manager.activate_dr_site()
 ```
+
+注記: 実運用では 1 回の health check 失敗だけで即時フェイルオーバーせず、`check-health --dry-run` で現行 DNS weight、target health、ASG desired capacity、DB 状態を記録してから、`failover --confirm` と `verify-dr` を分けて実行する方が安全です。Route 53 health check を新規作成した場合は、切り戻し後に不要な health check を削除する cleanup も runbook に含めてください。
 
 ## 11.2 マルチクラウドとハイブリッドクラウド
 
@@ -1003,7 +1013,7 @@ spec:
         spec:
           containers:
           - name: app
-            image: myregistry/app:latest
+            image: myregistry/app:1.2.3@sha256:replace-with-approved-digest
             ports:
             - containerPort: 8080
             env:
@@ -1029,6 +1039,8 @@ spec:
     clusterOverrides:
     - path: "/spec/replicas"
       value: 1
+
+注記: マルチクラウド配備では、可変タグではなく承認済みの固定タグまたは digest を全クラスタで共通参照する方が再現しやすくなります。切り替え後は各クラスタで `kubectl get deployment -o jsonpath=...` などを使い、実際に適用された image が意図どおりかを確認してください。image が一致していても rollout 未完了や traffic weight の反映遅延は別に起こるため、`kubectl rollout status` と service mesh / traffic manager 側の weight・到達先確認もあわせて行う方が安全です。
 ---
 # グローバルサービスメッシュ（Istio）
 apiVersion: networking.istio.io/v1beta1
