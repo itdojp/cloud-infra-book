@@ -19,11 +19,11 @@
 ## オンライン版（入口）
 
 - リポジトリ内: `docs/index.md`
-- GitHub Pages を有効化している場合: https://itdojp.github.io/cloud-infra-book/
+- GitHub Pages を有効化している場合: [クラウドインフラ設計・構築ガイド](https://itdojp.github.io/cloud-infra-book/)
 
 ## フィードバック
 
-- Issue: https://github.com/itdojp/cloud-infra-book/issues
+- Issue: [itdojp/cloud-infra-book の Issues](https://github.com/itdojp/cloud-infra-book/issues)
 
 ## ライセンス
 
