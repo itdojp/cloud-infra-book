@@ -79,7 +79,7 @@ title: "クラウドインフラ設計・構築ガイド"
 ## 利用と更新情報
 
 - リポジトリ: [itdojp/cloud-infra-book](https://github.com/itdojp/cloud-infra-book)
-- 更新差分を追う場合は、GitHub のコミット履歴と Pull Request を参照してください。
+- 更新差分を追う場合は、GitHub のコミット履歴と PR 一覧を参照してください。
 - クラウドサービスの仕様は変わりやすいため、実運用へ適用する前に各プロバイダの一次情報も確認してください。
 
 ## 関連書籍
