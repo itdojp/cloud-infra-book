@@ -38,6 +38,24 @@ title: "クラウドインフラ設計・構築ガイド"
 - IAM、ネットワーク、IaC の章では、最小権限、変更承認、ロールバック手順を前提に読み進めてください。
 - クラウドサービスの課金、権限、利用可能な機能は、契約プランやリージョン、時点によって変わります。実行前に各プロバイダの公式ドキュメントを確認してください。
 
+## 実務適用前のクラウド設計レビューゲート
+
+クラウド設計は、サービス名や構成例を写すだけでは完了しません。採用前に、以下の証跡をそろえて
+レビューします。
+
+- 責任共有: 利用するサービスごとに、プロバイダ責任、利用者責任、運用チーム責任、委託先責任を分ける。
+- IDと権限: 人間、CI/CD、IaC、ワークロードIDの権限を分離し、期限付き権限と監査ログを確認する。
+- ネットワーク: VPC/VNet、サブネット、経路、公開面、PrivateLink/Private Endpoint、DNS、egress を図示する。
+- 可用性とDR: 単一障害点、リージョン/AZ依存、RPO/RTO、バックアップ、リストア演習、フェイルバック条件を記録する。
+- コストと廃棄: 予算、アラート、タグ、データ転送、検証環境のTTL、削除手順、残存リソース確認を用意する。
+- 変更証跡: IaC plan、差分レビュー、承認者、ロールバック、未解決リスク、公開後の監視結果をPRや設計記録に残す。
+
+責任共有モデルはプロバイダとサービスモデルによって変化します。2026年5月23日時点では、
+[AWS の責任共有モデル](https://aws.amazon.com/jp/compliance/shared-responsibility-model/)、
+[Azure の責任共有モデル](https://learn.microsoft.com/azure/security/fundamentals/shared-responsibility)、
+[Google Cloud の shared responsibility / shared fate](https://docs.cloud.google.com/architecture/framework/security/shared-responsibility-shared-fate)
+を一次情報として確認し、実環境では利用サービス単位の最新ドキュメントに戻って判断してください。
+
 ## 所要時間
 - 通読: 約3.5〜5.5時間（本文量ベース概算。コードブロック除外、400〜600文字/分換算）
 - クラウド環境での検証を並行する場合は、利用サービスと検証範囲により変動します。
@@ -94,9 +112,10 @@ Email: [knowledge@itdo.jp](mailto:knowledge@itdo.jp)
 
 ---
 
-**著者**: 株式会社アイティードゥ  
-**Email**: knowledge@itdo.jp  
-**GitHub**: [@itdojp](https://github.com/itdojp)  
-**バージョン**: 1.0.1  
-**最終更新**: 2026-02-20
+- **著者**: 株式会社アイティードゥ
+- **Email**: [knowledge@itdo.jp](mailto:knowledge@itdo.jp)
+- **GitHub**: [@itdojp](https://github.com/itdojp)
+- **バージョン**: 1.0.1
+- **最終更新**: 2026-05-23
+
 {% include page-navigation.html %}
