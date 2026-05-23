@@ -1575,12 +1575,10 @@ jobs:
 
 注記: `image.tar` を artifact として受け渡す方法は、ジョブ分離を避けるための最小例です。大きなイメージや複数アーキテクチャを扱う実運用では、build job で ECR へ push し、deploy job は commit SHA や digest で同じイメージを参照する方が扱いやすくなります。可変な `production` tag は人間向けの別名として残してもよいですが、ECS task definition は SHA tag または digest を参照する方が再現しやすくなります。
 
-> Verify
-> build job で push した後に `aws ecr describe-images --repository-name ... --image-ids imageTag=${GITHUB_SHA}` などで `imageDigest` を取得し、deploy 時に登録する task definition が同じ SHA tag または `@sha256:` 参照を使っていることを確認してください。ECS は tag 解決時に digest を内部利用できますが、レビュー対象と実際の deploy 対象が一致したことを監査ログから追える形にしておく方が安全です。
-> あわせて、`aws ecs describe-services --cluster production --services web-app --query 'services[0].taskDefinition' --output text` で現在の task definition ARN を取得し、`aws ecs describe-task-definition --task-definition ... --query 'taskDefinition.containerDefinitions[*].image'` で期待する SHA tag / digest が実際に参照されていることまで確認してください。
+**Verify**: build job で push した後に `aws ecr describe-images --repository-name ... --image-ids imageTag=${GITHUB_SHA}` などで `imageDigest` を取得し、deploy 時に登録する task definition が同じ SHA tag または `@sha256:` 参照を使っていることを確認してください。ECS は tag 解決時に digest を内部利用できますが、レビュー対象と実際の deploy 対象が一致したことを監査ログから追える形にしておく方が安全です。
+あわせて、`aws ecs describe-services --cluster production --services web-app --query 'services[0].taskDefinition' --output text` で現在の task definition ARN を取得し、`aws ecs describe-task-definition --task-definition ... --query 'taskDefinition.containerDefinitions[*].image'` で期待する SHA tag / digest が実際に参照されていることまで確認してください。
 
-> Rollback
-> スモークテストや target health の確認に失敗した場合は、`aws ecs update-service --cluster production --service web-app --task-definition "$PREVIOUS_TASK_DEF"` を実行し、`aws ecs wait services-stable --cluster production --services web-app` と target health の再確認を行ってください。このサンプルでは `PREVIOUS_TASK_DEF` を `GITHUB_ENV` に保存しているため、後続 step から直前 revision へ戻せます。
+**Rollback**: スモークテストや target health の確認に失敗した場合は、`aws ecs update-service --cluster production --service web-app --task-definition "$PREVIOUS_TASK_DEF"` を実行し、`aws ecs wait services-stable --cluster production --services web-app` と target health の再確認を行ってください。このサンプルでは `PREVIOUS_TASK_DEF` を `GITHUB_ENV` に保存しているため、後続 step から直前 revision へ戻せます。
 
 ### イメージ管理のベストプラクティス
 
@@ -1713,6 +1711,7 @@ Cleanup:
 - 検証後は `docker compose down -v` で `notary-data` を含む lab 用 volume を削除し、検証用に作成した Content Trust key は `~/.docker/trust/private` から安全に退避または廃棄します。既存の署名運用と共有している鍵は誤って削除しないよう、検証専用ディレクトリで分離する方が安全です。
 
 サーバーレスとコンテナは、それぞれ異なる強みを持つクラウドネイティブ技術です。サーバーレスはイベント駆動で断続的なワークロードに最適であり、コンテナは複雑なアプリケーションや継続的な処理に適しています。重要なのは、それぞれの特性を理解し、適切なワークロードに適切な技術を選択することです。両者を組み合わせることで、スケーラブルで効率的、かつ管理しやすいクラウドネイティブアーキテクチャを実現できます。
+
 ---
 
 [第10章](../chapter-chapter10/index.md)へ進む

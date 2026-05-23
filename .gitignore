@@ -5,8 +5,11 @@ package-lock.json
 # Build outputs
 _build/
 _site/
+docs/_site/
 .tmp/
 *.log
+docs/Gemfile.lock
+vendor/bundle/
 
 # IDE
 .vscode/
@@ -27,3 +30,15 @@ Thumbs.db
 # Temporary files
 .cache/
 tmp/
+
+# Local secrets and cloud/IaC artifacts
+.env
+.env.*
+!.env.example
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan*
+crash.log
+infracost*.json

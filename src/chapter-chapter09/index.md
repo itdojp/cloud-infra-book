@@ -1575,12 +1575,10 @@ jobs:
 
 注記: `image.tar` を artifact として受け渡す方法は、ジョブ分離を避けるための最小例です。大きなイメージや複数アーキテクチャを扱う実運用では、build job で ECR へ push し、deploy job は commit SHA や digest で同じイメージを参照する方が扱いやすくなります。可変な `production` tag は人間向けの別名として残してもよいですが、ECS task definition は SHA tag または digest を参照する方が再現しやすくなります。
 
-> Verify
-> build job で push した後に `aws ecr describe-images --repository-name ... --image-ids imageTag=${GITHUB_SHA}` などで `imageDigest` を取得し、deploy 時に登録する task definition が同じ SHA tag または `@sha256:` 参照を使っていることを確認してください。ECS は tag 解決時に digest を内部利用できますが、レビュー対象と実際の deploy 対象が一致したことを監査ログから追える形にしておく方が安全です。
-> あわせて、`aws ecs describe-services --cluster production --services web-app --query 'services[0].taskDefinition' --output text` で現在の task definition ARN を取得し、`aws ecs describe-task-definition --task-definition ... --query 'taskDefinition.containerDefinitions[*].image'` で期待する SHA tag / digest が実際に参照されていることまで確認してください。
+**Verify**: build job で push した後に `aws ecr describe-images --repository-name ... --image-ids imageTag=${GITHUB_SHA}` などで `imageDigest` を取得し、deploy 時に登録する task definition が同じ SHA tag または `@sha256:` 参照を使っていることを確認してください。ECS は tag 解決時に digest を内部利用できますが、レビュー対象と実際の deploy 対象が一致したことを監査ログから追える形にしておく方が安全です。
+あわせて、`aws ecs describe-services --cluster production --services web-app --query 'services[0].taskDefinition' --output text` で現在の task definition ARN を取得し、`aws ecs describe-task-definition --task-definition ... --query 'taskDefinition.containerDefinitions[*].image'` で期待する SHA tag / digest が実際に参照されていることまで確認してください。
 
-> Rollback
-> スモークテストや target health の確認に失敗した場合は、`aws ecs update-service --cluster production --service web-app --task-definition "$PREVIOUS_TASK_DEF"` を実行し、`aws ecs wait services-stable --cluster production --services web-app` と target health の再確認を行ってください。このサンプルでは `PREVIOUS_TASK_DEF` を `GITHUB_ENV` に保存しているため、後続 step から直前 revision へ戻せます。
+**Rollback**: スモークテストや target health の確認に失敗した場合は、`aws ecs update-service --cluster production --service web-app --task-definition "$PREVIOUS_TASK_DEF"` を実行し、`aws ecs wait services-stable --cluster production --services web-app` と target health の再確認を行ってください。このサンプルでは `PREVIOUS_TASK_DEF` を `GITHUB_ENV` に保存しているため、後続 step から直前 revision へ戻せます。
 
 ### イメージ管理のベストプラクティス
 

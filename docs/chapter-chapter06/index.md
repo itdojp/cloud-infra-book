@@ -639,11 +639,9 @@ class ConditionalAccess:
 
 注記: `PowerUserAccess` や `CloudWatchFullAccess` などの AWS managed policy は導入や検証には便利ですが、最小権限にはなりません。本番運用では customer managed policy、permissions boundary、IAM Access Analyzer などを使って段階的に絞り込んでください。permissions boundary は許可を追加する仕組みではなく、既に付与された権限の上限を制限する境界です。boundary だけを追加してもアクセスは増えないため、identity policy / session policy / SCP を含めた合成結果を IAM Policy Simulator と検証環境の両方で確認してください。確認先として、AWS IAM の best practices と「AWS managed policies から least privilege へ寄せる」公式ガイドを参照してください。権限を絞り込んだ後は、IAM Policy Simulator で主要 API の許可・拒否を確認し、最終的には検証環境で実リクエストを流して差分を確認する運用を前提にしてください。Policy Simulator も live 環境を完全には再現しないため、最終確認は本番相当の検証環境で実施してください。
 
-> Verify
-> 権限縮小後は、代表的な操作を 3〜5 本に絞って検証環境で実行し、`AccessDenied` の有無だけでなく、CloudTrail や IAM Access Advisor で未使用サービスと想定外 deny が増えていないことも確認してください。
+**Verify**: 権限縮小後は、代表的な操作を 3〜5 本に絞って検証環境で実行し、`AccessDenied` の有無だけでなく、CloudTrail や IAM Access Advisor で未使用サービスと想定外 deny が増えていないことも確認してください。
 
-> Risk
-> AWS managed policy から customer managed policy へ切り替える前に、直前の policy JSON、policy version、permissions boundary の設定を rollback 用に退避してください。緊急時に元へ戻せないと、権限不足の切り分けより復旧の方が遅れます。
+**Risk**: AWS managed policy から customer managed policy へ切り替える前に、直前の policy JSON、policy version、permissions boundary の設定を rollback 用に退避してください。緊急時に元へ戻せないと、権限不足の切り分けより復旧の方が遅れます。
 
 ```python
 class GroupBasedManagement:
@@ -6321,6 +6319,7 @@ class ContinuousSecurityImprovement:
 5. **脆弱性管理とパッチ適用**：継続的なセキュリティ改善プロセスとDevSecOpsの実践を学びました。
 
 これらの技術と実践を組み合わせることで、クラウド環境における包括的なセキュリティ体制を構築できるようになりました。セキュリティは一度構築すれば終わりではなく、継続的な改善が必要な領域です。次章では、このセキュアなインフラストラクチャを効果的に監視し、最適化するための手法について詳しく学びます。
+
 ---
 
 [第07章](../chapter-chapter07/index.md)へ進む
