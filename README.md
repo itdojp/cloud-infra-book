@@ -21,6 +21,18 @@
 - リポジトリ内: `docs/index.md`
 - GitHub Pages を有効化している場合: [クラウドインフラ設計・構築ガイド](https://itdojp.github.io/cloud-infra-book/)
 
+
+## ローカル品質チェック
+
+このリポジトリでは、書籍メタデータと公開設定のずれを防ぐため、ローカル QA にメタデータ整合チェックを含めています。
+
+```bash
+npm install
+npm run test
+```
+
+`npm run check:metadata` は、`book-config.json`、`package.json`、Jekyll 設定、`docs/index.md` の title / version / repository / Pages URL を照合します。
+
 ## フィードバック
 
 - Issue: [itdojp/cloud-infra-book の Issues](https://github.com/itdojp/cloud-infra-book/issues)
