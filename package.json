@@ -1,17 +1,18 @@
 {
-  "name": "クラウドインフラ設計・構築ガイド",
-  "version": "1.0.0",
+  "name": "cloud-infra-book",
+  "version": "1.0.1",
   "description": "クラウドインフラエンジニアが実際の設計・構築業務で必要な知識を体系的に学べる実践書。設計の背景にある原理原則と実装判断の根拠を丁寧に解説し、単なる操作手順ではなく考え方を身につけることを重視しています。",
   "main": "index.md",
   "scripts": {
     "start": "jekyll serve --livereload",
     "build": "jekyll build",
     "build:safe": "bundle exec jekyll build",
-    "test": "npm run lint && npm run check-links",
+    "test": "npm run check:metadata && npm run lint && npm run check-links",
     "lint": "markdownlint src/**/*.md",
     "check-links": "markdown-link-check src/**/*.md",
     "check-conflicts": "node scripts/jekyll-conflict-detector.js",
-    "deploy": "gh-pages -d _site"
+    "deploy": "gh-pages -d _site",
+    "check:metadata": "node scripts/check-metadata-consistency.js"
   },
   "keywords": [
     "cloud",
@@ -33,5 +34,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/itdojp/cloud-infra-book.git"
+  },
+  "homepage": "https://itdojp.github.io/cloud-infra-book/",
+  "bugs": {
+    "url": "https://github.com/itdojp/cloud-infra-book/issues"
   }
 }
