@@ -9,7 +9,7 @@
     "build:safe": "bundle exec jekyll build",
     "test": "npm run check:metadata && npm run lint && npm run check-links",
     "lint": "markdownlint src/**/*.md",
-    "check-links": "markdown-link-check src/**/*.md",
+    "check-links": "markdown-link-check -c .markdown-link-check.json src/**/*.md",
     "check-conflicts": "node scripts/jekyll-conflict-detector.js",
     "deploy": "gh-pages -d _site",
     "check:metadata": "node scripts/check-metadata-consistency.js"
@@ -27,7 +27,7 @@
   "author": "株式会社アイティードゥ",
   "license": "CC-BY-NC-SA-4.0",
   "devDependencies": {
-    "markdownlint-cli": "^0.37.0",
+    "markdownlint-cli": "^0.48.0",
     "markdown-link-check": "^3.11.2",
     "gh-pages": "^6.0.0"
   },
