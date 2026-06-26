@@ -1609,7 +1609,7 @@ class LeastPrivilegeCredentials:
         """
         credential_templates = {
             'ci_cd_deployment': {
-                'description': 'CI/CDパイプライン用',
+                'description': 'CI/CD パイプライン用',
                 'policy': {
                     'Version': '2012-10-17',
                     'Statement': [
@@ -2318,7 +2318,7 @@ class ServiceAccountManagement:
                 # アカウントの作成
                 account_name = self.generate_account_name(account_spec)
                 
-                # IAMロールの作成
+                # IAM ロールの作成
                 role = self.iam.create_role(
                     RoleName=account_name,
                     AssumeRolePolicyDocument=json.dumps({
@@ -2457,7 +2457,7 @@ class AuditLogIntegrity:
             }]
         }
         
-        # S3バケットの保護設定
+        # S3 バケットの保護設定
         s3_protection = {
             'bucket_policy': {
                 'Version': '2012-10-17',

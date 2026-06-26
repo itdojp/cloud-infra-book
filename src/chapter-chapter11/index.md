@@ -460,7 +460,7 @@ class DisasterRecoveryManager:
         print("Promoting RDS read replica...")
         self.promote_rds_replica()
         
-        # 2. EC2インスタンスの起動
+        # 2. EC2 インスタンスの起動
         print("Starting EC2 instances...")
         self.start_dr_instances()
         
