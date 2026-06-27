@@ -434,7 +434,7 @@ class DisasterRecoveryTester:
         return test_results
     
     def _test_ec2_recovery(self, config: Dict) -> Dict:
-        """EC2インスタンスの復旧テスト"""
+        """EC2 インスタンスの復旧テスト"""
         try:
             # スナップショットからのAMI作成
             snapshot_id = config['snapshot_id']
@@ -617,7 +617,7 @@ class DisasterRecoveryTester:
             return {'match': False, 'error': str(e)}
     
     def _list_s3_objects(self, bucket_name: str) -> List[str]:
-        """S3バケット内のオブジェクト一覧を取得"""
+        """S3 バケット内のオブジェクト一覧を取得"""
         objects = []
         paginator = self.s3.get_paginator('list_objects_v2')
         pages = paginator.paginate(Bucket=bucket_name)
@@ -835,7 +835,7 @@ class ImmutableBackupManager:
         
     def create_immutable_backup_bucket(self, bucket_name: str, 
                                      retention_days: int = 2555) -> Dict:
-        """イミュータブルバックアップ用のS3バケットを作成"""
+        """イミュータブルバックアップ用の S3 バケットを作成"""
         try:
             # バケットの作成
             self.s3.create_bucket(

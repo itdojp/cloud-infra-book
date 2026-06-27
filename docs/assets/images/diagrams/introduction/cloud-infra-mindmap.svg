@@ -199,7 +199,7 @@
   <line x1="680" y1="80" x2="720" y2="120" class="sub-branch"/>
   <rect x="660" y="110" width="120" height="60" rx="4" class="core-node"/>
   <text x="720" y="130" class="topic-text">ネットワーク</text>
-  <text x="720" y="145" class="subtopic-text">VPC設計</text>
+  <text x="720" y="145" class="subtopic-text">VPC 設計</text>
   <text x="720" y="155" class="subtopic-text">DNS・CDN</text>
   <text x="720" y="165" class="subtopic-text">セキュリティグループ</text>
   

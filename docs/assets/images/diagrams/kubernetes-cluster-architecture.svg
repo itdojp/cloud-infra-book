@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
-  <title>Kubernetesクラスターアーキテクチャ</title>
-  <desc>マスター/ワーカーノード構成、ネットワーキング、ストレージを含むKubernetesクラスターの完全なアーキテクチャ図</desc>
+  <title>Kubernetes クラスターアーキテクチャ</title>
+  <desc>マスター/ワーカーノード構成、ネットワーキング、ストレージを含む Kubernetes クラスターの完全なアーキテクチャ図</desc>
   <defs>
     <style>
       :root {
@@ -30,7 +30,7 @@
   </defs>
 
   <!-- Title -->
-  <text x="400" y="30" class="title-text" text-anchor="middle">Kubernetesクラスターアーキテクチャ</text>
+  <text x="400" y="30" class="title-text" text-anchor="middle">Kubernetes クラスターアーキテクチャ</text>
 
   <!-- Control Plane (Master Nodes) -->
   <g id="control-plane">

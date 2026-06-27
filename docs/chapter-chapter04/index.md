@@ -1647,7 +1647,7 @@ class FileStorageArchitecture:
         
         # 利点の実証
         benefits = {
-            'concurrent_access': '数千のEC2インスタンスから同時アクセス可能',
+            'concurrent_access': '数千の EC2 インスタンスから同時アクセス可能',
             'automatic_scaling': 'ペタバイト規模まで自動拡張',
             'high_availability': 'マルチAZ配置による高可用性',
             'posix_compliance': 'POSIXファイルシステムセマンティクス',

@@ -24,7 +24,7 @@ chapter: chapter05
 ```python
 class VPCDesignPrinciples:
     """
-    VPC設計の原則と実装
+    VPC 設計の原則と実装
     """
     
     def __init__(self):
@@ -724,7 +724,7 @@ class ScalableNetworkDesign:
             'multi_region': {
                 'scenario': 'マルチリージョン展開',
                 'requirements': [
-                    'リージョン間VPCピアリング',
+                    'リージョン間 VPC ピアリング',
                     'Transit Gateway',
                     'グローバルなCIDR管理'
                 ],
@@ -809,12 +809,12 @@ class ScalableNetworkDesign:
         }
 ```
 
-### VPC設計のベストプラクティス実装
+### VPC 設計のベストプラクティス実装
 
 ```python
 class VPCBestPractices:
     """
-    VPC設計のベストプラクティス
+    VPC 設計のベストプラクティス
     """
     
     def __init__(self):
@@ -1039,7 +1039,7 @@ class CloudRouting:
         """
         高度なルーティングの実装
         """
-        # VPCピアリングのルーティング
+        # VPC ピアリングのルーティング
         peering_routing = {
             'requester_vpc': {
                 'route': '10.1.0.0/16',
@@ -2156,7 +2156,7 @@ class ApplicationLoadBalancer:
                 'コスト効率'
             ],
             'use_cases': [
-                'APIゲートウェイ代替',
+                'API ゲートウェイ代替',
                 'マイクロサービス',
                 'イベント処理'
             ]
@@ -2807,7 +2807,7 @@ class CloudNativeDNS:
                     '動的なレコード更新',
                     '自動化されたフェイルオーバー'
                 ],
-                'example': 'CI/CDパイプラインからのDNS更新'
+                'example': 'CI/CD パイプラインからの DNS 更新'
             },
             'global_distribution': {
                 'description': 'エニーキャストによる高可用性',

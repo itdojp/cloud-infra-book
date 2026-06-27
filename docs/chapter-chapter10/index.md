@@ -191,7 +191,7 @@ git show a5f3c21
 
 レベル4 - 完全自動化:
   特徴:
-    - CI/CDパイプライン統合
+    - CI/CD パイプライン統合
     - 自動テスト実装
     - Policy as Code
   成果:
@@ -253,7 +253,7 @@ resource "aws_config_config_rule" "terraform_managed" {
   # タグがない（手動作成された）リソースを検出
 }
 
-# 3. IAMポリシーによる手動変更の防止
+# 3. IAM ポリシーによる手動変更の防止
 data "aws_iam_policy_document" "prevent_manual_changes" {
   statement {
     effect = "Deny"
@@ -1366,7 +1366,7 @@ class AWSInventory:
         self.inventory['_meta'] = {'hostvars': {}}
 
     def get_instances(self):
-        """EC2インスタンスを取得してインベントリを構築"""
+        """EC2 インスタンスを取得してインベントリを構築"""
         ec2 = boto3.client('ec2', region_name='ap-northeast-1')
 
         # 実行中のインスタンスを取得
@@ -1572,13 +1572,13 @@ Risk: `~/.vault_pass` のような長寿命ファイルを使う場合は、repo
 
 Cleanup: 学習用に作成した `~/.vault_pass` や平文 `secrets.yml` が残っていないかを確認し、不要になったら削除または安全な保管先へ移してください。誤って VCS 管理下へ入っていないかも合わせて確認してください。
 
-## 10.4 CI/CDパイプラインとデプロイ自動化
+## 10.4 CI/CD パイプラインとデプロイ自動化
 
 ### CI/CDの本質と価値
 
 継続的インテグレーション（CI）と継続的デリバリー（CD）は、ソフトウェア開発のスピードと品質を両立させるための方法論です。インフラストラクチャのコード化により、これらの実践をインフラ管理にも適用できるようになりました。
 
-**CI/CDパイプラインの設計原則**
+**CI/CD パイプラインの設計原則**
 
 ```yaml
 パイプライン設計の原則:
@@ -1603,7 +1603,7 @@ Cleanup: 学習用に作成した `~/.vault_pass` や平文 `secrets.yml` が残
     - コンプライアンス対応
 ```
 
-### 包括的なCI/CDパイプラインの実装
+### 包括的な CI/CD パイプラインの実装
 
 **GitHub Actionsによる完全自動化**
 
