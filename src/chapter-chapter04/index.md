@@ -1756,6 +1756,7 @@ df -h | grep {mount_point}
 
 Windows環境での標準プロトコル：
 
+{% raw %}
 ```python
 class SMBImplementation:
     """
@@ -1842,6 +1843,7 @@ findmnt "$MOUNTPOINT"
         }
 
 ```
+{% endraw %}
 
 ### パフォーマンスとスケーラビリティ
 
