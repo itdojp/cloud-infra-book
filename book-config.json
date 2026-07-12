@@ -85,12 +85,12 @@
     "modules": {
       "quickStart": false,
       "readingGuide": true,
-      "checklistPack": false,
+      "checklistPack": true,
       "troubleshootingFlow": false,
       "conceptMap": false,
       "figureIndex": false,
       "legalNotice": true,
-      "glossary": false
+      "glossary": true
     }
   },
   "shared": {
