@@ -90,9 +90,17 @@ expect(
 expect(count(files.top, '(concept-map/)') === 1, 'docs/index.md: concept-map route must occur once');
 expect(count(files.nav, 'path: /concept-map/') === 1, 'navigation: /concept-map/ must occur once');
 expect(count(files.nav, 'path: /appendices/') === 1, 'navigation: /appendices/ must occur once');
+const navigationBridge = [
+  'resources:',
+  '- title: クラウドインフラ概念マップ',
+  '  path: /concept-map/',
+  'appendices:',
+  '- title: 付録：参考資料',
+  '  path: /appendices/',
+].join('\n');
 expect(
-  files.nav.indexOf('path: /concept-map/') < files.nav.indexOf('path: /appendices/'),
-  'navigation: concept map must immediately precede appendices in reading order',
+  count(files.nav, navigationBridge) === 1,
+  'navigation: concept map must immediately precede appendices as the only resources entry',
 );
 expect(files.public.includes('order: 14'), 'public concept map: order 14 missing');
 expect(files.appendix.includes('order: 15'), 'public appendices: order 15 missing');

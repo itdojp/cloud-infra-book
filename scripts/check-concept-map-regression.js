@@ -11,13 +11,23 @@ fs.mkdirSync(TMP_PARENT, { recursive: true });
 const suiteRoot = fs.mkdtempSync(path.join(TMP_PARENT, 'concept-map-regression-'));
 const checker = path.join(ROOT, 'scripts', 'check-concept-map.js');
 
+function shouldCopy(source) {
+  const parts = path.resolve(source).split(path.sep);
+  return !parts.includes('_site') && !parts.includes('.jekyll-cache');
+}
+
+if (shouldCopy(path.join(ROOT, 'docs', '_site'))
+  || shouldCopy(path.join(ROOT, 'docs', '.jekyll-cache'))
+  || shouldCopy(path.join(ROOT, 'docs', '_site', 'index.html'))) {
+  throw new Error('build artifact copy filter must reject directory entries and descendants');
+}
+
 function copyBaseline(target) {
   fs.mkdirSync(target, { recursive: true });
   for (const relativePath of ['book-config.json', 'package.json', 'src', 'docs']) {
     fs.cpSync(path.join(ROOT, relativePath), path.join(target, relativePath), {
       recursive: true,
-      filter: (source) => !source.includes(path.sep + '_site' + path.sep)
-        && !source.includes(path.sep + '.jekyll-cache' + path.sep),
+      filter: shouldCopy,
     });
   }
 }
