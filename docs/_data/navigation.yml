@@ -24,6 +24,9 @@ chapters:
   path: /chapter-chapter10/
 - title: 第11章：エンタープライズ設計パターンと事例
   path: /chapter-chapter11/
+resources:
+- title: クラウドインフラ概念マップ
+  path: /concept-map/
 appendices:
 - title: 付録：参考資料
   path: /appendices/

@@ -74,6 +74,11 @@
     ],
     "appendices": [
       {
+        "id": "concept-map",
+        "title": "概念マップ",
+        "description": "責任共有から各設計領域と対応章をたどるreader-facing map"
+      },
+      {
         "id": "appendices",
         "title": "付録：参考資料",
         "description": "比較表、参考文献、外部リソースへの導線"
@@ -87,7 +92,7 @@
       "readingGuide": true,
       "checklistPack": true,
       "troubleshootingFlow": false,
-      "conceptMap": false,
+      "conceptMap": true,
       "figureIndex": false,
       "legalNotice": true,
       "glossary": true
