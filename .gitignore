@@ -41,3 +41,6 @@ tmp/
 tfplan*
 crash.log
 infracost*.json
+
+# Local agent/build scratch
+.codex-local/
