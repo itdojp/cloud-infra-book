@@ -27,9 +27,9 @@
   "author": "株式会社アイティードゥ",
   "license": "CC-BY-NC-SA-4.0",
   "devDependencies": {
-    "markdownlint-cli": "^0.48.0",
+    "gh-pages": "^6.0.0",
     "markdown-link-check": "^3.11.2",
-    "gh-pages": "^6.0.0"
+    "markdownlint-cli": "^0.49.0"
   },
   "repository": {
     "type": "git",
@@ -38,5 +38,8 @@
   "homepage": "https://itdojp.github.io/cloud-infra-book/",
   "bugs": {
     "url": "https://github.com/itdojp/cloud-infra-book/issues"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }
