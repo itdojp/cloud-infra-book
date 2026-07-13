@@ -46,5 +46,3 @@ title: "クラウドインフラ概念マップ"
 - [付録：参考資料](https://itdojp.github.io/cloud-infra-book/appendices/): 設計checklist、用語、provider比較、一次情報への導線を確認する。
 
 図を入口にした場合も、実環境へ適用する前に対応章の前提、制約、検証条件へ戻り、利用するproviderとserviceの最新公式資料を確認してください。
-
-{% include page-navigation.html %}

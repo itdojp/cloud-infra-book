@@ -50,6 +50,10 @@ const cases = [
   ['missing accessibility metadata', (root) => mutateText(root, 'docs/assets/images/diagrams/introduction/cloud-infra-mindmap.svg', '<desc>', '<metadata>')],
   ['missing direct chapter link', (root) => mutateText(root, 'docs/concept-map/index.md', '../chapter-chapter01/index.md', '../regression/index.md')],
   ['source/public mismatch', (root) => mutateText(root, 'src/concept-map/index.md', '図の代替説明', '代替説明')],
+  ['duplicate inline page navigation', (root) => fs.appendFileSync(
+    path.join(root, 'docs/concept-map/index.md'),
+    '\n{% include page-navigation.html %}\n',
+  )],
 ];
 
 try {

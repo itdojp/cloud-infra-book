@@ -82,6 +82,11 @@ expect(
   normalizedBody(files.source) === normalizedBody(files.public),
   'concept map: source/public body mismatch',
 );
+expect(
+  !files.source.includes('{% include page-navigation.html %}')
+    && !files.public.includes('{% include page-navigation.html %}'),
+  'concept map: page navigation must be supplied once by the book layout',
+);
 expect(count(files.top, '(concept-map/)') === 1, 'docs/index.md: concept-map route must occur once');
 expect(count(files.nav, 'path: /concept-map/') === 1, 'navigation: /concept-map/ must occur once');
 expect(count(files.nav, 'path: /appendices/') === 1, 'navigation: /appendices/ must occur once');
