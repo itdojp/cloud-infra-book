@@ -41,6 +41,6 @@
     "url": "https://github.com/itdojp/cloud-infra-book/issues"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.22.2"
   }
 }
