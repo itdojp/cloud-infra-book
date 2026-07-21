@@ -47,10 +47,16 @@ cloud-infra-book/
 ### Development
 ```bash
 npm start                    # Start development server
-npm run build               # Build the book for production
-npm run build:safe          # Safe build with bundle exec
+npm run build               # Build the book with Gemfile.lock through Bundler
+npm run build:safe          # Compatibility alias for npm run build
 npm run deploy              # Deploy to GitHub Pages
 ```
+
+`npm run build` is the production build entry point. It must remain Bundler-managed so
+that the Jekyll dependency versions in `Gemfile.lock` are used. GitHub Pages invokes
+the same entry point with the `docs` source, destination, and base URL as arguments.
+Use Ruby 3.3 and Bundler 2.5.22, then run `bundle _2.5.22_ install` before the first
+local build in a clean checkout.
 
 ### Content Management
 ```bash
