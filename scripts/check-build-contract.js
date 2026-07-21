@@ -45,6 +45,10 @@ for (const [name, content] of [['CLAUDE.md', claude], ['README.md', readme]]) {
   }
 }
 
+if (!/bundle(?: _[^_]+_)? install/.test(readme)) {
+  fail('README.md must install the locked Ruby dependencies before the local build.');
+}
+
 if (claude.includes('Safe build with bundle exec')) {
   fail('CLAUDE.md still describes build:safe as a separate production build.');
 }

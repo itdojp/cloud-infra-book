@@ -26,15 +26,18 @@
 
 このリポジトリでは、書籍メタデータと公開設定のずれを防ぐため、ローカル QA にメタデータ整合チェックを含めています。
 Node.js 22.22.2以降の22.x、24.15.0以降の24.x、または26.0.0以上を使用してください。
+JekyllのビルドにはRuby 3.3と、`Gemfile.lock`で指定するBundler 2.5.22が必要です。
 
 ```bash
+gem install bundler -v 2.5.22
+bundle _2.5.22_ install
 npm ci
 npm run test
 npm run build
 ```
 
 `npm run check:metadata` は、`book-config.json`、`package.json`、Jekyll 設定、`docs/index.md` の title / version / repository / Pages URL を照合します。
-`npm run build` は Bundler 経由で `Gemfile.lock` の Jekyll 依存関係を使用します。`npm run build:safe` は同じbuildの互換aliasです。
+`npm run build` はBundlerを介し、`Gemfile.lock`に固定されたJekyll依存関係でビルドします。`npm run build:safe`は同じ処理を呼び出す互換コマンドです。
 
 ## フィードバック
 
