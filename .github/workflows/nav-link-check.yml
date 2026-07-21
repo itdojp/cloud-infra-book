@@ -26,21 +26,22 @@ jobs:
           from pathlib import Path
           import yaml
           repo = os.environ.get('GITHUB_REPOSITORY','').split('/')[-1]
-          cfg = Path('docs/_config.yml') if Path('docs/_config.yml').exists() else Path('_config.yml')
+          cfg = Path('docs/_config.yml')
+          if not cfg.is_file():
+              raise SystemExit('docs/_config.yml is required by the docs-only publication contract')
           baseurl = f'/{repo}'
-          if cfg.exists():
-              try:
-                  data = yaml.safe_load(cfg.read_text(encoding='utf-8')) or {}
-                  bu = data.get('baseurl')
-                  if isinstance(bu,str) and bu.strip():
-                      baseurl = bu.strip()
-              except Exception:
-                  # Fallback to naive parse but strip quotes
-                  for line in cfg.read_text(encoding='utf-8').splitlines():
-                      if line.strip().startswith('baseurl:'):
-                          val = line.split(':',1)[1].strip()
-                          baseurl = val.strip('"\'\' ')
-                          break
+          try:
+              data = yaml.safe_load(cfg.read_text(encoding='utf-8')) or {}
+              bu = data.get('baseurl')
+              if isinstance(bu,str) and bu.strip():
+                  baseurl = bu.strip()
+          except Exception:
+              # Fallback to naive parse but strip quotes
+              for line in cfg.read_text(encoding='utf-8').splitlines():
+                  if line.strip().startswith('baseurl:'):
+                      val = line.split(':',1)[1].strip()
+                      baseurl = val.strip('"\'\' ')
+                      break
           # Ensure baseurl starts with '/'
           if not baseurl.startswith('/'):
               baseurl = '/' + baseurl

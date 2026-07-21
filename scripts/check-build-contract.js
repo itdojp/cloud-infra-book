@@ -18,8 +18,12 @@ function fail(message) {
 const pkg = JSON.parse(read('package.json'));
 const scripts = pkg.scripts || {};
 
-if (scripts.build !== 'bundle exec jekyll build') {
-  fail('package.json scripts.build must run Jekyll through Bundler.');
+if (pkg.main !== 'docs/index.md') {
+  fail('package.json main must identify the canonical docs entry page.');
+}
+
+if (scripts.build !== 'bundle exec jekyll build --source docs --destination docs/_site') {
+  fail('package.json scripts.build must build only docs through Bundler.');
 }
 
 if (scripts['build:safe'] !== 'npm run build') {
@@ -29,12 +33,20 @@ if (scripts['build:safe'] !== 'npm run build') {
 const pagesWorkflow = read('.github/workflows/pages.yml')
   .replace(/\\\r?\n\s*/g, ' ')
   .replace(/\s+/g, ' ');
-if (!pagesWorkflow.includes('npm run build -- --source docs --destination docs/_site --baseurl')) {
-  fail('Pages must use the npm build entry point with the docs source and destination.');
+if (!pagesWorkflow.includes('npm run build -- --baseurl')) {
+  fail('Pages must use the docs-only npm build entry point and add only the base URL.');
 }
 
 if (pagesWorkflow.includes('bundle exec jekyll build --source docs')) {
   fail('Pages must not bypass the npm build entry point.');
+}
+
+if (scripts.start !== 'bundle exec jekyll serve --source docs --destination docs/_site --livereload') {
+  fail('package.json scripts.start must serve only the canonical docs surface.');
+}
+
+if (scripts.deploy !== 'gh-pages -d docs/_site') {
+  fail('package.json scripts.deploy must publish the canonical docs build output.');
 }
 
 const claude = read('CLAUDE.md');

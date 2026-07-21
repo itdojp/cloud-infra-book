@@ -38,8 +38,6 @@ jobs:
       - name: Build with Jekyll
         run: |
           npm run build -- \
-            --source docs \
-            --destination docs/_site \
             --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production

@@ -12,7 +12,7 @@ This project uses the **book-formatter** system:
 
 ```text
 cloud-infra-book/
-├── docs/                    # Generated output (GitHub Pages)
+├── docs/                    # Canonical Jekyll surface (GitHub Pages)
 ├── src/                     # Source content
 │   ├── introduction/        # Introduction section
 │   ├── chapter-chapter01/   # 11 chapters (chapter01-11)
@@ -53,10 +53,15 @@ npm run deploy              # Deploy to GitHub Pages
 ```
 
 `npm run build` is the production build entry point. It must remain Bundler-managed so
-that the Jekyll dependency versions in `Gemfile.lock` are used. GitHub Pages invokes
-the same entry point with the `docs` source, destination, and base URL as arguments.
+that the Jekyll dependency versions in `Gemfile.lock` are used. It always builds the
+canonical `docs` surface into `docs/_site`; GitHub Pages invokes the same entry point
+and supplies only the deployment base URL.
 Use Ruby 3.3 and Bundler 2.5.22, then run `bundle _2.5.22_ install` before the first
 local build in a clean checkout.
+
+The repository root is not a supported Jekyll surface. Edit manuscript content in
+`src`, keep its corresponding checked-in publication content in `docs` synchronized,
+and validate reader navigation from `docs/_data/navigation.yml`.
 
 ### Content Management
 ```bash
