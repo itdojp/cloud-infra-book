@@ -5,13 +5,14 @@
   "main": "index.md",
   "scripts": {
     "start": "jekyll serve --livereload",
-    "build": "jekyll build",
-    "build:safe": "bundle exec jekyll build",
-    "test": "npm run check:metadata && npm run check:concept-map && npm run lint && npm run check-links",
+    "build": "bundle exec jekyll build",
+    "build:safe": "npm run build",
+    "test": "npm run check:build-contract && npm run check:metadata && npm run check:concept-map && npm run lint && npm run check-links",
     "lint": "markdownlint src/**/*.md",
     "check-links": "markdown-link-check -c .markdown-link-check.json src/**/*.md",
     "check-conflicts": "node scripts/jekyll-conflict-detector.js",
     "deploy": "gh-pages -d _site",
+    "check:build-contract": "node scripts/check-build-contract.js",
     "check:metadata": "node scripts/check-metadata-consistency.js",
     "check:concept-map": "node scripts/check-concept-map.js && node scripts/check-concept-map-regression.js"
   },
