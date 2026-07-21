@@ -74,7 +74,6 @@ function expectEqual(errors, label, actual, expected) {
 function main() {
   const book = readJson('book-config.json');
   const pkg = readJson('package.json');
-  const rootConfig = parseYamlScalars('_config.yml');
   const docsConfig = parseYamlScalars('docs/_config.yml');
   const repo = repoInfoFromUrl(book.repository && book.repository.url);
   const repoFullName = `${repo.owner}/${repo.name}`;
@@ -93,15 +92,11 @@ function main() {
   expectEqual(errors, 'package.homepage', normalizeUrl(pkg.homepage), normalizeUrl(pagesUrl));
   expectEqual(errors, 'package.bugs.url', normalizeUrl(pkg.bugs && pkg.bugs.url), normalizeUrl(`${repoWebUrl}/issues`));
 
-  for (const [label, config] of [['_config.yml', rootConfig], ['docs/_config.yml', docsConfig]]) {
-    expectEqual(errors, `${label}.title`, config.title, book.title);
-    expectEqual(errors, `${label}.description`, config.description, book.description);
-    expectEqual(errors, `${label}.author`, config.author, book.author);
-    expectEqual(errors, `${label}.version`, config.version, book.version);
-    expectEqual(errors, `${label}.url/baseurl`, normalizeUrl(`${config.url || ''}${config.baseurl || ''}`), normalizeUrl(pagesUrl));
-  }
-  expectEqual(errors, '_config.yml.repository.github', normalizeUrl(rootConfig['repository.github']), normalizeUrl(repoWebUrl));
-  expectEqual(errors, '_config.yml.repository.name', rootConfig['repository.name'], repo.name);
+  expectEqual(errors, 'docs/_config.yml.title', docsConfig.title, book.title);
+  expectEqual(errors, 'docs/_config.yml.description', docsConfig.description, book.description);
+  expectEqual(errors, 'docs/_config.yml.author', docsConfig.author, book.author);
+  expectEqual(errors, 'docs/_config.yml.version', docsConfig.version, book.version);
+  expectEqual(errors, 'docs/_config.yml.url/baseurl', normalizeUrl(`${docsConfig.url || ''}${docsConfig.baseurl || ''}`), normalizeUrl(pagesUrl));
   expectEqual(errors, 'docs/_config.yml.repository', normalizeUrl(docsConfig.repository), normalizeUrl(repoWebUrl));
 
   const docsIndex = readText('docs/index.md');
@@ -125,7 +120,7 @@ function main() {
     process.exit(1);
   }
 
-  console.log('✅ Metadata is consistent across book-config, package, Jekyll configs, and docs index.');
+  console.log('✅ Metadata is consistent across book-config, package, docs Jekyll config, and docs index.');
 }
 
 main();

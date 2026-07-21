@@ -21,6 +21,8 @@
 - リポジトリ内: `docs/index.md`
 - GitHub Pages を有効化している場合: [クラウドインフラ設計・構築ガイド](https://itdojp.github.io/cloud-infra-book/)
 
+`docs`が唯一サポート対象のJekyllビルド面です。`src`は原稿の編集元ですが、
+リポジトリルート全体をJekyllでビルドまたはserveする運用はサポートしません。
 
 ## ローカル品質チェック
 
@@ -36,7 +38,7 @@ npm run test
 npm run build
 ```
 
-`npm run check:metadata` は、`book-config.json`、`package.json`、Jekyll 設定、`docs/index.md` の title / version / repository / Pages URL を照合します。
+`npm run check:metadata` は、`book-config.json`、`package.json`、`docs/_config.yml`、`docs/index.md` の title / version / repository / Pages URL を照合します。
 `npm run build` はBundlerを介し、`Gemfile.lock`に固定されたJekyll依存関係でビルドします。`npm run build:safe`は同じ処理を呼び出す互換コマンドです。
 
 ## フィードバック
